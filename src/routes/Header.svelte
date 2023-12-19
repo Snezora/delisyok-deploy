@@ -72,7 +72,6 @@
 			{:else if $user}
 				  <div class="flex items-center md:order-3">
 					<Avatar id="avatar-menu" src="https://th.bing.com/th/id/OIP.0mo3LvAAmAa21JunZCt9qwAAAA?rs=1&pid=ImgDetMain" />
-					<NavHamburger class1="w-full md:flex md:w-auto md:order-1" />
 				  </div>
 				  <Dropdown placement="bottom" triggeredBy="#avatar-menu">
 					<DropdownHeader>

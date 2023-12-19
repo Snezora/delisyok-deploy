@@ -273,7 +273,7 @@
 					</div>
 				</div>
                 <div class=" flex flex-col items-center">
-                    <Button type="submit" class="btn-primary w-[325px] mt-9">Register</Button>
+                    <Button type="submit" class="btn-primary w-[325px] mt-9" on:click={handleSignup}>Register</Button>
                     <p class="text-xs font-medium text-gray-500 dark:text-gray-300 mt-2">By registering, you agree to the <a href="../../" class="underline">Terms & Conditions</a>.</p>
                 </div>
 			</form>

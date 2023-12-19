@@ -33,19 +33,19 @@
 	const handleLogin = async() => {
 		try {
 			loading = true;
-			console.log(email);
 			const {error} = await supabaseClient.auth.signInWithPassword({
 				email,
 				password
 			})
 
 			if (error) throw error;
+			navigate('/');
+
 		} catch (error) {
 			console.error(error);
 			alert(error);
 		} finally {
 			loading = false;
-			navigate('/');
 		}
 
 	}
@@ -106,7 +106,7 @@
 						Forgot password?
 					</a>
 				</div>
-				<Button type="submit" class="w-[325px] mt-4">Login</Button>
+				<Button type="submit" class="w-[325px] mt-4" on:click={handleLogin}>Login</Button>
 				<div class="text-sm font-medium text-gray-500 dark:text-gray-300 text-xs mt-1 w-[325px] text-center">
 					Don't have an account? Register <a
 						href="/auth/register"
