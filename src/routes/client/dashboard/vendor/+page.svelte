@@ -5,14 +5,20 @@
     import { goto, invalidate } from '$app/navigation';
     import { supabaseClient } from '$lib/supabase.js';
     import Sidebar from '../../../Sidebar.svelte';
-    import { writable } from 'svelte/store';
-    import { Card, Drawer, Button, CloseButton, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, DarkMode, Chart, A, Dropdown, DropdownItem } from 'flowbite-svelte';
-    import { ChartPieSolid, ShoppingCartSolid, GridSolid, MailBoxSolid, UsersSolid, BagSolid, ArrowRightToBracketSolid, FileEditSolid, ChevronRightSolid, ChevronDownSolid } from 'flowbite-svelte-icons';
-    import { CircleCheckRegular, CircleXmarkRegular, CompassSolid, MoneyBill1Regular, WheelchairMoveSolid } from 'svelte-awesome-icons';
+    import { get, writable } from 'svelte/store';
+    import { Popover, Card, Drawer, Button, CloseButton, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, DarkMode, Chart, A, Dropdown, DropdownItem } from 'flowbite-svelte';
+    import { ChartPieSolid, ShoppingCartSolid, GridSolid, MailBoxSolid, UsersSolid, BagSolid, ArrowRightToBracketSolid, FileEditSolid, ChevronRightSolid, ChevronDownSolid, StoreSolid, GearSolid } from 'flowbite-svelte-icons';
+    import { BookOpenSolid, CircleCheckRegular, CircleXmarkRegular, CompassSolid, MoneyBill1Regular, MoneyBillsSolid, RightFromBracketSolid, ScrollSolid, WheelchairMoveSolid } from 'svelte-awesome-icons';
     import { sineIn } from 'svelte/easing';
 	import { fail } from '@sveltejs/kit';
 	import { supabase } from '@supabase/auth-ui-shared';
-    let hidden2 = true;
+    import  SidebarVendor  from './SidebarVendor.svelte';
+    import { hidden2 } from '../../../stores/sidebar.js';
+
+    let isCustomer = false;
+    let isVendor = true;
+    let isRider = false;
+    let placement;
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
     let transitionParams = {
         x: -320,
@@ -183,18 +189,14 @@
 </script>
 
 <div class="pagecontainer w-[100%] flex flex-row mobile-content">
-    <div class="text-center bg-pdark-50">
-        <Button on:click={() => (hidden2 = false)} class=" p-2 m-2 ">
-            <CompassSolid />
-        </Button>
-    </div>
+    <SidebarVendor />
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
-        <Drawer transitionType="fly" {transitionParams} bind:hidden={hidden2} id="sidebar2" class="">
+        <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
             <div class="flex items-center">
               <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation for {businessname}</h5>
-              <CloseButton on:click={() => (hidden2 = true)} class="mb-4 dark:text-white" />
+              <CloseButton on:click={() => ($hidden2 = true)} class="mb-4 dark:text-white" />
             </div>
-        <Sidebar />
+        <Sidebar {isVendor} />
         </Drawer>
     </div>
     <div class=" flex flex-col w-[100%] bg-slate-300 overflow-x-hidden">
@@ -255,7 +257,7 @@
         
         <div class=" h-[100%] w-[100%] p-3 flex flex-wrap justify-around items-center px-10 desktop-content bg-white dark:bg-pdark-100 gap-3">
             <div class="tableContainer">
-                <h2 class="font-bold">Recent 3 Orders:</h2>
+                <h2 class="font-bold dark:text-white">Recent 3 Orders:</h2>
                 <Table striped={true} color="green" hoverable={true}>
                     <TableHead>
                         <TableHeadCell>Order ID</TableHeadCell>
@@ -328,6 +330,16 @@
         </div> 
     </div>
 </div>
+
+<Popover triggeredBy="#navigation" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
+    Navigation
+</Popover>
+<Popover triggeredBy="#dashboard" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
+    Dashboard
+</Popover>
+<Popover triggeredBy="#storefront" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
+    Store Info
+</Popover>
 
 <style>
     /* This CSS will only apply to devices with a viewport width of 1024px or more */
