@@ -1,4 +1,4 @@
-<script>
+<script >
 	import { Alert, Avatar, Dropdown, DropdownDivider, DropdownHeader, DropdownItem } from 'flowbite-svelte';
 	import {
 		Checkbox,
@@ -39,9 +39,8 @@
 		user.set(false);
 	}
 
-
-
-
+	// @ts-ignore
+	export let isClient;
 	let formModal = false;
 </script>
 
@@ -51,7 +50,7 @@
   </style>
 </svelte:head>
 
-
+{#if !isClient}
 <div>
 	<Navbar fluid class=" overflow-hidden max-w-[100%] bg-gray-200">
 		<NavBrand href="/">
@@ -125,6 +124,7 @@
 	</Navbar>
 
 </div>
+{/if}
 
 
 <style>

@@ -20,6 +20,8 @@
 		DoorOpenSolid,
 		SignHangingSolid
 	} from 'svelte-awesome-icons';
+	import { supabaseClient } from '$lib/supabase';
+	import { goto } from '$app/navigation';
 
 	let selectedStates;
 	let states = [
@@ -40,6 +42,126 @@
 		{ value: 'W.P. Labuan', name: 'W.P. Labuan' },
 		{ value: 'W.P. Putrajaya', name: 'W.P. Putrajaya' }
 	];
+
+	let mondayToggle;
+	let tuesdayToggle;
+	let wednesdayToggle;
+	let thursdayToggle;
+	let fridayToggle;
+	let saturdayToggle;
+	let sundayToggle;
+
+	let loading = false;
+		/**
+	 * @type {any}
+	 */
+	 let email;
+	/**
+	 * @type {any}
+	 */
+	let password;
+	let vendorpicname;
+	let vendorhp;
+	let businessname;
+	let vendorkkmlistingno;
+	let businessstarttime;
+	let businessclosingtime;
+	let vendoraddressl1;
+	let vendoraddressl2;
+	let vendoraddresscity;
+	let vendoraddressposcode;
+	let vendoraddressstate;
+	let businessopday = [];
+
+	function createDaysArray() {
+		if (mondayToggle) {
+			businessopday.push("Monday");
+		}
+		if (tuesdayToggle) {
+			businessopday.push("Tuesday");
+		}
+		if (wednesdayToggle) {
+			businessopday.push("Wednesday");
+		}
+		if (thursdayToggle) {
+			businessopday.push("Thursday");
+		}
+		if (fridayToggle) {
+			businessopday.push("Friday");
+		}
+		if (saturdayToggle) {
+			businessopday.push("Saturday");
+		}
+		if (sundayToggle) {
+			businessopday.push("Sunday");
+		}
+
+		return businessopday;
+	}
+
+	const handleSignup = async() => {
+		try {
+			loading = true;
+			console.log(email);
+
+			const {error} = await supabaseClient.auth.signUp({
+				email,
+				password
+			})
+          
+			if (error) throw error;
+
+			const {error: SigninError} = await supabaseClient.auth.signInWithPassword({
+				email,
+				password
+			})
+
+			if (SigninError) throw SigninError;
+
+			const user = await supabaseClient.auth.getUser();
+			const user_id = user.data.user.id;
+
+			createDaysArray();
+			const { error: vendorError } = await supabaseClient
+			.from('vendor')
+			.insert([
+				{
+					user_id,
+					vendoremail: email,
+					vendorpicname,
+					vendorhp,
+					vendoraddressl1,
+					vendoraddressl2,
+					vendoraddresscity,
+					vendoraddressposcode,
+					vendoraddressstate,
+					businessname,
+					businessstarttime,
+					vendorkkmlistingno,
+					businessclosingtime,
+					businessopday
+				},
+			])
+			.select();
+
+			if (vendorError) {
+				console.log(vendorError);
+				throw vendorError;
+			}
+			alert('Sign up successful!');
+			if (typeof window !== 'undefined') {
+                window.location.href = '/auth/login';
+            }
+
+		} catch (error) {
+			console.error(error);
+			alert(error);
+		} finally {
+			loading = false;
+
+		}
+
+	}
 </script>
 
 <div
@@ -65,6 +187,7 @@
 								name="email"
 								placeholder="name@gmail.com"
 								required
+								bind:value={email}
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -78,6 +201,7 @@
 								name="password"
 								placeholder="••••••••••"
 								required
+								bind:value={password}
 								class="w-[325px] text-black password-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -110,6 +234,7 @@
 								name="fullname"
 								placeholder="John Doe"
 								required
+								bind:value={vendorpicname}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -121,27 +246,14 @@
 							<span class=" dark:text-white">Contact Information</span>
 							<Input
 								type="tel"
-								pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
 								name="phone"
 								placeholder="+60 123 456 789"
 								required
+								bind:value={vendorhp}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
 								<PhoneSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-							</Input>
-						</Label>
-
-						<Label>
-							<span class=" dark:text-white">Date of Birth</span>
-							<Input
-								type="date"
-								name="phone"
-								required
-								class="w-[325px] text-black dark:bg-[#ECECEC] placeholder:dark:text-gray-400"
-								color="white"
-							>
-								<CakeCandlesSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
 							</Input>
 						</Label>
 					</div>
@@ -158,6 +270,7 @@
 								placeholder="DeliSyok Sdn. Bhd."
 								autocomplete = "off"
 								required
+								bind:value={businessname}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -178,6 +291,7 @@
 								type="text"
 								name="kkmNo"
 								placeholder="KKM-FSQ-20-10-0001"
+								bind:value={vendorkkmlistingno}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -195,6 +309,7 @@
 								step="600"
 								name="businessOpeningTime"
 								required
+								bind:value={businessstarttime}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -209,6 +324,7 @@
 								step="600"
 								name="businessClosingTime"
 								required
+								bind:value={businessclosingtime}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -219,13 +335,13 @@
 						<Label>
 							<span class=" dark:text-white">Business Operation Day(s)</span>
 							<div class="days-container border border-gray-700 rounded-[10px] p-5 space-y-3 dark:bg-[#ECECEC] ">
-								<Toggle class="dark:text-black">Monday</Toggle>
-								<Toggle class="dark:text-black">Tuesday</Toggle>
-								<Toggle class="dark:text-black">Wednesday</Toggle>
-								<Toggle class="dark:text-black">Thursday</Toggle>
-								<Toggle class="dark:text-black">Friday</Toggle>
-								<Toggle class="dark:text-black">Saturday</Toggle>
-								<Toggle class="dark:text-black">Sunday</Toggle>
+								<Toggle class="dark:text-black" bind:checked={mondayToggle}>Monday</Toggle>
+								<Toggle class="dark:text-black" bind:checked={tuesdayToggle}>Tuesday</Toggle>
+								<Toggle class="dark:text-black" bind:checked={wednesdayToggle}>Wednesday</Toggle>
+								<Toggle class="dark:text-black" bind:checked={thursdayToggle}>Thursday</Toggle>
+								<Toggle class="dark:text-black" bind:checked={fridayToggle}>Friday</Toggle>
+								<Toggle class="dark:text-black" bind:checked={saturdayToggle}>Saturday</Toggle>
+								<Toggle class="dark:text-black" bind:checked={sundayToggle}>Sunday</Toggle>
 							</div>
 						</Label>
 					</div>
@@ -241,6 +357,7 @@
 								placeholder="Street"
 								autocomplete="street-address"
 								required
+								bind:value={vendoraddressl1}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -254,6 +371,7 @@
 								type="text"
 								name="street-address-2"
 								placeholder="Street"
+								bind:value={vendoraddressl2}
 								class="w-[325px] text-black  dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -269,6 +387,7 @@
 								placeholder="City"
 								autocomplete="city"
 								required
+								bind:value={vendoraddresscity}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -284,6 +403,7 @@
 								placeholder="Postcode"
 								autocomplete="postal-code"
 								required
+								bind:value={vendoraddressposcode}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -296,6 +416,7 @@
 							<Select
 								items={states}
 								bind:states={selectedStates}
+								bind:value={vendoraddressstate}
 								class="  h-[38px] dark:bg-[#ECECEC] bg-white placeholder:text-black dark:text-pdark-100"
 								>States</Select
 							>
@@ -303,7 +424,7 @@
 					</div>
 				</div>
 				<div class=" flex flex-col items-center">
-					<Button type="submit" class="btn-primary w-[325px] mt-9">Register</Button>
+					<Button type="submit" class="btn-primary w-[325px] mt-9" on:click={handleSignup}>Register</Button>
 					<p class="text-xs font-medium text-gray-500 dark:text-gray-300 mt-2">
 						By registering, you agree to the <a href="../../" class="underline"
 							>Terms & Conditions</a

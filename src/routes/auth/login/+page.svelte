@@ -39,7 +39,6 @@
 			})
 
 			if (error) throw error;
-			navigate('/');
 
 		} catch (error) {
 			console.error(error);
@@ -60,7 +59,7 @@
 	>
 		<form
 			class=" flex flex-col items-center justify-center align-middle bg-zinc-100 dark:bg-pdark-100 mb-0 login-form h-auto"
-			on:submit={handleLogin}
+			
 			>
 			<div
 				class="flex flex-col login-card w-[75%] h-[430px] items-center rounded-[30px] dark:bg-pdark-100"
@@ -106,7 +105,7 @@
 						Forgot password?
 					</a>
 				</div>
-				<Button type="submit" class="w-[325px] mt-4" on:click={handleLogin}>Login</Button>
+				<Button type="submit" class="w-[325px] mt-4" on:click={handleLogin} href="/">Login</Button>
 				<div class="text-sm font-medium text-gray-500 dark:text-gray-300 text-xs mt-1 w-[325px] text-center">
 					Don't have an account? Register <a
 						href="/auth/register"

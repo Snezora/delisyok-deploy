@@ -3,7 +3,6 @@
 
 
 	import { Label, Input, Button, Checkbox, Popover, Select } from 'flowbite-svelte';
-
 	import {
 		PhoneSolid,
 		UserSolid,
@@ -15,6 +14,7 @@
 	} from 'flowbite-svelte-icons';
 	import { CakeCandlesSolid } from 'svelte-awesome-icons';
 	import { supabaseClient } from '$lib/supabase';
+	import { navigate } from 'svelte-routing';
 
 	let selectedStates;
 	let states = [
@@ -45,40 +45,76 @@
 	 * @type {any}
 	 */
 	let password;
+	let customername;
+	let customerhp;
+	let customerdob;
+	let customeraddressl1;
+	let customeraddressl2;
+	let customeraddresscity;
+	let customeraddressposcode;
+	let customeraddressstate;
 	let isCustomer = true;
 
 	const handleSignup = async() => {
 		try {
 			loading = true;
 			console.log(email);
+
 			const {error} = await supabaseClient.auth.signUp({
 				email,
 				password
 			})
-
+          
 			if (error) throw error;
-			alert('Check your email for the confirmation email!')
+
+			const {error: SigninError} = await supabaseClient.auth.signInWithPassword({
+				email,
+				password
+			})
+
+			if (SigninError) throw SigninError;
+
+			const user = await supabaseClient.auth.getUser();
+			const user_id = user.data.user.id;
+
+			const { error: customerError } = await supabaseClient
+			.from('customer')
+			.insert([
+				{
+					user_id,
+					customeremail: email,
+					customername,
+					customerhp,
+					customerdob,
+					customeraddressl1,
+					customeraddressl2,
+					customeraddresscity,
+					customeraddressposcode,
+					customeraddressstate
+				},
+			])
+			.select();
+
+			if (customerError) {
+				console.log(customerError);
+				throw customerError;
+			}
+
+			alert('Sign up successful!')
+			if (typeof window !== 'undefined') {
+                window.location.href = '/auth/login';
+            }
+
+
 		} catch (error) {
 			console.error(error);
 			alert(error);
 		} finally {
 			loading = false;
-			navigate('/');
 		}
 
 	}
 
-	// let email: string;
-	// let password: string;
-	// let confirmpassword: string;
-	// let customername: string;
-	// let customerhp: string;
-	// let customerdob: string;
-	// let customeraddressl1: string;
-	// let customeraddressl2: string;
-	// let customeraddresscity: string;
-	// let customeraddressposcode: string;
-	// let customeraddressstate: string;
 
 	// @ts-ignore
 	export const form=null;
@@ -106,7 +142,7 @@
 		class="card flex flex-row rounded-[20px] bg-transparent h-[75%] w-[65%] justify-around py-[20px] mb-6"
 	>
 		<div class="flex-1">
-			<form on:submit|preventDefault={handleSignup} class="flex flex-col justify-around mt-5 gap-4">
+			<form class="flex flex-col justify-around mt-5 gap-4">
                 <div class="registration-text text-center flex-3 text-[40px] mb-4 dark:text-white font-extrabold align-middle mt-3">Customer Registration</div>
 				<div class="formcontainer flex flex-wrap justify-around mt-5 gap-4">
 					<div class="personalinfo flex flex-col gap-4">
@@ -165,6 +201,7 @@
 								name="customername"
 								placeholder="John Doe"
 								required
+								bind:value={customername}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -179,6 +216,7 @@
 								name="customerhp"
 								placeholder="012-3456789"
 								required
+								bind:value={customerhp}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -192,6 +230,7 @@
 								type="date"
 								name="customerdob"
 								required
+								bind:value={customerdob}
 								class="w-[325px] text-black dark:bg-[#ECECEC] placeholder:dark:text-gray-400"
 								color="white"
 							>
@@ -210,6 +249,7 @@
 								placeholder="Street"
 								autocomplete="street-address"
 								required
+								bind:value={customeraddressl1}
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -223,6 +263,7 @@
 								type="text"
 								name="customeraddressl2"
 								placeholder="Street"
+								bind:value={customeraddressl2}
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -238,6 +279,7 @@
 								placeholder="City"
 								autocomplete="city"
 								required
+								bind:value={customeraddresscity}
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -253,6 +295,7 @@
 								placeholder="Postcode"
 								autocomplete="postal-code"
 								required
+								bind:value={customeraddressposcode}
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -265,6 +308,7 @@
 							<Select
 								items={states}
 								bind:states={selectedStates}
+								bind:value={customeraddressstate}
 								name="customeraddressstate"
 								class="  h-[38px] dark:bg-[#ECECEC] bg-white placeholder:text-black dark:text-pdark-100"
 								>States</Select
