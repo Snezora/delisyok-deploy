@@ -40,7 +40,7 @@ const logout = () => {
     <Button href="/" on:click={() => logout()} on:mouseenter={() => (placement = 'right')} id="logoutInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-auto">
         <RightFromBracketSolid />
     </Button>
-    <DarkMode class="text-primary-500 mx-2 my-6 bg-white dark:bg-gray-800 dark:text-primary-600 border dark:border-gray-800"/>
+    <DarkMode class="text-primary-500 mx-2 my-4 bg-white dark:bg-gray-800 dark:text-primary-600 border dark:border-gray-800"/>
     <div class="h-[80px]"></div>
 </div>
 

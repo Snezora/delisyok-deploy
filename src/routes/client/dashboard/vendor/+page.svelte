@@ -188,7 +188,7 @@
 
 </script>
 
-<div class="pagecontainer w-[100%] flex flex-row mobile-content">
+<div class="pagecontainer w-[100%] flex flex-row mobile-content h-[100%]">
     <SidebarVendor />
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
         <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
@@ -331,15 +331,6 @@
     </div>
 </div>
 
-<Popover triggeredBy="#navigation" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
-    Navigation
-</Popover>
-<Popover triggeredBy="#dashboard" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
-    Dashboard
-</Popover>
-<Popover triggeredBy="#storefront" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
-    Store Info
-</Popover>
 
 <style>
     /* This CSS will only apply to devices with a viewport width of 1024px or more */
@@ -354,8 +345,9 @@
         .desktop-content {
             display: none;
         }
+        
         .mobile-content{
-            height: 80vh;
+            height: 100svh;
         }
     }
 </style>

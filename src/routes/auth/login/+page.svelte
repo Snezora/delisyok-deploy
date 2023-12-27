@@ -16,6 +16,10 @@
 		DarkMode
 
 	} from 'flowbite-svelte';
+	export let data
+		let { supabase } = data
+		$: ({ supabase } = data)
+
 
     let googleButtonSVG = "../src/lib/assets/socmed/google_light_round.svg";
     let facebookButtonSVG = "../src/lib/assets/socmed/facebook-svgrepo-com.svg";
@@ -30,24 +34,31 @@
 	 */
 	let password;
 
-	const handleLogin = async() => {
-		try {
-			loading = true;
-			const {error} = await supabaseClient.auth.signInWithPassword({
-				email,
-				password
-			})
+	// const handleLogin = async() => {
+	// 	try {
+	// 		loading = true;
+	// 		const {error} = await supabaseClient.auth.signInWithPassword({
+	// 			email,
+	// 			password
+	// 		})
 
-			if (error) throw error;
+	// 		if (error) throw error;
 
-		} catch (error) {
-			console.error(error);
-			alert(error);
-		} finally {
-			loading = false;
-		}
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 		alert(error);
+	// 	} finally {
+	// 		loading = false;
+	// 	}
 
-	}
+	// }
+
+	const handleLogin = async () => {
+    await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+  }
 
     
 </script>

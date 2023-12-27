@@ -4,21 +4,23 @@ import "../app.pcss";
 import Header from "./Header.svelte";
 import Sidebar from "./Sidebar.svelte";
 import { supabaseClient } from '$lib/supabase';
-import { invalidateAll } from '$app/navigation'
+import { invalidate, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores';
 
-// export let data
+export let data
 
-	// let { supabase, session } = data
-	// $: ({ supabase, session } = data)
+	let { supabase, session } = data
+	$: ({ supabase, session } = data)
 
 	onMount(() => {
 		const {
-			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
-			invalidateAll();
-		});
+		data: { subscription },
+		} = supabase.auth.onAuthStateChange((event, _session) => {
+		if (_session?.expires_at !== session?.expires_at) {
+			invalidate('supabase:auth')
+		}
+		})
 
 		return () => subscription.unsubscribe()
 	})

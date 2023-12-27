@@ -35,7 +35,8 @@
 		"@supabase/auth-helpers-sveltekit": "^0.10.7",
 		"@supabase/auth-ui-shared": "^0.1.8",
 		"@supabase/auth-ui-svelte": "^0.2.8",
-		"@supabase/supabase-js": "^2.39.0",
+		"@supabase/ssr": "^0.0.10",
+		"@supabase/supabase-js": "^2.39.1",
 		"@svelte-web-fonts/google": "^1.0.4",
 		"firebase": "^10.7.0"
 	}
