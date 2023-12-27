@@ -7,64 +7,61 @@
     import { page } from '$app/stores';
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
 
+    let isCustomer = false;
+    let isVendor = false;
+    let isRider = false;
     let user = false;
     let user_id;
     let vendordata;
 
     $: activeurl = $page.url.pathname;
 
-    // onMount(async () => {
-    //     supabaseClient.auth.onAuthStateChange(async (_, session) => {
-    //         user = !!session?.user;
-    //         if (user) {
-    //             const userLog = await supabaseClient.auth.getUser();
-    //             user_id = userLog.data.user?.id;
+    onMount(async () => {
+        supabaseClient.auth.onAuthStateChange(async (_, session) => {
+            user = !!session?.user;
+            if (user) {
+                const userLog = await supabaseClient.auth.getUser();
+                user_id = userLog.data.user?.id;
 
-    //             const { data, error } = await supabaseClient
-    //                 .from('vendor')
-    //                 .select('*')
-    //                 .eq('user_id', user_id);
+                const { data, error } = await supabaseClient
+                    .from('vendor')
+                    .select('*')
+                    .eq('user_id', user_id);
 
-    //             if (error || data.length == 0) {
-    //                 const { data, error } = await supabaseClient
-    //                   .from('customer')
-    //                   .select('*')
-    //                   .eq('user_id', user_id);
+                if (error || data.length == 0) {
+                    const { data, error } = await supabaseClient
+                      .from('customer')
+                      .select('*')
+                      .eq('user_id', user_id);
 
-    //                 if (error || data.length == 0) {
-    //                     const { data, error } = await supabaseClient
-    //                       .from('rider')
-    //                       .select('*')
-    //                       .eq('user_id', user_id);
+                    if (error || data.length == 0) {
+                        const { data, error } = await supabaseClient
+                          .from('rider')
+                          .select('*')
+                          .eq('user_id', user_id);
 
-    //                     if (error || data.length == 0) {
-    //                         if (typeof window !== 'undefined') {
-    //                             window.location.href = '/auth/login';
-    //                         }
-    //                     }
-    //                     else {
-    //                         isRider = true;
-    //                     }
-    //                 } else {
-    //                     isCustomer = true;
-    //                 }
-    //             } else {
-    //                 isVendor = true;
-    //             }
-    //         } else {
-    //             if (typeof window !== 'undefined') {
-    //                 window.location.href = '/auth/login';
-    //             }
-    //         }
-    //     });
-    // });
+                        if (error || data.length == 0) {
+                            if (typeof window !== 'undefined') {
+                                window.location.href = '/auth/login';
+                            }
+                        }
+                        else {
+                            isRider = true;
+                        }
+                    } else {
+                        isCustomer = true;
+                    }
+                } else {
+                    isVendor = true;
+                }
+            } else {
+                if (typeof window !== 'undefined') {
+                    window.location.href = '/auth/login';
+                }
+            }
+        });
+    });
 
-    // @ts-ignore
-    export let isCustomer = false;
-    // @ts-ignore
-    export let isVendor = false;
-    // @ts-ignore
-    export let isRider = false;
 
 
   </script>
@@ -153,6 +150,11 @@
       <SidebarItem label="Payment">
         <svelte:fragment slot="icon">
           <MoneyBillSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+        </svelte:fragment>
+      </SidebarItem>
+      <SidebarItem label="Users">
+        <svelte:fragment slot="icon">
+          <UserSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
         </svelte:fragment>
       </SidebarItem>
       <SidebarItem label="Settings">

@@ -7,11 +7,9 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { ArrowRightOutline } from 'flowbite-svelte-icons';
-    import { user } from '../../../../stores/authStore.js';
-    import { hidden2 } from '../../../../stores/sidebar.js';
-	import SidebarVendor from '../SidebarVendor.svelte';
 
-    let isVendor = true;
+
+    let hidden2 = true;
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
     let transitionParams = {
         x: -320,
@@ -64,7 +62,6 @@
         return vendorData;
     }
 
-
     async function getStorePhoto() {
         const { data } = supabaseClient
         .storage
@@ -79,14 +76,18 @@
 
 
 <div class="pagecontainer h-[100vh] w-[100%] flex flex-row mobile-content">
-    <SidebarVendor />
+    <div class="text-center bg-pdark-50">
+        <Button on:click={() => (hidden2 = false)} class=" p-2 m-2 ">
+            <CompassSolid />
+        </Button>
+    </div>
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
-        <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
+        <Drawer transitionType="fly" {transitionParams} bind:hidden={hidden2} id="sidebar2" class="">
             <div class="flex items-center">
               <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation for {businessname}</h5>
-              <CloseButton on:click={() => ($hidden2 = true)} class="mb-4 dark:text-white" />
+              <CloseButton on:click={() => (hidden2 = true)} class="mb-4 dark:text-white" />
             </div>
-        <Sidebar {isVendor} />
+        <Sidebar />
         </Drawer>
     </div>
     <div class="w-[100%] bg-slate-300 dark:bg-pdark-100 overflow-x-hidden flex flex-col p-5">
@@ -98,7 +99,7 @@
                 <img src="https://placehold.co/450x225" alt="storephoto" class="w-[450px]" />
             {/if}
             </div>
-            <div class="flex w-[60%] justify-center flex-col items-center gap-6">
+            <div class="flex w-[50%] justify-center flex-col items-center gap-6">
                 <div class="intro font-extrabold text-[36px] dark:text-white">Store Front Information for {businessname}</div>
                 <div class="fileuploadingarea">
                     <span class="dark:text-white">Upload your store front image here:</span>

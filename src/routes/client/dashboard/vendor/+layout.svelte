@@ -18,6 +18,8 @@
 	 * @type {any}
 	 */
     let businessName;
+
+
     
     onMount(async () => {
         supabaseClient.auth.onAuthStateChange(async (_, session) => {

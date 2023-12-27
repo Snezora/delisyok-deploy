@@ -5,20 +5,14 @@
     import { goto, invalidate } from '$app/navigation';
     import { supabaseClient } from '$lib/supabase.js';
     import Sidebar from '../../../Sidebar.svelte';
-    import { get, writable } from 'svelte/store';
-    import { Popover, Card, Drawer, Button, CloseButton, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, DarkMode, Chart, A, Dropdown, DropdownItem } from 'flowbite-svelte';
-    import { ChartPieSolid, ShoppingCartSolid, GridSolid, MailBoxSolid, UsersSolid, BagSolid, ArrowRightToBracketSolid, FileEditSolid, ChevronRightSolid, ChevronDownSolid, StoreSolid, GearSolid } from 'flowbite-svelte-icons';
-    import { BookOpenSolid, CircleCheckRegular, CircleXmarkRegular, CompassSolid, MoneyBill1Regular, MoneyBillsSolid, RightFromBracketSolid, ScrollSolid, WheelchairMoveSolid } from 'svelte-awesome-icons';
+    import { writable } from 'svelte/store';
+    import { Card, Drawer, Button, CloseButton, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, DarkMode, Chart, A, Dropdown, DropdownItem } from 'flowbite-svelte';
+    import { ChartPieSolid, ShoppingCartSolid, GridSolid, MailBoxSolid, UsersSolid, BagSolid, ArrowRightToBracketSolid, FileEditSolid, ChevronRightSolid, ChevronDownSolid } from 'flowbite-svelte-icons';
+    import { CircleCheckRegular, CircleXmarkRegular, CompassSolid, MoneyBill1Regular, WheelchairMoveSolid } from 'svelte-awesome-icons';
     import { sineIn } from 'svelte/easing';
 	import { fail } from '@sveltejs/kit';
 	import { supabase } from '@supabase/auth-ui-shared';
-    import  SidebarVendor  from './SidebarVendor.svelte';
-    import { hidden2 } from '../../../stores/sidebar.js';
-
-    let isCustomer = false;
-    let isVendor = true;
-    let isRider = false;
-    let placement;
+    let hidden2 = true;
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
     let transitionParams = {
         x: -320,
@@ -191,12 +185,12 @@
 <div class="pagecontainer w-[100%] flex flex-row mobile-content h-[100%]">
     <SidebarVendor />
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
-        <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
+        <Drawer transitionType="fly" {transitionParams} bind:hidden={hidden2} id="sidebar2" class="">
             <div class="flex items-center">
               <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation for {businessname}</h5>
-              <CloseButton on:click={() => ($hidden2 = true)} class="mb-4 dark:text-white" />
+              <CloseButton on:click={() => (hidden2 = true)} class="mb-4 dark:text-white" />
             </div>
-        <Sidebar {isVendor} />
+        <Sidebar />
         </Drawer>
     </div>
     <div class=" flex flex-col w-[100%] bg-slate-300 overflow-x-hidden">
@@ -257,7 +251,7 @@
         
         <div class=" h-[100%] w-[100%] p-3 flex flex-wrap justify-around items-center px-10 desktop-content bg-white dark:bg-pdark-100 gap-3">
             <div class="tableContainer">
-                <h2 class="font-bold dark:text-white">Recent 3 Orders:</h2>
+                <h2 class="font-bold">Recent 3 Orders:</h2>
                 <Table striped={true} color="green" hoverable={true}>
                     <TableHead>
                         <TableHeadCell>Order ID</TableHeadCell>
