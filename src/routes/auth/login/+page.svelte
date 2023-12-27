@@ -34,31 +34,31 @@
 	 */
 	let password;
 
-	// const handleLogin = async() => {
-	// 	try {
-	// 		loading = true;
-	// 		const {error} = await supabaseClient.auth.signInWithPassword({
-	// 			email,
-	// 			password
-	// 		})
+	const handleLogin = async() => {
+		try {
+			loading = true;
+			const {error} = await supabase.auth.signInWithPassword({
+				email,
+				password
+			})
 
-	// 		if (error) throw error;
+			if (error) throw error;
 
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 		alert(error);
-	// 	} finally {
-	// 		loading = false;
-	// 	}
+		} catch (error) {
+			console.error(error);
+			alert(error);
+		} finally {
+			loading = false;
+		}
 
-	// }
+	}
 
-	const handleLogin = async () => {
-    await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-  }
+// 	const handleLogin = async () => {
+//     await supabase.auth.signInWithPassword({
+//       email,
+//       password,
+//     })
+//   }
 
     
 </script>
