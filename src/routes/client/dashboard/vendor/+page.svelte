@@ -12,7 +12,9 @@
     import { sineIn } from 'svelte/easing';
 	import { fail } from '@sveltejs/kit';
 	import { supabase } from '@supabase/auth-ui-shared';
-    let hidden2 = true;
+    import SidebarVendor from './SidebarVendor.svelte';
+    import { hidden2 } from '../../../stores/sidebar.js';
+
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
     let transitionParams = {
         x: -320,
@@ -185,10 +187,10 @@
 <div class="pagecontainer w-[100%] flex flex-row mobile-content h-[100%]">
     <SidebarVendor />
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
-        <Drawer transitionType="fly" {transitionParams} bind:hidden={hidden2} id="sidebar2" class="">
+        <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
             <div class="flex items-center">
               <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation for {businessname}</h5>
-              <CloseButton on:click={() => (hidden2 = true)} class="mb-4 dark:text-white" />
+              <CloseButton on:click={() => ($hidden2 = true)} class="mb-4 dark:text-white" />
             </div>
         <Sidebar />
         </Drawer>

@@ -2,8 +2,6 @@
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 
-    /** @type {import('./$types').LayoutData} */
-
     let user;
     let user_id;
     /**
