@@ -1,4 +1,4 @@
-<script>
+<script context="module">
 	import { supabaseClient } from '$lib/supabase';
 	import { navigate } from 'svelte-routing';
 	import {
