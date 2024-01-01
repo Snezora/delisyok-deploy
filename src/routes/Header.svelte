@@ -1,4 +1,4 @@
-<script >
+<script context="module">
 	import { Alert, Avatar, Dropdown, DropdownDivider, DropdownHeader, DropdownItem } from 'flowbite-svelte';
 	import {
 		Checkbox,
