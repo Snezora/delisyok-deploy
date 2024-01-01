@@ -7,9 +7,6 @@
     import { page } from '$app/stores';
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
 
-    let isCustomer = false;
-    let isVendor = false;
-    let isRider = false;
     let user = false;
     let user_id;
     let vendordata;
@@ -62,7 +59,12 @@
         });
     });
 
-
+    // @ts-ignore
+    export let isCustomer = false;
+    // @ts-ignore
+    export let isVendor = false;
+    // @ts-ignore
+    export let isRider = false;
 
   </script>
   
@@ -137,7 +139,7 @@
           <MugSaucerSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
         </svelte:fragment>
         <SidebarDropdownItem label="Store Info" href="/client/dashboard/vendor/store" active={activeurl === '/client/dashboard/vendor/store'}/>
-        <SidebarDropdownItem label="Menu" />
+        <SidebarDropdownItem label="Menu" href="/client/dashboard/vendor/menu" active={activeurl === '/client/dashboard/vendor/menu'}/>
       </SidebarDropdownWrapper>
       <SidebarItem label="Orders" {spanClass}>
         <svelte:fragment slot="icon">

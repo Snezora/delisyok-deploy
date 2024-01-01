@@ -15,34 +15,34 @@ const logout = () => {
 </script>
 
 
-<div class="text-center bg-gray-900 grid grid-flow-row gap-1">
-    <Button on:click={() => (hidden2.set(false))} on:mouseenter={() => (placement = 'right')} id="navigation" class=" p-2 m-2 w-10 h-auto ">
+<div class="text-center bg-gray-900 flex flex-col gap-3">
+    <Button on:click={() => (hidden2.set(false))} on:mouseenter={() => (placement = 'right')} id="navigation" class=" p-2 m-2 w-10 h-10 ">
         <CompassSolid />
     </Button>
-    <Button href="/client/dashboard/vendor" on:mouseenter={() => (placement = 'right')} id="dashboard" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-auto">
+    <Button href="/client/dashboard/vendor" on:mouseenter={() => (placement = 'right')} id="dashboard" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <ChartPieSolid />
     </Button>
-    <Button href="/client/dashboard/vendor/store" on:mouseenter={() => (placement = 'right')} id="storefront" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-auto">
+    <Button href="/client/dashboard/vendor/store" on:mouseenter={() => (placement = 'right')} id="storefront" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <StoreSolid />
     </Button>
-    <Button href="" on:mouseenter={() => (placement = 'right')} id="menuInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-auto">
+    <Button href="/client/dashboard/vendor/menu" on:mouseenter={() => (placement = 'right')} id="menuInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <BookOpenSolid />
     </Button>
-    <Button href="" on:mouseenter={() => (placement = 'right')} id="orderInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-auto">
+    <Button href="/client/dashboard/vendor/orders" on:mouseenter={() => (placement = 'right')} id="orderInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <ScrollSolid />
     </Button>
-    <Button href="" on:mouseenter={() => (placement = 'right')} id="paymentInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-auto">
+    <Button href="" on:mouseenter={() => (placement = 'right')} id="paymentInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <MoneyBillsSolid />
     </Button>
-    <Button href="" on:mouseenter={() => (placement = 'right')} id="settingsInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-auto">
+    <Button href="" on:mouseenter={() => (placement = 'right')} id="settingsInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <GearSolid />
     </Button>
-    <Button href="/" on:click={() => logout()} on:mouseenter={() => (placement = 'right')} id="logoutInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-auto">
+    <Button href="/" on:click={() => logout()} on:mouseenter={() => (placement = 'right')} id="logoutInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <RightFromBracketSolid />
     </Button>
     <DarkMode class="text-primary-500 mx-2 my-4 bg-white dark:bg-gray-800 dark:text-primary-600 border dark:border-gray-800"/>
-    <div class="h-[80px]"></div>
 </div>
+
 
 <Popover triggeredBy="#navigation" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
     Navigation

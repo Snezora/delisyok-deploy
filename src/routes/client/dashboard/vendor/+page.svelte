@@ -44,6 +44,7 @@
 	 * @type {any[]}
 	 */
     let orders;
+    let isVendor = true;
 
 
     onMount(async () => {
@@ -189,10 +190,10 @@
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
         <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
             <div class="flex items-center">
-              <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation for {businessname}</h5>
+              <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation</h5>
               <CloseButton on:click={() => ($hidden2 = true)} class="mb-4 dark:text-white" />
             </div>
-        <Sidebar />
+        <Sidebar {isVendor} />
         </Drawer>
     </div>
     <div class=" flex flex-col w-[100%] bg-slate-300 overflow-x-hidden">

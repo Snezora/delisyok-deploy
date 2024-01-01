@@ -1,15 +1,16 @@
 <script>
-    import { Button, Drawer, CloseButton, ImagePlaceholder, Card, Fileupload } from 'flowbite-svelte';
+    import { Button, Drawer, CloseButton, ImagePlaceholder, Card, Fileupload, Input, Label, Textarea, Checkbox, Toast } from 'flowbite-svelte';
     import Sidebar from '../../../../Sidebar.svelte';
     import { sineIn } from 'svelte/easing';
-    import { CompassSolid } from 'svelte-awesome-icons';
+    import { CompassSolid, StoreSolid } from 'svelte-awesome-icons';
     import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { ArrowRightOutline } from 'flowbite-svelte-icons';
+	import { ArrowRightOutline, CheckCircleSolid, EnvelopeSolid } from 'flowbite-svelte-icons';
+	import SidebarVendor from '../SidebarVendor.svelte';
+    import { hidden2 } from '../../../../stores/sidebar.js';
+	import { invalidateAll } from '$app/navigation';
 
-
-    let hidden2 = true;
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
     let transitionParams = {
         x: -320,
@@ -24,6 +25,10 @@
 	 * @type {any}
 	 */
     let vendorData;
+    /**
+	 * @type {any}
+	 */
+    let vendorid;
     let user_id;
     /**
 	 * @type {any}
@@ -33,12 +38,130 @@
 	 * @type {string}
 	 */
     let storephotourl;
+    let isVendor = true;
+    /**
+	 * @type {any}
+	 */
+    let vendorkkmlistingno;
+	/**
+	 * @type {any}
+	 */
+	let businessstarttime;
+	/**
+	 * @type {any}
+	 */
+	let businessclosingtime;
+	/**
+	 * @type {any}
+	 */
+	let vendoraddressl1;
+	/**
+	 * @type {any}
+	 */
+	let vendoraddressl2;
+	/**
+	 * @type {any}
+	 */
+	let vendoraddresscity;
+	/**
+	 * @type {any}
+	 */
+	let vendoraddressposcode;
+    /**
+	 * @type {any}
+	 */
+    let vendorpicname;
+    /**
+	 * @type {any}
+	 */
+    let vendoremail;
+    /**
+	 * @type {any}
+	 */
+    let vendorhp;
+	/**
+	 * @type {any}
+	 */
+	let vendoraddressstate;
+    /**
+	 * @type {any}
+	 */
+    let businessopday;
+    /**
+	 * @type {any[]}
+	 */
+    let days;
+    /**
+	 * @type {any}
+	 */
+    let storedescription;
+    let openMonday = false;
+    let openTuesday = false;
+    let openWednesday = false;
+    let openThursday = false;
+    let openFriday = false;
+    let openSaturday = false;
+    let openSunday = false;
+    /**
+	 * @type {string[]}
+	 */
+    let selectedDays = [];
 
     onMount(async () => {
         vendorData = await fetchBusinessName();
         console.log(vendorData);
+        vendorid = vendorData.vendorid;
+        vendoremail = vendorData.vendoremail;
         businessname = vendorData.businessname;
         storephoto = vendorData.storephoto;
+        vendorkkmlistingno = vendorData.vendorkkmlistingno;
+        businessstarttime = vendorData.businessstarttime;
+        businessclosingtime = vendorData.businessclosingtime;
+        vendoraddressl1 = vendorData.vendoraddressl1;
+        vendoraddressl2 = vendorData.vendoraddressl2;
+        vendoraddresscity = vendorData.vendoraddresscity;
+        vendoraddressposcode = vendorData.vendoraddressposcode;
+        vendoraddressstate = vendorData.vendoraddressstate;
+        vendorhp = vendorData.vendorhp;
+        vendorpicname = vendorData.vendorpicname;
+        businessopday = vendorData.businessopday;
+        storedescription = vendorData.storedescription;
+        days = JSON.parse(businessopday);
+        for (let day = 0; day < days.length; day++) {
+            const element = days[day];
+            switch (element) {
+                case 'Monday':
+                    openMonday = true;
+                    break;
+            
+                case 'Tuesday':
+                    openTuesday = true;
+                    break;
+
+                case 'Wednesday':
+                    openWednesday = true;
+                    break;
+
+                case 'Thursday':
+                    openThursday = true;
+                    break;
+
+                case 'Friday':
+                    openFriday = true;
+                    break;
+
+                case 'Saturday':
+                    openSaturday = true;
+                    break;
+
+                case 'Sunday':
+                    openSunday = true;
+                    break;
+
+                default:
+                    break;
+            }
+        }
         storephotourl = await getStorePhoto();
         console.log(storephotourl);
     });
@@ -71,42 +194,260 @@
         return data.publicUrl;
     }
 
+    async function saveNewInfo() {
+        // Check if the user is signed in
+        const userLog = await supabaseClient.auth.getUser();
+        user_id = userLog.data.user?.id;
+
+        // Fetch the businessname from the vendor table
+        const { data, error } = await supabaseClient
+            .from('vendor')
+            .select('*')
+            .eq('user_id', user_id);
+
+        if (error) {
+            alert('Error fetching business name');
+        } else if (data && data.length > 0) {
+            selectedDays = [];
+            if (openMonday) {
+                selectedDays.push('Monday');
+            } 
+            if (openTuesday) {
+                selectedDays.push('Tuesday');
+            } 
+            if (openWednesday) {
+                selectedDays.push('Wednesday');
+            } 
+            if (openThursday) {
+                selectedDays.push('Thursday');
+            } 
+            if (openFriday) {
+                selectedDays.push('Friday');
+            } 
+            if (openSaturday) {
+                selectedDays.push('Saturday');
+            } 
+            if (openSunday) {
+                selectedDays.push('Sunday');
+            } 
+            const newbusinessopday = JSON.stringify(selectedDays);
+
+            const { error: vendorError } = await supabaseClient
+			.from('vendor')
+			.update([
+				{
+					vendoremail,
+					vendorpicname,
+					vendorhp,
+                    storedescription,
+					vendoraddressl1,
+					vendoraddressl2,
+					vendoraddresscity,
+					vendoraddressposcode,
+					vendoraddressstate,
+					businessname,
+					businessstarttime,
+					vendorkkmlistingno,
+					businessclosingtime,
+                    businessopday: newbusinessopday,
+				},
+			])
+            .eq('user_id', user_id);
+
+            if (vendorError) {
+                alert('Error updating vendor data');
+            } else {
+                alert('Vendor data updated successfully');
+                window.location.href = '/client/dashboard/vendor/store';
+            }
+        }
+        return vendorData;
+    }
+
+    let photourl;
+
+    async function changePhoto(){
+        const file = storephoto[0];
+		const fileExt = file.name.split('.').pop();
+		const filePath = `${Math.random()}.${fileExt}`;
+		photourl = filePath;
+		console.log(storephoto);
+		console.log(photourl);
+		const { error: imageerror } = await supabaseClient.storage.from('vendorstore').upload(filePath, file);
+		if (imageerror) throw imageerror;
+
+        const { data, error } = await supabaseClient
+        .from('vendor')
+        .update({ storephoto: photourl })
+        .eq('vendorid', vendorid)
+        .select()
+
+        if (error) {
+            console.error('Error updating store photo:', error);
+        }
+        else{
+            console.log('Store photo updated successfully:', data);
+            alert('Store photo updated successfully');
+            window.location.href = '/client/dashboard/vendor/store';
+        }
+    }
+
     $: activeurl = $page.url.pathname;
 </script>
 
 
-<div class="pagecontainer h-[100vh] w-[100%] flex flex-row mobile-content">
-    <div class="text-center bg-pdark-50">
-        <Button on:click={() => (hidden2 = false)} class=" p-2 m-2 ">
-            <CompassSolid />
-        </Button>
-    </div>
-    <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
-        <Drawer transitionType="fly" {transitionParams} bind:hidden={hidden2} id="sidebar2" class="">
-            <div class="flex items-center">
-              <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation for {businessname}</h5>
-              <CloseButton on:click={() => (hidden2 = true)} class="mb-4 dark:text-white" />
-            </div>
-        <Sidebar />
-        </Drawer>
-    </div>
-    <div class="w-[100%] bg-slate-300 dark:bg-pdark-100 overflow-x-hidden flex flex-col p-5">
-        <div class="storephoto w-[100%] flex-wrap flex items-center justify-around">
-            <div class="flex justify-center">            
+<div class="pagecontainer h-[100%] w-[100%] flex flex-row mobile-content">
+        <SidebarVendor />
+        <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
+            <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
+                <div class="flex items-center">
+                  <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation</h5>
+                  <CloseButton on:click={() => ($hidden2 = true)} class="mb-4 dark:text-white" />
+                </div>
+            <Sidebar {isVendor} />
+            </Drawer>
+        </div>
+        
+    <form class="w-[100%] bg-slate-300 dark:bg-pdark-100 overflow-x-hidden flex flex-col">
+        <div class="storephoto w-[100%] flex-wrap flex items-center justify-around bg-gray-200 dark:bg-orange-900 p-5">
+            <div class="flex justify-center ">            
             {#if storephoto}
-                <img src={storephotourl} alt="storephoto" class="w-[100%] h-[100%]" />
+            <div class="w-[420px] h-[225px] flex justify-center align-middle">
+                <img src={storephotourl} alt="storephoto" class="h-[100%]" />
+            </div>
             {:else}
                 <img src="https://placehold.co/450x225" alt="storephoto" class="w-[450px]" />
             {/if}
             </div>
-            <div class="flex w-[50%] justify-center flex-col items-center gap-6">
-                <div class="intro font-extrabold text-[36px] dark:text-white">Store Front Information for {businessname}</div>
+            <div class="flex justify-center flex-col items-center gap-5">
+                <div class="intro font-extrabold text-[32px] dark:text-white text-center">Store Front Information for {businessname}</div>
                 <div class="fileuploadingarea">
                     <span class="dark:text-white">Upload your store front image here:</span>
-                    <Fileupload accept=".png, .jpg, .jpeg" color="white" class="border-none m-[1px] bg-white dark:bg-gray-500 dark:text-white w-[400px]" ></Fileupload>
+                    <Fileupload accept=".png, .jpg, .jpeg" bind:files={storephoto} color="white" class="border-none m-[1px] bg-white dark:bg-gray-500 dark:text-white" ></Fileupload>
                 </div>
-                <Button>Submit Photo</Button>
+                <Button on:click={changePhoto}>Submit Photo</Button>
             </div>
         </div>
-    </div>
+        <div class="bottomhalf p-7 grid lg:grid-cols-3 gap-9 justify-around md:grid-flow-row">
+            <div class="firsthalf flex flex-col gap-4">
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Store ID</Label>
+                    <Input id="vendorid" type="text" placeholder="02438992" readonly disabled bind:value={vendorid}>
+                      <StoreSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-[1.8rem]">
+                    <Label for="input-group-1" class="block mb-2">Business Name</Label>
+                    <Input id="businessname" type="text" placeholder="Delisyok Sdn Bhd" bind:value={businessname}>
+                      <StoreSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Description</Label>
+                    <Textarea id="message" rows="6" bind:value={storedescription} placeholder="Description for your store (What you sell, how you do it, etc.)"></Textarea>
+                </div>
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Vendor KKM Listing No.</Label>
+                    <Input id="kkmlistingno" type="text" placeholder="KKM Listing No" bind:value={vendorkkmlistingno}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+            </div>
+            <div class="secondhalf flex flex-col gap-4">
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Your Email</Label>
+                    <Input id="email" type="email" placeholder="madani@delisyok.com" bind:value={vendoremail}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Business PIC Name</Label>
+                    <Input id="email" type="text" placeholder="PIC Name" bind:value={vendorpicname}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Business Handphone No.</Label>
+                    <Input id="email" type="email" placeholder="madani@delisyok.com" bind:value={vendorhp}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-6">
+                    <Label>
+                        <span class=" dark:text-white block mb-2">Business Opening Time</span>
+                        <Input
+                            type="time"
+                            step="600"
+                            name="businessOpeningTime"
+                            required
+                            bind:value={businessstarttime}
+                            class=" text-black dark:bg-gray-700"
+                        >
+                        </Input>
+                    </Label>
+                </div>
+                <div class="mb-6">
+                    <Label>
+                        <span class=" dark:text-white block mb-2">Business Closing Time</span>
+                        <Input
+                            type="time"
+                            step="600"
+                            name="businessClosingTime"
+                            required
+                            bind:value={businessclosingtime}
+                            class=" text-black dark:bg-gray-700"
+                        >
+                        </Input>
+                    </Label>
+                </div>
+            </div>
+            <div class="thirdhalf flex flex-col gap-4">
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Vendor Address Line 1</Label>
+                    <Input id="vendoraddressl1" type="text" placeholder="Address Line 1" bind:value={vendoraddressl1}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Vendor Address Line 2</Label>
+                    <Input id="vendoraddressl2" type="text" placeholder="Address Line 2" bind:value={vendoraddressl2}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Vendor City</Label>
+                    <Input id="vendoraddresscity" type="text" placeholder="City" bind:value={vendoraddresscity}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-8">
+                    <Label for="input-group-1" class="block mb-2">Vendor Post Code</Label>
+                    <Input id="vendoraddressposcode" type="text" placeholder="Postcode" bind:value={vendoraddressposcode}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+                <div class="mb-6">
+                    <Label for="input-group-1" class="block mb-2">Vendor State</Label>
+                    <Input id="vendoraddressstate" type="text" placeholder="State" bind:value={vendoraddressstate}>
+                      <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    </Input>
+                </div>
+            </div>
+        </div>
+        <div class="dayscontainer flex flex-col items-center mb-10">
+            <Label for="opendays" class="block mb-2">Vendor Open Days</Label>
+            <div class="opendays p-4 rounded-2xl flex flex-wrap gap-5 mx-5 bg-white dark:bg-gray-700">
+                <Checkbox id="openMonday" bind:checked={openMonday}>Monday</Checkbox>
+                <Checkbox id="openTuesday" bind:checked={openTuesday}>Tuesday</Checkbox>
+                <Checkbox id="openWednesday" bind:checked={openWednesday}>Wednesday</Checkbox>
+                <Checkbox id="openThursday" bind:checked={openThursday}>Thursday</Checkbox>
+                <Checkbox id="openFriday" bind:checked={openFriday}>Friday</Checkbox>
+                <Checkbox id="openSaturday" bind:checked={openSaturday}>Saturday</Checkbox>
+                <Checkbox id="openSunday" bind:checked={openSunday}>Sunday</Checkbox>
+            </div>
+        </div>
+        <div class="savebutton flex justify-center mb-10">
+            <Button class="" on:click={saveNewInfo}>Save Information</Button>
+        </div>
+    </form>
 </div>
