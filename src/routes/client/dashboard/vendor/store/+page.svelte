@@ -265,6 +265,7 @@
 
             if (vendorError) {
                 alert('Error updating vendor data');
+                console.error(vendorError);
             } else {
                 alert('Vendor data updated successfully');
                 invalidateAll();
