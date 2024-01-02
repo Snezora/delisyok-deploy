@@ -24,58 +24,57 @@
 
     
     onMount(async () => {
-        supabaseClient.auth.onAuthStateChange(async (_, session) => {
-            console.log("onmount in layout triggered");
-            user = !!session?.user;
-            if (user) {
-                const userLog = await supabaseClient.auth.getUser();
-                user_id = userLog.data.user?.id;
+    console.log("onmount in layout triggered");
 
-                const { data, error } = await supabaseClient
-                    .from('vendor')
-                    .select('*')
-                    .eq('user_id', user_id);
+    // This code will run immediately when the component mounts
+    const vendorData = await fetchBusinessName();
+    console.log(vendorData);
+    const days = JSON.parse(vendorData.businessopday);
+    const openDays = {
+        openMonday: days.includes('Monday'),
+        openTuesday: days.includes('Tuesday'),
+        openWednesday: days.includes('Wednesday'),
+        openThursday: days.includes('Thursday'),
+        openFriday: days.includes('Friday'),
+        openSaturday: days.includes('Saturday'),
+        openSunday: days.includes('Sunday'),
+    };
+    console.log("onmount in layout triggered 2");
 
-                    vendordata = data;
+    // Update the store
+    vendorStore.set({
+        ...vendorData,
+        ...openDays,
+        user_id
+    });
 
-                if (error || data.length == 0) {
-                    if (typeof window !== 'undefined') {
-                        window.location.href = '/auth/login';
-                    }
-                } else {
+    supabaseClient.auth.onAuthStateChange(async (_, session) => {
+        // This code will run when the auth state changes
+        user = !!session?.user;
+        if (user) {
+            const userLog = await supabaseClient.auth.getUser();
+            user_id = userLog.data.user?.id;
 
-                }
-            } else {
+            const { data, error } = await supabaseClient
+                .from('vendor')
+                .select('*')
+                .eq('user_id', user_id);
+
+            vendordata = data;
+
+            if (error || data.length == 0) {
                 if (typeof window !== 'undefined') {
                     window.location.href = '/auth/login';
                 }
             }
-        });
-
-
-        const vendorData = await fetchBusinessName();
-        console.log(vendorData);
-        const days = JSON.parse(vendorData.businessopday);
-        const openDays = {
-            openMonday: days.includes('Monday'),
-            openTuesday: days.includes('Tuesday'),
-            openWednesday: days.includes('Wednesday'),
-            openThursday: days.includes('Thursday'),
-            openFriday: days.includes('Friday'),
-            openSaturday: days.includes('Saturday'),
-            openSunday: days.includes('Sunday'),
-        };
-        console.log("onmount in layout triggered 2");
-
-        // Update the store
-        vendorStore.set({
-            ...vendorData,
-            ...openDays,
-            user_id
-        });
-    
-
+        } else {
+            if (typeof window !== 'undefined') {
+                window.location.href = '/auth/login';
+            }
+        }
     });
+});
+
 
     async function fetchBusinessName() {
 
