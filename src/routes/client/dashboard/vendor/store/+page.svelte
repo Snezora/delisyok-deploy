@@ -4,11 +4,12 @@
     import { sineIn } from 'svelte/easing';
     import { CompassSolid, StoreSolid } from 'svelte-awesome-icons';
     import { supabaseClient } from '$lib/supabase';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { page } from '$app/stores';
 	import { ArrowRightOutline, CheckCircleSolid, EnvelopeSolid } from 'flowbite-svelte-icons';
 	import SidebarVendor from '../SidebarVendor.svelte';
     import { hidden2 } from '../../../../stores/sidebar.js';
+    import { vendorStore } from '../../../../stores/businessStore.js';
 	import { invalidateAll } from '$app/navigation';
 
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
@@ -29,6 +30,9 @@
 	 * @type {any}
 	 */
     let vendorid;
+    /**
+	 * @type {string | undefined}
+	 */
     let user_id;
     /**
 	 * @type {any}
@@ -108,68 +112,43 @@
     let selectedDays = [];
 
     onMount(async () => {
-        vendorData = await fetchBusinessName();
-        console.log(vendorData);
-        vendorid = vendorData.vendorid;
-        vendoremail = vendorData.vendoremail;
-        businessname = vendorData.businessname;
-        storephoto = vendorData.storephoto;
-        vendorkkmlistingno = vendorData.vendorkkmlistingno;
-        businessstarttime = vendorData.businessstarttime;
-        businessclosingtime = vendorData.businessclosingtime;
-        vendoraddressl1 = vendorData.vendoraddressl1;
-        vendoraddressl2 = vendorData.vendoraddressl2;
-        vendoraddresscity = vendorData.vendoraddresscity;
-        vendoraddressposcode = vendorData.vendoraddressposcode;
-        vendoraddressstate = vendorData.vendoraddressstate;
-        vendorhp = vendorData.vendorhp;
-        vendorpicname = vendorData.vendorpicname;
-        businessopday = vendorData.businessopday;
-        storedescription = vendorData.storedescription;
-        days = JSON.parse(businessopday);
-        for (let day = 0; day < days.length; day++) {
-            const element = days[day];
-            switch (element) {
-                case 'Monday':
-                    openMonday = true;
-                    break;
-            
-                case 'Tuesday':
-                    openTuesday = true;
-                    break;
-
-                case 'Wednesday':
-                    openWednesday = true;
-                    break;
-
-                case 'Thursday':
-                    openThursday = true;
-                    break;
-
-                case 'Friday':
-                    openFriday = true;
-                    break;
-
-                case 'Saturday':
-                    openSaturday = true;
-                    break;
-
-                case 'Sunday':
-                    openSunday = true;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        storephotourl = await getStorePhoto();
-        console.log(storephotourl);
-    });
-
-    async function fetchBusinessName() {
+        invalidateAll();
         // Check if the user is signed in
         const userLog = await supabaseClient.auth.getUser();
         user_id = userLog.data.user?.id;
+
+        const vendorData = await fetchBusinessName();
+        console.log(vendorData);
+        const days = JSON.parse(vendorData.businessopday);
+        const openDays = {
+            openMonday: days.includes('Monday'),
+            openTuesday: days.includes('Tuesday'),
+            openWednesday: days.includes('Wednesday'),
+            openThursday: days.includes('Thursday'),
+            openFriday: days.includes('Friday'),
+            openSaturday: days.includes('Saturday'),
+            openSunday: days.includes('Sunday'),
+        };
+
+        // Update the store
+        vendorStore.set({
+            ...vendorData,
+            ...openDays,
+        });
+    
+        storephotourl = await getStorePhoto();
+        console.log(storephotourl);
+
+        vendorStore.set({
+            ...vendorData,
+            ...openDays,
+            storephotourl,
+            user_id
+        });
+
+    });
+
+    async function fetchBusinessName() {
 
         // Fetch the businessname from the vendor table
         const { data, error } = await supabaseClient
@@ -193,44 +172,74 @@
 
         return data.publicUrl;
     }
+    
+    $: {
+        selectedDays = [];  // Clear selectedDays
+
+        if (openMonday) {
+            selectedDays.push('Monday');
+        }
+        if (openTuesday) {
+            selectedDays.push('Tuesday');
+        }
+        if (openWednesday) {
+            selectedDays.push('Wednesday');
+        }
+        if (openThursday) {
+            selectedDays.push('Thursday');
+        }
+        if (openFriday) {
+            selectedDays.push('Friday');
+        }
+        if (openSaturday) {
+            selectedDays.push('Saturday');
+        }
+        if (openSunday) {
+            selectedDays.push('Sunday');
+        }
+    }
+
 
     async function saveNewInfo() {
-        // Check if the user is signed in
-        const userLog = await supabaseClient.auth.getUser();
-        user_id = userLog.data.user?.id;
 
-        // Fetch the businessname from the vendor table
-        const { data, error } = await supabaseClient
-            .from('vendor')
-            .select('*')
-            .eq('user_id', user_id);
+        // // Fetch the businessname from the vendor table
+        // const { data, error } = await supabaseClient
+        //     .from('vendor')
+        //     .select('*')
+        //     .eq('user_id', user_id);
 
-        if (error) {
-            alert('Error fetching business name');
-        } else if (data && data.length > 0) {
-            selectedDays = [];
-            if (openMonday) {
-                selectedDays.push('Monday');
-            } 
-            if (openTuesday) {
-                selectedDays.push('Tuesday');
-            } 
-            if (openWednesday) {
-                selectedDays.push('Wednesday');
-            } 
-            if (openThursday) {
-                selectedDays.push('Thursday');
-            } 
-            if (openFriday) {
-                selectedDays.push('Friday');
-            } 
-            if (openSaturday) {
-                selectedDays.push('Saturday');
-            } 
-            if (openSunday) {
-                selectedDays.push('Sunday');
-            } 
+        console.log("here");
+
+        // if (error) {
+        //     alert('Error fetching business name');
+        // } else if (data && data.length > 0) {
+            // selectedDays = [];
+            // if (openMonday) {
+            //     selectedDays.push('Monday');
+            // } 
+            // if (openTuesday) {
+            //     selectedDays.push('Tuesday');
+            // } 
+            // if (openWednesday) {
+            //     selectedDays.push('Wednesday');
+            // } 
+            // if (openThursday) {
+            //     selectedDays.push('Thursday');
+            // } 
+            // if (openFriday) {
+            //     selectedDays.push('Friday');
+            // } 
+            // if (openSaturday) {
+            //     selectedDays.push('Saturday');
+            // } 
+            // if (openSunday) {
+            //     selectedDays.push('Sunday');
+            // } 
+
+            await tick();
+
             const newbusinessopday = JSON.stringify(selectedDays);
+            console.log(user_id);
 
             const { error: vendorError } = await supabaseClient
 			.from('vendor')
@@ -258,11 +267,10 @@
                 alert('Error updating vendor data');
             } else {
                 alert('Vendor data updated successfully');
-                window.location.href = '/client/dashboard/vendor/store';
+                invalidateAll();
             }
         }
-        return vendorData;
-    }
+
 
     let photourl;
 
@@ -288,9 +296,37 @@
         else{
             console.log('Store photo updated successfully:', data);
             alert('Store photo updated successfully');
-            window.location.href = '/client/dashboard/vendor/store';
+            window.location.href = '/client/dashboard/vendor/';
         }
     }
+
+    vendorStore.subscribe(value => {
+        vendorid = value.vendorid;
+        businessname = value.businessname;
+        storephoto = value.storephoto;
+        businessopday = value.businessopday;
+        businessstarttime = value.businessstarttime;
+        businessclosingtime = value.businessclosingtime;
+        storedescription = value.storedescription;
+        vendoremail = value.vendoremail;
+        vendorhp = value.vendorhp;
+        vendorpicname = value.vendorpicname;
+        vendoraddressl1 = value.vendoraddressl1;
+        vendoraddressl2 = value.vendoraddressl2;
+        vendoraddresscity = value.vendoraddresscity;
+        vendoraddressposcode = value.vendoraddressposcode;
+        vendoraddressstate = value.vendoraddressstate;
+        vendorkkmlistingno = value.vendorkkmlistingno;
+        openMonday = value.businessopday.includes('Monday');
+        openTuesday = value.businessopday.includes('Tuesday');
+        openWednesday = value.businessopday.includes('Wednesday');
+        openThursday = value.businessopday.includes('Thursday');
+        openFriday = value.businessopday.includes('Friday');
+        openSaturday = value.businessopday.includes('Saturday');
+        openSunday = value.businessopday.includes('Sunday');
+        storephotourl = value.storephotourl;
+        user_id = value.user_id;
+    }) //CONTINUE HERE
 
     $: activeurl = $page.url.pathname;
 </script>
@@ -447,7 +483,7 @@
             </div>
         </div>
         <div class="savebutton flex justify-center mb-10">
-            <Button class="" on:click={saveNewInfo}>Save Information</Button>
+            <Button class="" on:click={saveNewInfo} href="/client/dashboard/vendor/store" data-sveltekit-reload>Save Information</Button>
         </div>
     </form>
 </div>

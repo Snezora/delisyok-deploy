@@ -1,4 +1,4 @@
-<script context="module">
+<script>
 	import { Alert, Avatar, Dropdown, DropdownDivider, DropdownHeader, DropdownItem } from 'flowbite-svelte';
 	import {
 		Checkbox,
@@ -17,8 +17,10 @@
 	import { fade } from 'svelte/transition';
 
 	import { page } from '$app/stores';
-	import { user } from '../routes/stores/authStore.js';
+	import { user, usertype } from '../routes/stores/authStore.js';
 	import { supabaseClient } from '$lib/supabase.js';
+	import { onMount } from 'svelte';
+	import { goto, invalidateAll } from '$app/navigation';
 
 	supabaseClient.auth.getSession().then(({ data: { session } }) => {
 		const isLoggedIn = session !== null;
@@ -40,8 +42,77 @@
 	}
 
 	// @ts-ignore
-	export let isClient;
+	/**
+	 * @type {any}
+	 */
+	 export let isClient;
 	let formModal = false;
+	let user_id;
+	/**
+	 * @type {boolean}
+	 */
+	let isVendor;
+	/**
+	 * @type {boolean}
+	 */
+	let isCustomer;
+	/**
+	 * @type {boolean}
+	 */
+	let isRider;
+
+	onMount(async () => {
+		// Check if the user is signed in
+		const userLog = await supabaseClient.auth.getUser();
+        user_id = userLog.data.user?.id;
+		
+		
+		let { data: vendor, error } = await supabaseClient
+		.from('vendor')
+		.select('*')
+		.eq('user_id', user_id);
+
+		if (error) {
+			let { data: customer, error } = await supabaseClient
+				.from('customer')
+				.select('*')
+				.eq('user_id', user_id);
+
+			if (error) {
+				let { data: rider, error } = await supabaseClient
+					.from('rider')
+					.select('*')
+					.eq('user_id', user_id);
+
+				if (error) {
+					console.log("cant find");
+				} else if (rider && rider.length > 0) {
+					isRider = true;
+					isVendor = false;
+					isCustomer = false;
+				}
+			} else if (customer && customer.length > 0) {
+				isCustomer = true;
+				isVendor = false;
+				isRider = false;
+			}
+		} else if (vendor && vendor.length > 0) {
+			isVendor = true;
+			isCustomer = false;
+			isRider = false;
+		}
+
+		usertype.set({isVendor, isCustomer, isRider});
+
+		console.log($usertype);
+	})
+
+	usertype.subscribe(value => {
+		isVendor = value.isVendor;
+		isCustomer = value.isCustomer;
+		isRider = value.isRider;
+	})
+
 </script>
 
 <svelte:head>
@@ -55,7 +126,7 @@
 	<Navbar fluid class=" overflow-hidden max-w-[100%] bg-gray-200">
 		<NavBrand href="/">
 			<!-- <img src="/images/flowbite-svelte-icon-logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" /> -->
-			<span class="self-center whitespace-nowrap dark:text-white logo sm:text-[12px] md:text-[18px] lg:text-[24px]"
+			<span class="logo self-center whitespace-nowrap dark:text-white logo sm:text-[12px] md:text-[18px] lg:text-[24px]"
 				>DeliSyok</span
 			>
 		</NavBrand>
@@ -77,7 +148,13 @@
 					  <span class="block text-sm">Bonnie Green</span>
 					  <span class="block truncate text-sm font-medium">name@flowbite.com</span>
 					</DropdownHeader>
-					<DropdownItem>Dashboard</DropdownItem>
+					{#if isVendor}
+					<DropdownItem href="/client/dashboard/vendor" data-sveltekit-reload>Dashboard</DropdownItem>
+					{:else if isCustomer}
+					<DropdownItem href="/client/dashboard/customer" data-sveltekit-reload>Dashboard</DropdownItem>
+					{:else if isRider}
+					<DropdownItem href="/client/dashboard/rider" data-sveltekit-reload>Dashboard</DropdownItem>
+					{/if}
 					<DropdownItem>Settings</DropdownItem>
 					<DropdownItem>Earnings</DropdownItem>
 					<DropdownDivider />

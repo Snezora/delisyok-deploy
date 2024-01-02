@@ -185,7 +185,7 @@
 
 </script>
 
-<div class="pagecontainer w-[100%] flex flex-row mobile-content h-[100%]">
+<div class="pagecontainer w-[100%] flex flex-row mobile-content h-[100vh]">
     <SidebarVendor />
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
         <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">

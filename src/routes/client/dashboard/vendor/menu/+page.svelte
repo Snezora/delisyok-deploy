@@ -8,6 +8,7 @@
 	import { PenToSquareRegular, TrashCanRegular } from "svelte-awesome-icons";
 	import { supabaseClient } from "$lib/supabase";
 	import { onMount } from "svelte";
+	import { invalidateAll } from "$app/navigation";
 
     let transitionParams = {
         x: -320,
@@ -21,6 +22,7 @@
     let businessname;
 
     onMount(async () => {
+        invalidateAll();
         const userLog = await supabaseClient.auth.getUser();
         user_id = userLog.data.user?.id;
         const { data, error } = await supabaseClient
@@ -87,7 +89,7 @@
     let isVendor = true;
 </script>
 
-<div class="pagecontainer h-[100%] w-[100%] flex flex-row mobile-content bg-gray-500">
+<div class="pagecontainer h-[100vh] w-[100%] flex flex-row mobile-content bg-gray-500">
     <SidebarVendor />
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
         <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">

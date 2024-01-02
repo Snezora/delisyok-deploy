@@ -1,4 +1,4 @@
-<script context="module">
+<script>
 	import { supabaseClient } from '$lib/supabase';
 	import { navigate } from 'svelte-routing';
 	import {
@@ -31,24 +31,29 @@
 	 */
 	let password;
 
-	const handleLogin = async() => {
-		try {
-			loading = true;
-			const {error} = await supabaseClient.auth.signInWithPassword({
-				email,
-				password
-			})
+	const handleLogin = async(event) => {
+		console.log("before");
+		event.preventDefault();
+		console.log("after");
+    try {
+        loading = true;
+        const {error} = await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+        })
 
-			if (error) throw error;
+        if (error) throw error;
+		window.location.href="/";
 
-		} catch (error) {
-			console.error(error);
-			alert(error);
-		} finally {
-			loading = false;
-		}
+    } catch (error) {
+        console.error(error);
+        alert(error);
+    } finally {
+        loading = false;
+    }
+}
 
-	}
+
 
 // 	const handleLogin = async () => {
 //     await supabase.auth.signInWithPassword({
@@ -113,7 +118,7 @@
 						Forgot password?
 					</a>
 				</div>
-				<Button type="submit" class="w-[325px] mt-4" on:click={handleLogin} href="/">Login</Button>
+				<Button type="submit" class="w-[325px] mt-4" on:click={(event) => handleLogin(event)} href="/" id="submitbutton">Login</Button>
 				<div class="text-sm font-medium text-gray-500 dark:text-gray-300 text-xs mt-1 w-[325px] text-center">
 					Don't have an account? Register <a
 						href="/auth/register"
