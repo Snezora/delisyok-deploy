@@ -24,6 +24,9 @@
 
     
     onMount(async () => {
+    const userLog = await supabaseClient.auth.getUser();
+    user_id = userLog.data.user?.id;
+    
     console.log("onmount in layout triggered");
 
     // This code will run immediately when the component mounts
