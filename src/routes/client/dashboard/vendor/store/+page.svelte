@@ -484,7 +484,7 @@
             </div>
         </div>
         <div class="savebutton flex justify-center mb-10">
-            <Button class="" on:click={saveNewInfo} >Save Information</Button>
+            <Button class="" on:click={saveNewInfo} href="/client/dashboard/vendor/store">Save Information</Button>
         </div>
     </form>
 </div>
