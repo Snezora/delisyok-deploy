@@ -89,6 +89,7 @@ let menuItemPhoto;
 
             if (menuItemError) {
                 alert('Error updating vendor data');
+                console.error(menuItemError);
             } else {
                 showToast = true;
                 window.location.href = `/client/dashboard/vendor/menu/${itemid}/edit`;

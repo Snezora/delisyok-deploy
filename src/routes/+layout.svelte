@@ -24,9 +24,10 @@ import { page } from '$app/stores';
 
 </script>
 
-<Header {isClient}/>
-<slot />
-<Footer />
+
+	<Header {isClient}/>
+	<slot />
+	<Footer />
 
 <style>
 
