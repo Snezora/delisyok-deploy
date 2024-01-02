@@ -21,12 +21,21 @@
 	 */
     let businessName;
 
+    /**
+	 * @type {any}
+	 */
+    let storephoto;
+    let storephotourl;
+
+    var blurred = false;
+    window.onblur = function() { blurred = true; };
+    window.onfocus = function() { blurred && (location.reload()); }; //THIS IS LEGENDARY
 
     
     onMount(async () => {
     const userLog = await supabaseClient.auth.getUser();
     user_id = userLog.data.user?.id;
-    
+
     console.log("onmount in layout triggered");
 
     // This code will run immediately when the component mounts
@@ -42,12 +51,17 @@
         openSaturday: days.includes('Saturday'),
         openSunday: days.includes('Sunday'),
     };
+
+    storephoto = vendorData.storephoto;
+    storephotourl = await getStorePhoto();
+
     console.log("onmount in layout triggered 2");
 
     // Update the store
     vendorStore.set({
         ...vendorData,
         ...openDays,
+        storephotourl,
         user_id
     });
 
@@ -78,6 +92,14 @@
     });
 });
 
+    async function getStorePhoto() {
+            const { data } = supabaseClient
+            .storage
+            .from('vendorstore')
+            .getPublicUrl(`${storephoto}`);
+
+            return data.publicUrl;
+        }
 
     async function fetchBusinessName() {
 

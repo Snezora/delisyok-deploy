@@ -21,6 +21,11 @@
 	 */
     let businessname;
 
+    /**
+	 * @type {any[] | null}
+	 */
+    let menuitems = [];
+
     onMount(async () => {
         invalidateAll();
         const userLog = await supabaseClient.auth.getUser();
@@ -79,14 +84,11 @@
 	 */
     let user_id;
     /**
-	 * @type {any[] | null}
-	 */
-    let menuitems = [];
-    /**
 	 * @type {{ vendorid: any; }}
 	 */
     let vendorid;
     let isVendor = true;
+
 </script>
 
 <div class="pagecontainer h-[100vh] w-[100%] flex flex-row mobile-content bg-gray-500">

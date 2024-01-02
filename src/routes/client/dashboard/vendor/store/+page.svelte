@@ -112,39 +112,39 @@
     let selectedDays = [];
 
     onMount(async () => {
-        invalidateAll();
-        // Check if the user is signed in
-        const userLog = await supabaseClient.auth.getUser();
-        user_id = userLog.data.user?.id;
+        // invalidateAll();
+        // // Check if the user is signed in
+        // const userLog = await supabaseClient.auth.getUser();
+        // user_id = userLog.data.user?.id;
 
-        const vendorData = await fetchBusinessName();
-        console.log(vendorData);
-        const days = JSON.parse(vendorData.businessopday);
-        const openDays = {
-            openMonday: days.includes('Monday'),
-            openTuesday: days.includes('Tuesday'),
-            openWednesday: days.includes('Wednesday'),
-            openThursday: days.includes('Thursday'),
-            openFriday: days.includes('Friday'),
-            openSaturday: days.includes('Saturday'),
-            openSunday: days.includes('Sunday'),
-        };
+        // const vendorData = await fetchBusinessName();
+        // console.log(vendorData);
+        // const days = JSON.parse(vendorData.businessopday);
+        // const openDays = {
+        //     openMonday: days.includes('Monday'),
+        //     openTuesday: days.includes('Tuesday'),
+        //     openWednesday: days.includes('Wednesday'),
+        //     openThursday: days.includes('Thursday'),
+        //     openFriday: days.includes('Friday'),
+        //     openSaturday: days.includes('Saturday'),
+        //     openSunday: days.includes('Sunday'),
+        // };
 
-        // Update the store
-        vendorStore.set({
-            ...vendorData,
-            ...openDays,
-        });
+        // // Update the store
+        // vendorStore.set({
+        //     ...vendorData,
+        //     ...openDays,
+        // });
     
-        storephotourl = await getStorePhoto();
-        console.log(storephotourl);
+        // storephotourl = await getStorePhoto();
+        // console.log(storephotourl);
 
-        vendorStore.set({
-            ...vendorData,
-            ...openDays,
-            storephotourl,
-            user_id
-        });
+        // vendorStore.set({
+        //     ...vendorData,
+        //     ...openDays,
+        //     storephotourl,
+        //     user_id
+        // });
 
     });
 
@@ -268,7 +268,6 @@
                 console.error(vendorError);
             } else {
                 alert('Vendor data updated successfully');
-                invalidateAll();
             }
         }
 
