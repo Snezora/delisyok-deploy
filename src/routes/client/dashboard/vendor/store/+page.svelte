@@ -11,6 +11,7 @@
     import { hidden2 } from '../../../../stores/sidebar.js';
     import { vendorStore } from '../../../../stores/businessStore.js';
 	import { invalidateAll } from '$app/navigation';
+    import SpinnerSet from '../../../SpinnerSet.svelte';
 
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
     let transitionParams = {
@@ -331,6 +332,7 @@
     $: activeurl = $page.url.pathname;
 </script>
 
+<SpinnerSet />
 
 <div class="pagecontainer h-[100%] w-[100%] flex flex-row mobile-content">
         <SidebarVendor />

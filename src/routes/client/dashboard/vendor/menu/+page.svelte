@@ -1,5 +1,5 @@
 <script>
-	import { Drawer, CloseButton, Button, Card, Toggle } from "flowbite-svelte";
+	import { Drawer, CloseButton, Button, Card, Toggle, Spinner } from "flowbite-svelte";
     import Sidebar from '../../../../Sidebar.svelte';
 	import { hidden2 } from "../../../../stores/sidebar.js";
 	import SidebarVendor from "../SidebarVendor.svelte";
@@ -9,6 +9,8 @@
 	import { supabaseClient } from "$lib/supabase";
 	import { onMount } from "svelte";
 	import { invalidateAll } from "$app/navigation";
+	import { fade } from "svelte/transition";
+	import SpinnerSet from "../../../SpinnerSet.svelte";
 
     let transitionParams = {
         x: -320,
@@ -90,6 +92,8 @@
     let isVendor = true;
 
 </script>
+
+<SpinnerSet />
 
 <div class="pagecontainer h-[100vh] w-[100%] flex flex-row mobile-content bg-gray-500">
     <SidebarVendor />

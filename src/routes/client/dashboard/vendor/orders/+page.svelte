@@ -8,6 +8,9 @@
 	import { PenToSquareRegular, TrashCanRegular } from "svelte-awesome-icons";
 	import { supabaseClient } from "$lib/supabase";
 	import { onMount } from "svelte";
+    import { fade } from 'svelte/transition';
+	import SpinnerSet from "../../../SpinnerSet.svelte";
+
 
     let transitionParams = {
         x: -320,
@@ -19,7 +22,7 @@
 	 * @type {string}
 	 */
     let time;
-    let showLoading = true;
+
 
     onMount(() => {
         let currentTime = new Date();
@@ -27,11 +30,7 @@
     })
 </script>
 
-{#if showLoading}
-<div class=" flex toastcontainer justify-center align-middle pt-5 fade-in h-[100%] w-[100%] items-center">
-    <Spinner size="8" class="text-center"/>
-</div>
-{/if}
+<SpinnerSet />
 
 <div class="pagecontainer h-[100%] w-[100%] flex flex-row mobile-content bg-gray-500">
     <SidebarVendor />
@@ -50,17 +49,4 @@
     </div>
 </div>
 
-<style>
-    .toastcontainer {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 10000;
-    }
-  
-      .fade-in {
-          transition: opacity 0.5s ease-in;
-          opacity: 1;
-      }
-</style>
+

@@ -2,6 +2,8 @@
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import { vendorStore } from '../../../stores/businessStore';
+	import { Spinner } from 'flowbite-svelte';
+	import { fade } from 'svelte/transition';
 
     let user;
     /**
@@ -29,10 +31,13 @@
 
     // var blurred = false;
     // window.onblur = function() { blurred = true; };
-    // window.onfocus = function() { (location.reload()); }; //THIS IS LEGENDARY
 
     
     onMount(async () => {
+
+    window.onfocus = function() { (location.reload()); }; //THIS IS LEGENDARY
+
+
     const userLog = await supabaseClient.auth.getUser();
     user_id = userLog.data.user?.id;
 
@@ -120,6 +125,23 @@
 
 </script>
 
+
+
 <div class="">
     <slot />
 </div>
+
+<style>
+    .toastcontainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+    }
+
+    .fade-in {
+        transition: opacity 0.5s ease-in;
+        opacity: 1;
+    }
+</style>

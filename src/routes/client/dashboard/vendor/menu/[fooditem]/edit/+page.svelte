@@ -9,6 +9,7 @@
 	import { CheckCircleSolid } from "flowbite-svelte-icons";
 	import { onMount } from "svelte";
 	import { supabaseClient } from "$lib/supabase";
+	import SpinnerSet from "../../../../../SpinnerSet.svelte";
 
     const itemid = $page.params.fooditem;
 
@@ -36,6 +37,7 @@ let menuitemphotourl;
 	 * @type {any}
 	 */
 let menuItemPhoto;
+
 
     onMount(async () => {
         const userLog = await supabaseClient.auth.getUser();
@@ -134,6 +136,8 @@ let menuItemPhoto;
 
 </script>
 
+<SpinnerSet />
+
 {#if showToast}
 <div class=" flex toastcontainer justify-center pt-5 fade-in">
     <Toast color="green">
@@ -213,18 +217,3 @@ let menuItemPhoto;
     </div>
 
 </div>
-
-<style>
-    .toastcontainer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 9999;
-    }
-
-    .fade-in {
-        transition: opacity 0.5s ease-in;
-        opacity: 1;
-    }
-</style>

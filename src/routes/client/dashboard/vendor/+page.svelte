@@ -6,7 +6,7 @@
     import { supabaseClient } from '$lib/supabase.js';
     import Sidebar from '../../../Sidebar.svelte';
     import { writable } from 'svelte/store';
-    import { Card, Drawer, Button, CloseButton, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, DarkMode, Chart, A, Dropdown, DropdownItem } from 'flowbite-svelte';
+    import { Card, Drawer, Spinner, Button, CloseButton, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, DarkMode, Chart, A, Dropdown, DropdownItem } from 'flowbite-svelte';
     import { ChartPieSolid, ShoppingCartSolid, GridSolid, MailBoxSolid, UsersSolid, BagSolid, ArrowRightToBracketSolid, FileEditSolid, ChevronRightSolid, ChevronDownSolid } from 'flowbite-svelte-icons';
     import { CircleCheckRegular, CircleXmarkRegular, CompassSolid, MoneyBill1Regular, WheelchairMoveSolid } from 'svelte-awesome-icons';
     import { sineIn } from 'svelte/easing';
@@ -14,6 +14,10 @@
 	import { supabase } from '@supabase/auth-ui-shared';
     import SidebarVendor from './SidebarVendor.svelte';
     import { hidden2 } from '../../../stores/sidebar.js';
+    import { fade } from 'svelte/transition';
+	import SpinnerSet from '../../SpinnerSet.svelte';
+	import { vendorStore } from '../../../stores/businessStore';
+
 
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
     let transitionParams = {
@@ -45,6 +49,7 @@
 	 */
     let orders;
     let isVendor = true;
+
 
 
     onMount(async () => {
@@ -183,7 +188,13 @@
         return order;
     }
 
+    vendorStore.subscribe((value) => {
+        businessname = value.businessname;
+    });
+
 </script>
+
+<SpinnerSet />
 
 <div class="pagecontainer w-[100%] flex flex-row mobile-content h-[100vh]">
     <SidebarVendor />
@@ -347,5 +358,6 @@
             height: 100svh;
         }
     }
+
 </style>
 
