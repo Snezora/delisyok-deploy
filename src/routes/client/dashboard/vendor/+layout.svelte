@@ -35,7 +35,6 @@
     
     onMount(async () => {
 
-    window.onfocus = function() { (location.reload()); }; //THIS IS LEGENDARY
 
 
     const userLog = await supabaseClient.auth.getUser();
@@ -93,6 +92,9 @@
             }
         }
     });
+
+    window.onfocus = function() { (location.reload()); }; //THIS IS LEGENDARY
+
 });
 
     async function getStorePhoto() {
