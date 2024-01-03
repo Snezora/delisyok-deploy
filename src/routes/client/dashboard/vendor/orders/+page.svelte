@@ -23,6 +23,8 @@
 	 */
     let time;
 
+    let isVendor = true;
+
 
     onMount(() => {
         let currentTime = new Date();

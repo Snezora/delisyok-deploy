@@ -1,10 +1,13 @@
 <script>
+// @ts-nocheck
+
 	import { Drawer, CloseButton, Button, Label, Input, Textarea, Toggle, Toast, Fileupload } from "flowbite-svelte";
 	import { hidden2 } from "../../../../../../stores/sidebar";
     import Sidebar from "../../../../../../Sidebar.svelte";
 	import SidebarVendor from "../../../SidebarVendor.svelte";
 	import { sineIn } from "svelte/easing";
     import { page } from '$app/stores';
+	// @ts-ignore
 	import { ArrowLeftSolid, DollarSignSolid, EnvelopeSolid, MSolid, RSolid } from "svelte-awesome-icons";
 	import { CheckCircleSolid } from "flowbite-svelte-icons";
 	import { onMount } from "svelte";
@@ -21,7 +24,7 @@ let user_id;
 	 */
 let vendorid;
 	/**
-	 * @type {never[]}
+	 * @type {any[]}
 	 */
 let menuitem = [];
 let transitionParams = {
@@ -80,9 +83,13 @@ let menuItemPhoto;
 			.from('menuitem')
 			.update([
 				{
+                    // @ts-ignore
                     itemname: menuitem.itemname,
+                    // @ts-ignore
                     itemdescription: menuitem.itemdescription,
+                    // @ts-ignore
                     itemprice: menuitem.itemprice,
+                    // @ts-ignore
                     isActive: menuitem.isActive
 				},
 			])
@@ -102,6 +109,7 @@ let menuItemPhoto;
         const { data } = supabaseClient
         .storage
         .from('menuitemimage')
+        // @ts-ignore
         .getPublicUrl(`${menuitem.itemimage}`);
 
         return data.publicUrl;

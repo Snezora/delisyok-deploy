@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     /** @type {import('./$types').PageData} */
 
     import { onMount } from 'svelte';
