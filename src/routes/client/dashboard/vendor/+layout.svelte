@@ -27,9 +27,9 @@
     let storephoto;
     let storephotourl;
 
-    var blurred = false;
-    window.onblur = function() { blurred = true; };
-    window.onfocus = function() { blurred && (location.reload()); }; //THIS IS LEGENDARY
+    // var blurred = false;
+    // window.onblur = function() { blurred = true; };
+    // window.onfocus = function() { (location.reload()); }; //THIS IS LEGENDARY
 
     
     onMount(async () => {
@@ -54,8 +54,6 @@
 
     storephoto = vendorData.storephoto;
     storephotourl = await getStorePhoto();
-
-    console.log("onmount in layout triggered 2");
 
     // Update the store
     vendorStore.set({
