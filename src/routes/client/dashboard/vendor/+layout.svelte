@@ -93,7 +93,6 @@
         }
     });
 
-    window.onfocus = function() { (location.reload()); }; //THIS IS LEGENDARY
 
 });
 
