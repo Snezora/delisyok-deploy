@@ -45,9 +45,13 @@
         <Sidebar {isVendor} />
         </Drawer>
     </div>
-    <div class="maincontainer flex flex-col w-[100%]">
+    <div class="maincontainer flex flex-col w-[100%] ">
         <div class="title flex justify-center items-center text-2xl font-bold bg-orange-900 text-white h-[50px]">Orders</div>
-        {time}
+        <div class="subtitle flex justify-center items-center text-2xl font-bold bg-blue-700 text-white h-[50px] gap-5">
+            Last Refreshed: {time} GMT+8
+            <Button on:click={() => location.reload()} color="red"> Refresh </Button>
+        </div>
+
     </div>
 </div>
 

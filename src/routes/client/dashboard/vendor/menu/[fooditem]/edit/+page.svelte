@@ -13,6 +13,7 @@
 	import { onMount } from "svelte";
 	import { supabaseClient } from "$lib/supabase";
 	import SpinnerSet from "../../../../../SpinnerSet.svelte";
+    import { uploadingFile } from "../../../../../../stores/businessStore";
 
     const itemid = $page.params.fooditem;
 
@@ -42,7 +43,9 @@ let menuitemphotourl;
 let menuItemPhoto;
 
 
+
     onMount(async () => {
+        $uploadingFile = false;
         const userLog = await supabaseClient.auth.getUser();
         user_id = userLog.data.user?.id;
         const { data, error } = await supabaseClient
@@ -185,7 +188,7 @@ let menuItemPhoto;
                 <div class="flex justify-center flex-col items-center gap-5 py-7">
                     <div class="fileuploadingarea">
                         <span class="dark:text-white font-bold">Upload your food image here:</span>
-                        <Fileupload accept=".png, .jpg, .jpeg" bind:files={menuItemPhoto} color="white" class="border m-[1px] bg-white dark:bg-gray-500 dark:text-white" ></Fileupload>
+                        <Fileupload accept=".png, .jpg, .jpeg" bind:files={menuItemPhoto} on:change={()=> {$uploadingFile = true}} color="white" class="border m-[1px] bg-white dark:bg-gray-500 dark:text-white" ></Fileupload>
                     </div>
                     <Button on:click={changePhoto}>Submit Photo</Button>
                 </div>

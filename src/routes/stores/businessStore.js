@@ -28,3 +28,5 @@ export const vendorStore = writable({
   openSunday: false,
   storephotourl: ''
 });
+
+export const uploadingFile = writable(false);

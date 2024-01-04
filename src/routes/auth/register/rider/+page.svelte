@@ -233,7 +233,7 @@
 							<Input
 								type="tel"
 								name="phone"
-								placeholder="+60 123 456 789"
+								placeholder="0123456789"
 								required
 								bind:value={riderhp}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"

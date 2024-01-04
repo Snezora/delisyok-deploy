@@ -1,7 +1,7 @@
 <script>
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
-	import { vendorStore } from '../../../stores/businessStore';
+	import { uploadingFile, vendorStore } from '../../../stores/businessStore';
 	import { Spinner } from 'flowbite-svelte';
 	import { fade } from 'svelte/transition';
 
@@ -93,7 +93,9 @@
         }
     });
 
-
+    if (!$uploadingFile){
+        // window.onfocus = function() { (location.reload()); };
+    }
 });
 
     async function getStorePhoto() {

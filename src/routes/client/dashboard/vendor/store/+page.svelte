@@ -9,7 +9,7 @@
 	import { ArrowRightOutline, CheckCircleSolid, EnvelopeSolid } from 'flowbite-svelte-icons';
 	import SidebarVendor from '../SidebarVendor.svelte';
     import { hidden2 } from '../../../../stores/sidebar.js';
-    import { vendorStore } from '../../../../stores/businessStore.js';
+    import { uploadingFile, vendorStore } from '../../../../stores/businessStore.js';
 	import { invalidateAll } from '$app/navigation';
     import SpinnerSet from '../../../SpinnerSet.svelte';
 
@@ -113,6 +113,7 @@
     let selectedDays = [];
 
     onMount(async () => {
+        $uploadingFile = false;
         // invalidateAll();
         // // Check if the user is signed in
         // const userLog = await supabaseClient.auth.getUser();
@@ -361,7 +362,7 @@
                 <div class="intro font-extrabold text-[32px] dark:text-white text-center">Store Front Information for {businessname}</div>
                 <div class="fileuploadingarea">
                     <span class="dark:text-white">Upload your store front image here:</span>
-                    <Fileupload accept=".png, .jpg, .jpeg" bind:files={storephoto} color="white" class="border-none m-[1px] bg-white dark:bg-gray-500 dark:text-white" ></Fileupload>
+                    <Fileupload accept=".png, .jpg, .jpeg" bind:files={storephoto} on:change={()=> {$uploadingFile = true}} color="white" class="border-none m-[1px] bg-white dark:bg-gray-500 dark:text-white" ></Fileupload>
                 </div>
                 <Button on:click={changePhoto}>Submit Photo</Button>
             </div>

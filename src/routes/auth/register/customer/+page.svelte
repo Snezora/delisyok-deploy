@@ -214,7 +214,7 @@
 							<Input
 								type="tel"
 								name="customerhp"
-								placeholder="012-3456789"
+								placeholder="0123456789"
 								required
 								bind:value={customerhp}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
