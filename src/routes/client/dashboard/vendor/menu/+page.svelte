@@ -11,6 +11,7 @@
 	import { invalidateAll } from "$app/navigation";
 	import { fade } from "svelte/transition";
 	import SpinnerSet from "../../../SpinnerSet.svelte";
+	import { vendorStore } from "../../../../stores/businessStore";
 
     let transitionParams = {
         x: -320,
@@ -90,6 +91,11 @@
 	 */
     let vendorid;
     let isVendor = true;
+
+    vendorStore.subscribe(value => {
+        businessname = value.businessname;
+        user_id = value.user_id;
+    }) //CONTINUE HERE
 
 </script>
 
