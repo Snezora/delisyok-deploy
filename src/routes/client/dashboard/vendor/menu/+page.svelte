@@ -112,7 +112,6 @@
         <Sidebar {isVendor} />
         </Drawer>
     </div>
-
     <div class="maincontainer w-[100%] flex flex-col">
         <div class="title flex justify-center items-center text-2xl font-bold bg-orange-900 text-white h-[50px]">{businessname} Menu</div>
         <div class="additembar bg-gray-300 dark:bg-gray-600 p-2 flex justify-end">

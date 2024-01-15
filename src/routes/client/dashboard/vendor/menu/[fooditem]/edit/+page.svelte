@@ -181,7 +181,7 @@ let menuItemPhoto;
             Edit Item
             <p />
         </div>
-        <div class="maincontainer w-[100%] grid grid-flow-row md:grid-flow-col">
+        <div class="maincontainer w-[100%] grid grid-flow-row md:grid-flow-col bg-gray-100 h-[100%]">
             <div class="firsthalf justify-start py-10 flex flex-col px-20 pb-0">
                 <!-- Put Photo here -->
                 <img src={menuitemphotourl} alt="" class="w-[300px] self-center">

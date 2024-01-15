@@ -115,38 +115,38 @@
     onMount(async () => {
         $uploadingFile = false;
         // invalidateAll();
-        // // Check if the user is signed in
-        // const userLog = await supabaseClient.auth.getUser();
-        // user_id = userLog.data.user?.id;
+        // Check if the user is signed in
+        const userLog = await supabaseClient.auth.getUser();
+        user_id = userLog.data.user?.id;
 
-        // const vendorData = await fetchBusinessName();
-        // console.log(vendorData);
-        // const days = JSON.parse(vendorData.businessopday);
-        // const openDays = {
-        //     openMonday: days.includes('Monday'),
-        //     openTuesday: days.includes('Tuesday'),
-        //     openWednesday: days.includes('Wednesday'),
-        //     openThursday: days.includes('Thursday'),
-        //     openFriday: days.includes('Friday'),
-        //     openSaturday: days.includes('Saturday'),
-        //     openSunday: days.includes('Sunday'),
-        // };
+        const vendorData = await fetchBusinessName();
+        console.log(vendorData);
+        const days = JSON.parse(vendorData.businessopday);
+        const openDays = {
+            openMonday: days.includes('Monday'),
+            openTuesday: days.includes('Tuesday'),
+            openWednesday: days.includes('Wednesday'),
+            openThursday: days.includes('Thursday'),
+            openFriday: days.includes('Friday'),
+            openSaturday: days.includes('Saturday'),
+            openSunday: days.includes('Sunday'),
+        };
 
-        // // Update the store
-        // vendorStore.set({
-        //     ...vendorData,
-        //     ...openDays,
-        // });
+        // Update the store
+        vendorStore.set({
+            ...vendorData,
+            ...openDays,
+        });
     
-        // storephotourl = await getStorePhoto();
-        // console.log(storephotourl);
+        storephotourl = await getStorePhoto();
+        console.log(storephotourl);
 
-        // vendorStore.set({
-        //     ...vendorData,
-        //     ...openDays,
-        //     storephotourl,
-        //     user_id
-        // });
+        vendorStore.set({
+            ...vendorData,
+            ...openDays,
+            storephotourl,
+            user_id
+        });
 
     });
 
@@ -364,7 +364,7 @@
                     <span class="dark:text-white">Upload your store front image here:</span>
                     <Fileupload accept=".png, .jpg, .jpeg" bind:files={storephoto} on:change={()=> {$uploadingFile = true}} color="white" class="border-none m-[1px] bg-white dark:bg-gray-500 dark:text-white" ></Fileupload>
                 </div>
-                <Button on:click={changePhoto}>Submit Photo</Button>
+                <Button on:click={changePhoto} color="primary">Submit Photo</Button>
             </div>
         </div>
         <div class="bottomhalf p-7 grid lg:grid-cols-3 gap-9 justify-around md:grid-flow-row">

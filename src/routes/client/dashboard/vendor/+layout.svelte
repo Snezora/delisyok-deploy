@@ -94,7 +94,7 @@
     });
 
     if (!$uploadingFile){
-        // window.onfocus = function() { (location.reload()); };
+        window.onfocus = function() { (location.reload()); };
     }
 });
 

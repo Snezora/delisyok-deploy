@@ -173,10 +173,10 @@
             console.error('Error fetching vendor info: ', error);
         } else if (data && data.length > 0) {
             const { data, error } = await supabaseClient
-                .from('cusorder')
+                .from('sale')
                 .select('*')
                 .eq('vendorid', vendorid)
-                .order('ordergenerated', { ascending: false });
+                .order('receiptgenerated', { ascending: false });
 
             if (error) {
                 console.error('Error fetching orders: ', error);
@@ -283,8 +283,8 @@
                                 {#if order}
                                     <TableBodyRow>
                                         <TableBodyCell>{order.orderid}</TableBodyCell>
-                                        <TableBodyCell>{order.ordergenerated}</TableBodyCell>
-                                        <TableBodyCell class="capitalize">{order.orderstatus}</TableBodyCell>
+                                        <TableBodyCell>{order.receiptgenerated}</TableBodyCell>
+                                        <TableBodyCell class="capitalize">{order.vendororderstatus}</TableBodyCell>
                                         <TableBodyCell>
                                         <a href="/client/orders/{order.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Details</a>
                                         </TableBodyCell>

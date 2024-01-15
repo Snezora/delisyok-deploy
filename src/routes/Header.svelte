@@ -67,40 +67,38 @@
         user_id = userLog.data.user?.id;
 		
 		
-		let { data: vendor, error } = await supabaseClient
+		let { data: vendor } = await supabaseClient
 		.from('vendor')
 		.select('*')
 		.eq('user_id', user_id);
 
-		if (error) {
-			let { data: customer, error } = await supabaseClient
-				.from('customer')
-				.select('*')
-				.eq('user_id', user_id);
-
-			if (error) {
-				let { data: rider, error } = await supabaseClient
-					.from('rider')
-					.select('*')
-					.eq('user_id', user_id);
-
-				if (error) {
-					console.log("cant find");
-				} else if (rider && rider.length > 0) {
-					isRider = true;
-					isVendor = false;
-					isCustomer = false;
-				}
-			} else if (customer && customer.length > 0) {
-				isCustomer = true;
-				isVendor = false;
-				isRider = false;
-			}
-		} else if (vendor && vendor.length > 0) {
+		if (vendor && vendor.length > 0) {
 			isVendor = true;
 			isCustomer = false;
 			isRider = false;
 		}
+
+		let { data: customer} = await supabaseClient
+				.from('customer')
+				.select('*')
+				.eq('user_id', user_id);
+
+		if (customer && customer.length > 0) {
+				isCustomer = true;
+				isVendor = false;
+				isRider = false;
+			}
+
+		let { data: rider, error } = await supabaseClient
+				.from('deliveryrider')
+				.select('*')
+				.eq('user_id', user_id);
+
+		if (rider && rider.length > 0) {
+					isRider = true;
+					isVendor = false;
+					isCustomer = false;
+				}
 
 		usertype.set({isVendor, isCustomer, isRider});
 

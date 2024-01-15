@@ -1,5 +1,5 @@
 <script>
-	import { Drawer, CloseButton, Button, Card, Toggle, Spinner, Accordion, AccordionItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
+	import { Drawer, CloseButton, Button, Card, Toggle, Spinner, Accordion, AccordionItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, ImagePlaceholder, Modal } from "flowbite-svelte";
     import Sidebar from '../../../../Sidebar.svelte';
 	import { hidden2 } from "../../../../stores/sidebar.js";
 	import SidebarVendor from "../SidebarVendor.svelte";
@@ -8,7 +8,7 @@
 	import { PenToSquareRegular, TrashCanRegular } from "svelte-awesome-icons";
 	import { supabaseClient } from "$lib/supabase";
 	import { onMount } from "svelte";
-    import { fade } from 'svelte/transition';
+    import { fade, slide } from 'svelte/transition';
 	import SpinnerSet from "../../../SpinnerSet.svelte";
 	import { vendorStore } from "../../../../stores/businessStore";
 
@@ -40,6 +40,7 @@
 	 * @type {any[] | undefined}
 	 */
     let pastOrders;
+
 
     onMount(async () => {
         let currentTime = new Date();
@@ -76,11 +77,11 @@
       let realData;
 
         const { data, error } = await supabaseClient
-        .from('cusorder')
-        .select('*, customer(*)')
+        .from('sale')
+        .select('*, cusorder(*, customer(*))')
         .eq('vendorid', vendorid)
         .eq('vendororderstatus', 'pending')
-        .order('ordergenerated', { ascending: false });
+        .order('receiptgenerated', { ascending: false });
         
         if (error) {
             console.error('Error fetching orders:', error);
@@ -94,12 +95,12 @@
     async function getCurrentOrders() {
       let realData;
 
-        const { data, error } = await supabaseClient
-        .from('cusorder')
-        .select('*, customer(*)')
+      const { data, error } = await supabaseClient
+        .from('sale')
+        .select('*, cusorder(*, customer(*))')
         .eq('vendorid', vendorid)
         .eq('vendororderstatus', 'ongoing')
-        .order('ordergenerated', { ascending: false });
+        .order('receiptgenerated', { ascending: false });
         
         if (error) {
             console.error('Error fetching orders:', error);
@@ -113,12 +114,12 @@
     async function getPastOrders() {
       let realData;
 
-        const { data, error } = await supabaseClient
-        .from('cusorder')
-        .select('*, customer(*)')
+      const { data, error } = await supabaseClient
+        .from('sale')
+        .select('*, cusorder(*, customer(*))')
         .eq('vendorid', vendorid)
         .in('vendororderstatus', ['completed', 'rejected'])
-        .order('ordergenerated', { ascending: false });
+        .order('receiptgenerated', { ascending: false });
         
         if (error) {
             console.error('Error fetching orders:', error);
@@ -130,13 +131,13 @@
     }
 
     /**
-	 * @param {any} orderid
+	 * @param {any} saleid
 	 */
-    async function approveNewOrder(orderid) {
+    async function approveNewOrder(saleid) {
         const { data, error } = await supabaseClient
-        .from('cusorder')
+        .from('sale')
         .update({ vendororderstatus: 'ongoing' })
-        .eq('orderid', orderid);
+        .eq('saleid', saleid);
 
         if (error) {
             console.error('Error updating order status:', error);
@@ -147,13 +148,30 @@
     }
 
     /**
-	 * @param {any} orderid
+	 * @param {any} saleid
 	 */
-    async function rejectNewOrder(orderid) {
+    async function rejectNewOrder(saleid) {
         const { data, error } = await supabaseClient
-        .from('cusorder')
+        .from('sale')
         .update({ vendororderstatus: 'rejected' })
-        .eq('orderid', orderid);
+        .eq('saleid', saleid);
+
+        if (error) {
+            console.error('Error updating order status:', error);
+        } else {
+          //return bubble here saying success
+          location.reload();
+        }
+    }
+
+        /**
+	 * @param {any} saleid
+	 */
+   async function completeNewOrder(saleid) {
+        const { data, error } = await supabaseClient
+        .from('sale')
+        .update({ vendororderstatus: 'completed' })
+        .eq('saleid', saleid);
 
         if (error) {
             console.error('Error updating order status:', error);
@@ -168,17 +186,8 @@
 <SpinnerSet />
 
 <div class="pagecontainer w-max-[100%] flex flex-row mobile-content bg-white dark:bg-gray-800">
-    <SidebarVendor />
-    <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
-        <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
-            <div class="flex items-center">
-              <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation</h5>
-              <CloseButton on:click={() => ($hidden2 = true)} class="mb-4 dark:text-white" />
-            </div>
-        <Sidebar {isVendor} />
-        </Drawer>
-    </div>
-    <div class="maincontainer flex flex-col w-[100%]">
+
+    <div class="maincontainer flex flex-col w-[100%] order-2">
         <div class="topsection">
             <div class="title flex justify-center items-center text-2xl font-bold bg-orange-900 text-white h-[50px]">Orders</div>
             <div class="subtitle flex justify-center items-center text-xl font-bold bg-blue-700 text-white h-[50px] gap-5">
@@ -193,7 +202,6 @@
                     <ShoppingCartSolid class="mt-0.5" />
                     <span>New Orders</span>
                   </span>
-
                   {#if newOrders?.length > 0}
                   <Table hoverable={true} class=" text-left text-sm text-gray-500 dark:text-gray-400">
                     <TableHead>
@@ -214,18 +222,18 @@
                     <TableBody class="divide-y">
                       {#each newOrders as order}
                         <TableBodyRow>
-                          <TableBodyCell>{order.orderid}</TableBodyCell>
-                          <TableBodyCell>{order.ordergenerated}</TableBodyCell>
-                          <TableBodyCell>{order.customer.customername}</TableBodyCell>
-                          <TableBodyCell>{order.foodtotalprice}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.orderid}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.ordergenerated}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.customer.customername}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.foodtotalprice}</TableBodyCell>
                           <TableBodyCell>
-                            <a on:click={() => approveNewOrder(order.orderid)} class="font-medium text-green-500 hover:underline dark:text-green-500">Accept</a>
+                            <a on:click={() => approveNewOrder(order.saleid)} class="font-medium text-green-500 hover:underline dark:text-green-500">Accept</a>
                           </TableBodyCell>
                           <TableBodyCell>
-                            <a on:click={() => rejectNewOrder(order.orderid)} class="font-medium text-red-600 hover:underline dark:text-red-600">Reject</a>
+                            <a on:click={() => rejectNewOrder(order.saleid)} class="font-medium text-red-600 hover:underline dark:text-red-600">Reject</a>
                           </TableBodyCell>
                           <TableBodyCell>
-                            <a href="/client/orders/{order.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
+                            <a href="/client/orders/{order.cusorder.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
                           </TableBodyCell>
                         </TableBodyRow>
                       {/each}
@@ -259,15 +267,15 @@
                     <TableBody class="divide-y">
                       {#each currentOrders as order}
                         <TableBodyRow>
-                          <TableBodyCell>{order.orderid}</TableBodyCell>
-                          <TableBodyCell>{order.ordergenerated}</TableBodyCell>
-                          <TableBodyCell>{order.customer.customername}</TableBodyCell>
-                          <TableBodyCell>{order.foodtotalprice}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.orderid}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.ordergenerated}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.customer.customername}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.foodtotalprice}</TableBodyCell>
                           <TableBodyCell>
-                            <a href="/client/orders/{order.orderid}" class="font-medium text-green-600 hover:underline dark:text-green-500">Complete</a>
+                            <a on:click={() => completeNewOrder(order.saleid)} class="font-medium text-green-600 hover:underline dark:text-green-500">Complete</a>
                           </TableBodyCell>
                           <TableBodyCell>
-                            <a href="/client/orders/{order.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
+                            <a href="/client/orders/{order.cusorder.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
                           </TableBodyCell>
                         </TableBodyRow>
                       {/each}
@@ -298,12 +306,12 @@
                     <TableBody class="divide-y">
                       {#each pastOrders as order}
                         <TableBodyRow>
-                          <TableBodyCell>{order.orderid}</TableBodyCell>
-                          <TableBodyCell>{order.ordergenerated}</TableBodyCell>
-                          <TableBodyCell>{order.customer.customername}</TableBodyCell>
-                          <TableBodyCell>{order.foodtotalprice}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.orderid}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.ordergenerated}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.customer.customername}</TableBodyCell>
+                          <TableBodyCell>{order.cusorder.foodtotalprice}</TableBodyCell>
                           <TableBodyCell>
-                            <a href="/client/orders/{order.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
+                            <a href="/client/orders/{order.cusorder.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
                           </TableBodyCell>
                         </TableBodyRow>
                       {/each}
@@ -318,6 +326,17 @@
         </div>
 
     </div>
+    <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
+      <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
+          <div class="flex items-center">
+            <h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase rounded">Navigation</h5>
+            <CloseButton on:click={() => ($hidden2 = true)} class="mb-4 dark:text-white" />
+          </div>
+      <Sidebar {isVendor} />
+      </Drawer>
+    </div>    
+    <SidebarVendor class=" order-1"/>
+
 </div>
 
 
