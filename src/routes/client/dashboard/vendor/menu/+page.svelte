@@ -101,7 +101,7 @@
 
 <SpinnerSet />
 
-<div class="pagecontainer h-[100vh] w-[100%] flex flex-row mobile-content bg-gray-500">
+<div class="pagecontainer min-h-[100vh] w-[100%] flex flex-row mobile-content bg-gray-500">
     <SidebarVendor />
     <div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937] ">
         <Drawer transitionType="fly" {transitionParams} bind:hidden={$hidden2} id="sidebar2" class="">
