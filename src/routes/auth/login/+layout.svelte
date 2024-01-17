@@ -1,5 +1,5 @@
 <script>
-    import "../../../app.pcss";
+    import "../../../app.pc ss";
     </script>
     
     <slot></slot>
