@@ -1,4 +1,5 @@
 <script>
+	import { crossfade, draw, fade, fly, slide } from 'svelte/transition';
 	/** @type {import('./$types').PageData} */
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
@@ -93,6 +94,13 @@
 			alert('No vendor found with that name')
 		}
 	}
+
+	let filteredVendors = [];
+
+	$: filteredVendors = vendors.filter((vendor) =>
+    	vendor.businessname.toLowerCase().includes(searchInput.toLowerCase())
+	);
+	
 </script>
 
 <div class="fixed z-10">
@@ -133,16 +141,16 @@
 		</div>
 		<form class="flex gap-2 mt-20" on:submit|preventDefault={scrollToVendor}>
 			<Search size="md" input bind:value={searchInput} on:input={handleSearchInput} class="form-input" type="text" placeholder="Search Vendor"/>
-			<Button class="!p-2.5">
+			<!-- <Button class="!p-2.5">
 				<SearchOutline class="w-5 h-5" />
-			</Button>
+			</Button> -->
 		</form>
 
 		<div
 			class="card-container w-[90%] grid lg:grid-cols-3 md:grid-cols-2 justify-center place-self-center gap-20 my-7"
 		>
-			{#each vendors as vendor}
-				<div class="flex relative vendor-${vendor.businessname}">
+			{#each filteredVendors as vendor}
+				<div class="flex relative vendor-${vendor.businessname}" in:slide out:fade>
 						<Card
 							img={`https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/vendorstore/${vendor.storephoto}`}
 							href="/"
