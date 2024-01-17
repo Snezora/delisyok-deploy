@@ -141,11 +141,11 @@
                     {#each newOrders as order}
                         <AccordionItem class="mt-6">
                         <span slot="header" class="flex justify-between w-[100%] h-[100%]">
-                            <div class="text flex items-center lg:text-[18px] text-[16px]">{order.vendor.businessname} ㅤㅤ Order ID: {order.orderid}</div>
+                            <div class="text flex items-center lg:text-[18px] text-[16px] dark:text-white">{order.vendor.businessname} ㅤㅤ Order ID: {order.orderid}</div>
                             <Button class="lg:mr-8 mr-5 w-[60px]" on:click={() => acceptOrder(order.orderid)}>Accept</Button>
                         </span>
                         <div class="vendoraddress mb-4 flex flex-wrap w-[100%] justify-between">
-                            <p href="" class="pb-4 text-gray-500 dark:text-gray-400 flex align-middle">Vendor Address: 
+                            <p href="" class="pb-4 text-gray-500 flex align-middle dark:text-gray-200">Vendor Address: 
                                 {#if order.vendor.vendoraddressl2}
                                 {order.vendor.vendoraddressl1}, {order.vendor.vendoraddressl2}, 
                                 {:else}
@@ -157,7 +157,7 @@
                         </div>
                         <hr />
                         <div class="customeraddress mt-4 flex flex-wrap w-[100%] justify-between">
-                            <p class="pb-4 text-gray-500 dark:text-gray-400">Delivery Address: 
+                            <p class="pb-4 text-gray-500 dark:text-gray-200">Delivery Address: 
                                 <!-- {#if order.cusorder.customer.customeraddressl2}
                                 {order.cusorder.customer.customeraddressl1} {order.cusorder.customer.customeraddressl2}, 
                                 {:else}
@@ -180,8 +180,18 @@
                 {/if}
             </div>
             <div class="totalcontainer flex-2 p-6">
-                <div class="rectangle w-[250px] m-3 bg-blue-300 h-[300px]">
-                    test
+                <div class="rectangle w-[250px] m-3 bg-blue-700 h-[300px] flex flex-col p-3 gap-2 justify-between rounded-xl">
+                    <div class="riderinfos flex flex-col gap-3">
+                        <div class="info font-bold text-xl text-white">Rider Info:</div>
+                        <div class="ridername text-white">Rider Name: {riderData.ridername}</div>
+                        <div class="riderid text-white">Rider ID: {riderData.riderid}</div>
+                        <div class="vehicleplate text-white">Vehicle Plate: {riderData.ridervehicleplate}</div>
+                    </div>
+
+                    <div class="buttons flex flex-col gap-3">
+                        <Button color="yellow" href="/client/dashboard/rider/info">Edit Your Info</Button>
+                        <Button color="purple" href="/client/dashboard/rider/ongoing">Accepted Requests</Button>
+                    </div>
                 </div>
             </div>
         </div>
