@@ -2,7 +2,7 @@
 
 	import { Button, DarkMode, Popover } from "flowbite-svelte";
     import { hidden2 } from "../../../stores/sidebar.js"
-	import { BookOpenSolid, PersonRunningSolid, ChartPieSolid, CompassSolid, GearSolid, MoneyBillsSolid, RightFromBracketSolid, ScrollSolid, StoreSolid, UserGearSolid } from "svelte-awesome-icons";
+	import { BookOpenSolid, PersonRunningSolid, ChartPieSolid, CompassSolid, GearSolid, MoneyBillsSolid, RightFromBracketSolid, ScrollSolid, StoreSolid, UserGearSolid, ClockRotateLeftSolid } from "svelte-awesome-icons";
 	import { supabaseClient } from "$lib/supabase.js";
     import { user } from "../../../stores/authStore.js";
     let placement;
@@ -25,12 +25,12 @@ const logout = () => {
     <Button href="/client/dashboard/rider/ongoing" on:mouseenter={() => (placement = 'right')} id="accepted" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <PersonRunningSolid />
     </Button>
+    <Button href="/client/dashboard/rider/past" on:mouseenter={() => (placement = 'right')} id="orderpast" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
+        <ClockRotateLeftSolid />
+    </Button>
     <Button href="/client/dashboard/vendor/menu" on:mouseenter={() => (placement = 'right')} id="userInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <UserGearSolid />
     </Button>
-    <!-- <Button href="/client/dashboard/vendor/orders" on:mouseenter={() => (placement = 'right')} id="orderInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
-        <ScrollSolid />
-    </Button> -->
     <!-- <Button href="" on:mouseenter={() => (placement = 'right')} id="paymentInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <MoneyBillsSolid />
     </Button>
@@ -56,9 +56,9 @@ const logout = () => {
 <Popover triggeredBy="#userInfo" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
     User Info
 </Popover>
-<!-- <Popover triggeredBy="#orderInfo" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
-    Orders
-</Popover> -->
+<Popover triggeredBy="#orderpast" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
+    Past Orders
+</Popover>
 <!-- <Popover triggeredBy="#paymentInfo" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
     Payment
 </Popover>

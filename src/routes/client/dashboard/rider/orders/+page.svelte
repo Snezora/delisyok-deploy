@@ -84,9 +84,6 @@
         const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}&travelmode=driving`;
         window.open(googleMapsUrl, "_blank");
 
-        // Use the 'address' variable as needed
-        console.log(address);
-        // or return address;
     }
 
     async function shortToMaps(address){
