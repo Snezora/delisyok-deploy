@@ -272,16 +272,17 @@ async function deliveredOrder(saleid){
                                     <Button color="red" disabled>Order Completed</Button>
                                 {/if}
                             </div>
+                            {:else}
+                                <div class="title text-center w-[100%] text-[24px]">No Order Selected</div>
+                                <div class="subtitle text-center w-[100%] text-[20px]">Please select an order</div>
                             {/if}
                         </div>
-
-
                     </div>
                 </div>
             </div>
         {:else}
             <div class="maincontainer w-[100%] h-[100%] flex flex-col">
-                <div class="contentcontainer flex flex-col w-[100%] justify-between">
+                <div class="contentcontainer flex flex-col w-[80%] justify-between self-center">
                     <Label for="input-group-1" class="block mb-2 ml-2 mt-5">Order</Label>
                     <Select items={orderOptions} bind:value={selectedOrderPhone} on:change={handleSelectChange}/>
                 </div>
@@ -356,6 +357,9 @@ async function deliveredOrder(saleid){
                                 <Button color="red" disabled>Order Completed</Button>
                             {/if}
                         </div>
+                        {:else}
+                        <div class="title text-center w-[100%] text-[24px]">No Order Selected</div>
+                        <div class="subtitle text-center w-[100%] text-[20px]">Please select an order</div>
                         {/if}
                     </div>
                 </div>
