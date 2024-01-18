@@ -1,41 +1,63 @@
 <script>
-    /** @type {import('./$types').PageData} */
     import { supabaseClient } from "$lib/supabase";
     import { onMount } from 'svelte';
-    import TrashBin from './trash.svelte';
+    import TrashBin from '../cart/trash.svelte';
     import  { Button, Modal } from 'flowbite-svelte';
+    import { page } from '$app/stores';
     import {ExclamationCircleOutline} from 'flowbite-svelte-icons';
     let popupModal = false;
 
+    const itemid = $page.params.menuItem;
     let userData;
     /**
 	 * @type {any}
 	 */
     let customerData;
+    /**
+	 * @type {string | undefined}
+	 */
     let user_id;
 
+    /**
+	 * @type {any[]}
+	 */
+    let menuItemData = []; //Here is the menu Item Data
+
     onMount(async () => {
+        const userLog = await supabaseClient.auth.getUser();
+        user_id = userLog.data.user?.id;
+        menuItemData = await fetchMenuItemData();
+        console.log(menuItemData);
         console.log('im here start');
         customerData = await fetchCustomerData();
         console.log(customerData);
+
     });
 
-    async function fetchCustomerData(){
-        const userLog = await supabaseClient.auth.getUser();
-        user_id = userLog.data.user?.id;
-        console.log('im here');
+    async function fetchMenuItemData(){
+        const { data, error } = await supabaseClient
+        .from('menuitem')
+        .select('*')
+        .eq('itemid', itemid);
 
-        const {data, error} = await supabaseClient.from('Customer')
+        if (error){
+            console.error('Error fetching menu item: ', error);
+        } else {
+            return data[0];
+        }
+    }
+
+    async function fetchCustomerData(){
+
+        const { data, error } = await supabaseClient.from('customer')
         .select('*')
         .eq('user_id', user_id);
 
         if (error){
             console.error('Error fetching customer name: ', error);
         } else if (data && data.length > 0){
-            customerData = data[0];
-            console.log('enter');
+            return data[0];
         }
-        return customerData;
     }
 
     async function deleteOrderItem(){
@@ -45,9 +67,11 @@
     //export let data;
 
 </script>
+
 <div class="topSpace"></div>
 <div class="titleBar">
-        <h1>Hello World</h1>
+        <h1>Hello World, this is the page for {menuItemData.itemname}</h1> 
+        <!-- If it's like this with red line beneath itemname, its normal, leave it -->
 </div>
 
 <div>

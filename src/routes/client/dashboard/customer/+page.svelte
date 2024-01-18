@@ -1,6 +1,5 @@
 <script>
 	import { crossfade, draw, fade, fly, slide } from 'svelte/transition';
-	/** @type {import('./$types').PageData} */
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import SidebarCustomer from './SidebarCustomer.svelte';
@@ -95,12 +94,23 @@
 		}
 	}
 
+	/**
+	 * @type {any[]}
+	 */
 	let filteredVendors = [];
 
 	$: filteredVendors = vendors.filter((vendor) =>
     	vendor.businessname.toLowerCase().includes(searchInput.toLowerCase())
 	);
 	
+
+	/**
+	 * @param {any} vendorid
+	 */ 
+	//This is added to direct to vendor menu based on the vendorID
+	function directToVendorMenu(vendorid){
+		window.location.href = `/client/dashboard/customer/${vendorid}`
+	}
 </script>
 
 <div class="fixed z-10">
@@ -111,7 +121,7 @@
 	{/if}
 </div>
 
-<div class="page-container min-h-[100vh]">
+<div class="page-container min-h-[100vh] overflow-x-hidden">
 	<div class="flex flex-col items-center h-16 bg-gray-900">
 		<div class="font-bold text-2xl text-white w-full h-9 flex items-center justify-center">
 			<h1>Hi, Shopper.</h1>
@@ -147,17 +157,18 @@
 		</form>
 
 		<div
-			class="card-container w-[90%] grid lg:grid-cols-3 md:grid-cols-2 justify-center place-self-center gap-20 my-7"
+			class="card-container w-[80%] grid lg:grid-cols-3 md:grid-cols-2 justify-center place-self-center gap-20 my-7"
 		>
 			{#each filteredVendors as vendor}
-				<div class="flex relative vendor-${vendor.businessname}" in:slide out:fade>
+				<div class="flex relative h-[100%] justify-self-center vendor-${vendor.businessname}" in:slide out:fade>
 						<Card
 							img={`https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/vendorstore/${vendor.storephoto}`}
-							href="/"
 							size="md"
-							class="rounded-lg w-96 h-96 object-cover"
+							href="#"
+							class="rounded-lg w-96 object-cover max-h-[100%] flex flex-col justify-between"
+							on:click={() => directToVendorMenu(vendor.vendorid)}
 						>
-						<div class="card-content absolute bottom-0 w-full p-5 translate-x-[-25px]">
+						<div class="card-content bottom-0 w-[100%] p-5 ml-auto mr-auto">
 							<h5 class="mb-2 text-2xl min-w-[60px] font-bold tracking-tight text-center text-gray-900 dark:text-white">
 								{vendor.businessname}
 							</h5>
