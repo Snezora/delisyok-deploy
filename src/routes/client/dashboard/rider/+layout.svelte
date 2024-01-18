@@ -46,6 +46,8 @@ onMount(async () => {
             }
         }
     });
+
+    window.onfocus = function() { (location.reload()); };
 })
 
 async function fetchRiderInfo() {
