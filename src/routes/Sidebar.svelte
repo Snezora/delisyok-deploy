@@ -19,10 +19,15 @@
 		GearSolid
 	} from 'flowbite-svelte-icons';
 	import {
+	ClockRotateLeftSolid,
 		MoneyBillSolid,
 		MugSaucerSolid,
+		PersonRunningSolid,
 		RightFromBracketSolid,
-		ScrollSolid
+		ScrollSolid,
+
+		UserGearSolid
+
 	} from 'svelte-awesome-icons';
 	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/supabase';
@@ -81,6 +86,18 @@
 			}
 		});
 	});
+
+	async function signOut(){
+		const { error } = await supabaseClient.auth.signOut();
+		if (error) {
+			alert(error.message);
+		} else {
+			if (typeof window !== 'undefined') {
+				window.location.href = '/auth/login';
+
+			}
+		}
+	}
 
 	// @ts-ignore
 	export let isCustomer = false;
@@ -229,7 +246,7 @@
           <GearSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
         </svelte:fragment>
       </SidebarItem> -->
-				<SidebarItem label="Sign Out">
+				<SidebarItem label="Sign Out" on:click={signOut}>
 					<svelte:fragment slot="icon">
 						<RightFromBracketSolid
 							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -247,73 +264,41 @@
 	<Sidebar>
 		<SidebarWrapper divClass="overflow-y-auto py-4 px-3 bg-gray-50 dark:bg-gray-800 h-[100%] ">
 			<SidebarGroup>
-				<SidebarItem label="Dashboard">
+				<SidebarItem label="New Orders" href="/client/dashboard/rider/orders">
 					<svelte:fragment slot="icon">
-						<ChartPieSolid
+						<ScrollSolid
 							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
 						/>
 					</svelte:fragment>
 				</SidebarItem>
-				<SidebarDropdownWrapper label="E-commerce">
+				<SidebarItem label="Ongoing Orders" href="/client/dashboard/rider/ongoing">
 					<svelte:fragment slot="icon">
-						<ShoppingCartSolid
-							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						/>
-					</svelte:fragment>
-					<SidebarDropdownItem label="Products" />
-					<SidebarDropdownItem label="Billing" />
-					<SidebarDropdownItem label="Invoice" />
-				</SidebarDropdownWrapper>
-				<SidebarItem label="Kanban" {spanClass}>
-					<svelte:fragment slot="icon">
-						<GridSolid
-							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						/>
-					</svelte:fragment>
-					<svelte:fragment slot="subtext">
-						<span
-							class="inline-flex justify-center items-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300"
-						>
-							Pro
-						</span>
-					</svelte:fragment>
-				</SidebarItem>
-				<SidebarItem label="Inbox" {spanClass}>
-					<svelte:fragment slot="icon">
-						<MailBoxSolid
-							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						/>
-					</svelte:fragment>
-					<svelte:fragment slot="subtext">
-						<span
-							class="inline-flex justify-center items-center p-3 ms-3 w-3 h-3 text-sm font-medium text-primary-600 bg-primary-200 rounded-full dark:bg-primary-900 dark:text-primary-200"
-						>
-							3
-						</span>
-					</svelte:fragment>
-				</SidebarItem>
-				<SidebarItem label="Users">
-					<svelte:fragment slot="icon">
-						<UserSolid
+						<PersonRunningSolid
 							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
 						/>
 					</svelte:fragment>
 				</SidebarItem>
-				<SidebarItem label="Sign In">
+				<SidebarItem label="Order History" href="/client/dashboard/rider/past">
 					<svelte:fragment slot="icon">
-						<ArrowRightToBracketSolid
+						<ClockRotateLeftSolid
 							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
 						/>
 					</svelte:fragment>
 				</SidebarItem>
-				<SidebarItem label="Sign Up">
+				<SidebarItem label="Edit Profile Info" href="/client/dashboard/rider/info">
 					<svelte:fragment slot="icon">
-						<FileEditSolid
+						<UserGearSolid
 							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
 						/>
 					</svelte:fragment>
 				</SidebarItem>
-
+				<SidebarItem label="Sign Out" on:click={signOut}>
+					<svelte:fragment slot="icon">
+						<RightFromBracketSolid
+							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+						/>
+					</svelte:fragment>
+				</SidebarItem>
 				<DarkMode class="text-primary-500 dark:text-primary-600 border dark:border-gray-800" />
 			</SidebarGroup>
 		</SidebarWrapper>

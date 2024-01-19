@@ -13,8 +13,11 @@
     /**
 	 * @type {any[]}
 	 */
-    let orderdeets;
+    let orderdeets = [];
 
+    /**
+	 * @type {any[] | undefined}
+	 */
     let fooditems = [];
     /**
 	 * @type {any[]}
@@ -42,18 +45,6 @@
         const userLog = await supabaseClient.auth.getUser();
         user_id = userLog.data.user?.id;
 
-        // Fetch the vendorid from the vendor table
-        const { data, error } = await supabaseClient
-            .from('vendor')
-            .select('vendorid')
-            .eq('user_id', user_id);
-
-        if (data) {
-          vendorid = data[0].vendorid;
-        } else {
-          console.error('Error fetching vendor:', error);
-        }
-
         orderdeets = await fetchOrderData();
         console.log(orderdeets);
         fooditems = await fetchOrderItems();
@@ -70,10 +61,11 @@
     })
 
     async function fetchOrderData(){
+
         const { data, error } = await supabaseClient
         .from('sale')
         .select('*, cusorder(*, customer(*)), deliveryrider(*), vendor(*)')
-        .eq('cusorder.orderid', orderid)
+        .eq('orderid', orderid)
 
         if (error) {
             console.error('Error fetching order data:', error);
@@ -190,6 +182,8 @@
                 <div class="phone">Phone: {orderdeets?.deliveryrider?.riderhp}</div>
             </div>
         </div>
+        {#if orderdeets.deliverystatus != 'completed'}
         <Button color="red" class="self-center" on:click={() => {history.back()}}>Track Delivery</Button>
+        {/if}
     </div>
 </div>

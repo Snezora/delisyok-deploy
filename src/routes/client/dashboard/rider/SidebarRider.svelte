@@ -28,7 +28,7 @@ const logout = () => {
     <Button href="/client/dashboard/rider/past" on:mouseenter={() => (placement = 'right')} id="orderpast" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <ClockRotateLeftSolid />
     </Button>
-    <Button href="/client/dashboard/vendor/menu" on:mouseenter={() => (placement = 'right')} id="userInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
+    <Button href="/client/dashboard/rider/info" on:mouseenter={() => (placement = 'right')} id="userInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <UserGearSolid />
     </Button>
     <!-- <Button href="" on:mouseenter={() => (placement = 'right')} id="paymentInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">

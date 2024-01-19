@@ -99,7 +99,7 @@ async function updateConfirm(){
 
 <div class="pagecontainer w-[100%] min-h-[100lvh]">
     <div class="realheader bg-black text-white font-bold h-[50px] flex justify-between items-center text-[24px]">
-        <div class="text ml-auto mr-auto">    DELISYOK DELIVERY RIDER CLIENT
+        <div class="text lg:text-[24px] md:text-[16px] ml-auto mr-auto">    DELISYOK DELIVERY RIDER CLIENT
         </div>
         <DarkMode class=""></DarkMode>
     </div>

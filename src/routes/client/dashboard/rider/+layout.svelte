@@ -47,7 +47,9 @@ onMount(async () => {
         }
     });
 
-    window.onfocus = function() { (location.reload()); };
+    window.onfocus = function() {
+        location.reload();
+    };
 })
 
 async function fetchRiderInfo() {
