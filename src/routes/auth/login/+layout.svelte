@@ -1,5 +1,4 @@
 <script>
-    import "../../../app.pc ss";
-    </script>
+</script>
     
     <slot></slot>

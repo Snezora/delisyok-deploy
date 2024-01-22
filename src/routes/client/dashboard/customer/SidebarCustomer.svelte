@@ -1,5 +1,5 @@
 <script>
-    import { Sidebar, SidebarWrapper, SidebarBrand, SidebarItem, SidebarGroup } from 'flowbite-svelte';
+    import { Sidebar, SidebarWrapper, SidebarBrand, SidebarItem, SidebarGroup, DarkMode } from 'flowbite-svelte';
     import { UserGroupSolid, MobilePhoneSolid, UserSettingsSolid, UserSolid, QuestionCircleSolid, BookSolid } from 'flowbite-svelte-icons';
     import "./Sidebar.css";
     let spanClass = 'flex-1 ms-0 whitespace-nowrap';
@@ -38,6 +38,7 @@
              <UserSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white icon-container" />
            </svelte:fragment>
          </SidebarItem>
+         <DarkMode class=" -translate-x-1"/>
          <SidebarItem label="Settings">
             <svelte:fragment slot="icon">
               <UserSettingsSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white icon-container" />

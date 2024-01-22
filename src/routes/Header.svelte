@@ -73,33 +73,37 @@
 		.eq('user_id', user_id);
 
 		if (error) {
-			let { data: customer, error } = await supabaseClient
-				.from('customer')
-				.select('*')
-				.eq('user_id', user_id);
-
-			if (error) {
-				let { data: rider, error } = await supabaseClient
-					.from('rider')
-					.select('*')
-					.eq('user_id', user_id);
-
-				if (error) {
-					console.log("cant find");
-				} else if (rider && rider.length > 0) {
-					isRider = true;
-					isVendor = false;
-					isCustomer = false;
-				}
-			} else if (customer && customer.length > 0) {
-				isCustomer = true;
-				isVendor = false;
-				isRider = false;
-			}
+			console.error('Error fetching vendor:', error);
 		} else if (vendor && vendor.length > 0) {
 			isVendor = true;
 			isCustomer = false;
 			isRider = false;
+		}
+
+		let { data: customer, error: customerError } = await supabaseClient
+		.from('customer')
+		.select('*')
+		.eq('user_id', user_id);
+
+		if (customerError) {
+			console.error('Error fetching customer:', customerError);
+		} else if (customer && customer.length > 0) {
+			isVendor = false;
+			isCustomer = true;
+			isRider = false;
+		}
+
+		let { data: rider, error: riderError } = await supabaseClient
+		.from('deliveryrider')
+		.select('*')
+		.eq('user_id', user_id);
+
+		if (riderError) {
+			console.error('Error fetching rider:', riderError);
+		} else if (rider && rider.length > 0) {
+			isVendor = false;
+			isCustomer = false;
+			isRider = true;
 		}
 
 		usertype.set({isVendor, isCustomer, isRider});

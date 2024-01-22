@@ -30,10 +30,10 @@
 		vendors = await fetchVendor();
 		console.log(customerData);
 		console.log(vendors);
+		clearCart();
 	});
 
 	async function fetchCustomerData() {
-		console.log('im here');
 
 		const { data, error } = await supabaseClient
 			.from('customer')
@@ -94,6 +94,41 @@
 		}
 	}
 
+	async function clearCart(){
+		const { data, error } = await supabaseClient
+		.from('cusorder')
+		.select('*')
+		.eq('customerid', customerData.customerid)
+		.eq('cartstatus', 'unpaid')
+	
+		if (error){
+			console.error('Error deleting cart: ', error);
+		} else {
+			const orderid = data[0]?.orderid;
+			if (orderid != null) {
+				const { error } = await supabaseClient
+				.from('orderitem')
+				.delete()
+				.eq('orderid', orderid);
+
+			if (error){
+				console.error('Error deleting cart: ', error);
+			} else {
+				const { error } = await supabaseClient
+				.from('cusorder')
+				.delete()
+				.eq('orderid', orderid)
+
+				if (error){
+					console.error('Error deleting cart: ', error);
+				}
+			}
+			}
+
+
+		}
+	}
+
 	/**
 	 * @type {any[]}
 	 */
@@ -121,7 +156,7 @@
 	{/if}
 </div>
 
-<div class="page-container min-h-[100vh] overflow-x-hidden">
+<div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-stone-500">
 	<div class="flex flex-col items-center h-16 bg-gray-900">
 		<div class="font-bold text-2xl text-white w-full h-9 flex items-center justify-center">
 			<h1>Hi, Shopper.</h1>
@@ -145,7 +180,7 @@
 
 	<div class="flex flex-col items-center">
 		<div
-			class="font-bold text-2xl relative -translate-x-2/4 -translate-y-2/4 w-full text-center mt-auto left-2/4 top-20"
+			class="font-bold text-2xl relative -translate-x-2/4 -translate-y-2/4 w-full text-center mt-auto left-2/4 top-20 dark:text-white"
 		>
 			Vendor
 		</div>
@@ -163,9 +198,8 @@
 				<div class="flex relative h-[100%] justify-self-center vendor-${vendor.businessname}" in:slide out:fade>
 						<Card
 							img={`https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/vendorstore/${vendor.storephoto}`}
-							size="md"
 							href="#"
-							class="rounded-lg w-96 object-cover max-h-[100%] flex flex-col justify-between"
+							class="rounded-lg  object-cover max-h-[100%] flex flex-col justify-between"
 							on:click={() => directToVendorMenu(vendor.vendorid)}
 						>
 						<div class="card-content bottom-0 w-[100%] p-5 ml-auto mr-auto">
