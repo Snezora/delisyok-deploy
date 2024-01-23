@@ -30,7 +30,7 @@
 		customerData = await fetchCustomerData();
 		orders = await fetchOrders();
 		// for (let order of orders) {
-        //     console.log(order);
+		//     console.log(order);
 		// 	order.orderitems = await fetchOrderItems(order.orderid);
 		// }
 		console.log(customerData);
@@ -60,7 +60,7 @@
 		console.log('fetching orders');
 		const { data: order, error } = await supabaseClient
 			.from('cusorder')
-			.select('*, orderitem(*)')
+			.select('*, orderitem(*), sale(*)')
 			.eq('customerid', customerData.customerid)
 			.eq('cartstatus', 'completed');
 
@@ -71,28 +71,6 @@
 		}
 		console.log('done fetching');
 		return order;
-	}
-
-	/**
-	 * @param {any} orderid
-	 */
-	async function fetchOrderItems(orderid) {
-		console.log('fetching order items');
-		console.log(orderid);
-		const { data: orderitem, error } = await supabaseClient
-			.from('orderitem')
-			.select('*')
-			.eq('orderid', orderid);
-
-		if (error) {
-			console.error('Error fetching order items: ', error);
-		} else if (orderitem && orderitem.length > 0) {
-            console.log('something',orderitems);
-			orderitems = orderitem;
-		}
-		console.log('done fetching');
-        console.log(orderitems.orderitemid);
-		return orderitem || [];
 	}
 
 	//export let data;
@@ -113,23 +91,70 @@
 			<Accordion>
 				<AccordionItem>
 					<span slot="header">{order.orderid}</span>
-					<p class="mb-2 text-gray-500 dark:text-gray-400 flex flex-col gap-1">
-						{#each order.orderitem as item}
-							{item.itemname}
-							<hr />
+					<p class="mb-2 text-gray-600 dark:text-gray-500 flex flex-col gap-1">
+						{#each order.sale as sale}
+							<span>Receipt generated: {sale.receiptgenerated}</span>
+						{/each}
+
+						{#each order.sale as sale}
+							<span>
+								Sale id: {sale.saleid}
+							</span>
 						{/each}
 					</p>
-					<p class="text-gray-500 dark:text-gray-400">
-						Check out this guide to learn how to <a
-							href="/"
-							target="_blank"
-							rel="noreferrer"
-							class="text-blue-600 dark:text-blue-500 hover:underline"
-						>
-							get started
-						</a>
-						and start developing websites even faster with components on top of Tailwind CSS.
-					</p>
+
+					<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
+
+					Order items:
+					{#each order.orderitem as orderitem}
+						<div style="display: flex; justify-content: space-between; margin-left: 20px">
+							{orderitem.itemname}
+							<span>RM{orderitem.itemprice}</span>
+						</div>
+					{/each}
+
+					<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
+					<div>
+						{#each order.sale as sale}
+							<span>Total price: RM{sale.totalamount}</span>
+						{/each}
+					</div>
+
+					<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
+
+					<div>
+						{#each order.sale as sale}
+						<p>
+							Delivery address: {sale.deliveryaddress}
+						</p>
+						<p>
+							<span style="
+                        display: inline-block;
+                        width: 10px;
+                        height: 10px;
+                        background-color: {sale.vendororderstatus === null ? 'grey' : 
+						sale.vendororderstatus === 'pending' ? 'yellow' :
+						sale.vendororderstatus === 'completed' ? 'green' : 
+						sale.vendororderstatus === 'failed' ? 'red': 'gray'};
+                        margin-right: 5px;
+                    "></span>
+							Order status: {sale.vendororderstatus}
+						</p>
+						<p>
+							<span style="
+                        display: inline-block;
+                        width: 10px;
+                        height: 10px;
+                        background-color: {sale.deliverystatus === null ? 'grey' :
+						sale.deliverystatus === 'pending' ? 'yellow' :
+						sale.deliverystatus === 'completed' ? 'green' :
+						sale.deliverystatus === 'failed' ? 'red': 'gray'};
+                        margin-right: 5px;
+                    "></span>
+							Delivery status: {sale.deliverystatus}
+						</p>
+						{/each}
+					</div>
 				</AccordionItem>
 			</Accordion>
 		{/each}
