@@ -29,10 +29,10 @@
 		user_id = userLog.data.user?.id;
 		customerData = await fetchCustomerData();
 		orders = await fetchOrders();
-		for (let order of orders) {
-            console.log(order);
-			order.orderitems = await fetchOrderItems(order.orderid);
-		}
+		// for (let order of orders) {
+        //     console.log(order);
+		// 	order.orderitems = await fetchOrderItems(order.orderid);
+		// }
 		console.log(customerData);
 		console.log(orders);
 	});
@@ -60,7 +60,7 @@
 		console.log('fetching orders');
 		const { data: order, error } = await supabaseClient
 			.from('cusorder')
-			.select('*')
+			.select('*, orderitem(*)')
 			.eq('customerid', customerData.customerid)
 			.eq('cartstatus', 'completed');
 
@@ -109,12 +109,15 @@
 		</div>
 	</div>
 	<div>
-		{#each orders as order (order.orderid)}
+		{#each orders as order}
 			<Accordion>
 				<AccordionItem>
 					<span slot="header">{order.orderid}</span>
-					<p class="mb-2 text-gray-500 dark:text-gray-400">
-						
+					<p class="mb-2 text-gray-500 dark:text-gray-400 flex flex-col gap-1">
+						{#each order.orderitem as item}
+							{item.itemname}
+							<hr />
+						{/each}
 					</p>
 					<p class="text-gray-500 dark:text-gray-400">
 						Check out this guide to learn how to <a

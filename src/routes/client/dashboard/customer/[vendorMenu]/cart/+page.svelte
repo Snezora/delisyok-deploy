@@ -222,7 +222,7 @@
                                 <Button color="none" on:click={() => {
                                     popupModal = true;
                                     selectedItem = item.orderitemid;
-                                }}><TrashCanRegular color="red" /></Button>
+                                }}><TrashCanRegular color="red" class="dark:text-red-800" /></Button>
                             </div>
                         </div>
                         <hr class="dark:border-gray-200 border-gray-700 mb-5"/>
@@ -230,10 +230,10 @@
                 </div>
             </div>
         </div>
-        <div class="bottom p-[4rem] flex flex-col items-end">
+        <div class="bottom p-[4rem] flex flex-col items-end dark:text-white">
             <div class="totalprice text-[18px]">Subtotal: RM {pricetotal}</div>
             <div class="text-[18px]">Delivery fee: RM {riderComm}</div>
-            <div class="tax text-[18px]">Sales Tax: RM {salestax}</div>
+            <div class="tax text-[18px]">Sales Tax (8%): RM {salestax}</div>
             <div class="text-xl font-bold mb-3">Total: RM {ordertotalprice}</div>
             <Button>Checkout</Button>
         </div>
