@@ -235,7 +235,7 @@
             <div class="text-[18px]">Delivery fee: RM {riderComm}</div>
             <div class="tax text-[18px]">Sales Tax (8%): RM {salestax}</div>
             <div class="text-xl font-bold mb-3">Total: RM {ordertotalprice}</div>
-            <Button>Checkout</Button>
+            <Button href="/client/dashboard/customer/{vendorid}/cart/checkout">Checkout</Button>
         </div>
     </div>
 </div> 
