@@ -158,7 +158,7 @@
 
 <div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-stone-500">
 	<div class="flex flex-col items-center h-16 bg-gray-900">
-		<div class="font-bold text-2xl text-white w-full h-9 flex items-center justify-center">
+		<div class="font-bold text-2xl text-white w-full h-10 flex items-center justify-center">
 			<h1>Hi, Shopper.</h1>
 		</div>
 
@@ -169,8 +169,9 @@
 
 	<div class="absolute z-10">
 		<button
-			class="z-10 w-[50px] h-[50px] transition-[width] duration-[0.3s] ease-[ease-in-out] border bg-[#f8f9fa] border-solid border-[#f8f9fa] hover:bg-slate-300 {sidebarOpen
-				? 'translate-x-[200px] translate-y-[-65px] fixed'
+			class="z-10 w-[70px] h-[50px] transition-[width] duration-[0.3s] ease-[ease-in-out] border bg-[#EF562F] border-solid border-[#EF562F]
+			hover:bg-slate-600 hover:border-slate-600 rounded-r-lg shadow-md font-bold text-white {sidebarOpen
+				? 'translate-x-[200px] translate-y-[-57px] fixed'
 				: ''}"
 			on:click={toggleSidebar}
 		>
@@ -210,13 +211,6 @@
 						</Card>
 					</div>
 			{/each}
-		</div>
-
-		<div class="flex mt-20">
-			<div class="w-28 h-28 bg-blue-500 m-4"></div>
-			<div class="w-28 h-28 bg-red-500 m-4"></div>
-			<div class="w-28 h-28 bg-green-500 m-4"></div>
-			<div class="w-28 h-28 bg-yellow-500 m-4"></div>
 		</div>
 	</div>
 </div>

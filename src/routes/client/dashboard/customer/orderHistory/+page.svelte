@@ -132,9 +132,9 @@
                         display: inline-block;
                         width: 10px;
                         height: 10px;
-                        background-color: {sale.vendororderstatus === null ? 'grey' : 
+                        background-color: {sale.vendororderstatus === null ? 'grey' :
 						sale.vendororderstatus === 'pending' ? 'yellow' :
-						sale.vendororderstatus === 'completed' ? 'green' : 
+						sale.vendororderstatus === 'completed' ? 'green' :
 						sale.vendororderstatus === 'failed' ? 'red': 'gray'};
                         margin-right: 5px;
                     "></span>
