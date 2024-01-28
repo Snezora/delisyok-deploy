@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import SidebarCustomer from './SidebarCustomer.svelte';
 	import { Card, Toggle, Search, Button } from 'flowbite-svelte';
-	import { SearchOutline } from 'flowbite-svelte-icons';
+	import { ArrowLeftOutline, BarsOutline } from 'flowbite-svelte-icons';
 
 	let sidebarOpen = false;
 
@@ -75,6 +75,7 @@
 	async function toggleSidebar() {
 		sidebarOpen = !sidebarOpen;
 	}
+	$: buttonText = sidebarOpen ? "Close" : "Menu";
 
 	let searchInput = '';
 
@@ -100,7 +101,7 @@
 		.select('*')
 		.eq('customerid', customerData.customerid)
 		.eq('cartstatus', 'unpaid')
-	
+
 		if (error){
 			console.error('Error deleting cart: ', error);
 		} else {
@@ -148,34 +149,43 @@
 	}
 </script>
 
-<div class="fixed z-10">
+<div class="fixed z-20  h-[100%]">
 	{#if sidebarOpen}
-		<div class="fixed">
+		<div class="z-20 fixed h-[100%]">
 			<SidebarCustomer />
 		</div>
 	{/if}
 </div>
 
 <div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-stone-500">
-	<div class="flex flex-col items-center h-16 bg-gray-900">
-		<div class="font-bold text-2xl text-white w-full h-10 flex items-center justify-center">
+	<div class="flex flex-col justify-items-center h-30 bg-gray-900">
+
+		<div class="translate-y-[29px] absolute justify-start items-center w-full h-10">
+			<button class="justify-center ml-4 px-4 py-2 bg-slate-700 text-white rounded-lg inline-flex items-center">
+				<ArrowLeftOutline class="h-5 w-5" />
+				<span class="hidden md:flex md:visible ml-2"> Home</span>
+			</button>
+		</div>
+
+
+		<div class="font-bold text-3xl text-white w-full h-12 flex items-center justify-center">
 			<h1>Hi, Shopper.</h1>
 		</div>
 
-		<div class="text-base text-white w-full h-8 flex items-center justify-center">
+		<div class="text-lg text-white w-full h-12 flex items-center justify-center">
 			<h1>What will your next order be?</h1>
 		</div>
 	</div>
 
 	<div class="absolute z-10">
-		<button
-			class="z-10 w-[70px] h-[50px] transition-[width] duration-[0.3s] ease-[ease-in-out] border bg-[#EF562F] border-solid border-[#EF562F]
-			hover:bg-slate-600 hover:border-slate-600 rounded-r-lg shadow-md font-bold text-white {sidebarOpen
-				? 'translate-x-[200px] translate-y-[-57px] fixed'
+		<button class="justify-center m-4 ml-4 px-4 py-2 rounded-lg h-[40px] transition-[width] duration-[0.3s] ease-[ease-in-out] border bg-primary-600 border-solid border-[#EF562F]
+			hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center {sidebarOpen
+				? 'translate-x-[179px] translate-y-[-112px] fixed'
 				: ''}"
 			on:click={toggleSidebar}
 		>
-			Menu
+		<BarsOutline class="h-5 w-5"/>
+		<span class="hidden md:flex md:visible ml-2">{buttonText}</span>
 		</button>
 	</div>
 
