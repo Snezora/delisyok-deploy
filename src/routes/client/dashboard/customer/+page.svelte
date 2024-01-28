@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import SidebarCustomer from './SidebarCustomer.svelte';
 	import { Card, Toggle, Search, Button } from 'flowbite-svelte';
-	import { ArrowLeftOutline, BarsOutline } from 'flowbite-svelte-icons';
+	import { ArrowLeftOutline, BarsOutline, XCompanySolid } from 'flowbite-svelte-icons';
 
 	let sidebarOpen = false;
 
@@ -184,7 +184,11 @@
 				: ''}"
 			on:click={toggleSidebar}
 		>
-		<BarsOutline class="h-5 w-5"/>
+		{#if sidebarOpen == true}
+			<XCompanySolid class="h-5 w-5"/>
+		{:else}
+			<BarsOutline class="h-5 w-5"/>
+		{/if}
 		<span class="hidden md:flex md:visible ml-2">{buttonText}</span>
 		</button>
 	</div>
