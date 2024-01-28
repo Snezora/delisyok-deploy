@@ -1,11 +1,9 @@
 <script>
-	import { ArrowLeftSolid } from 'svelte-awesome-icons';
-	import { Button, Card, DarkMode, Modal } from 'flowbite-svelte';
+	import { Button, DarkMode, Modal } from 'flowbite-svelte';
     import { page } from '$app/stores';
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import SidebarCustomer from '../SidebarCustomer.svelte';
-    import { CircleLeftRegular, ThumbsUpSolid } from 'svelte-awesome-icons';
 	import { ArrowLeftOutline, CartOutline, ExclamationCircleOutline } from 'flowbite-svelte-icons';
 	import { slide, fade } from 'svelte/transition';
 
@@ -29,6 +27,9 @@
     let vendorMenu = [];
     let cart = [];
     let sidebarOpen = false;
+    /**
+	 * @type {string}
+	 */
     let vendoropdays;
     let popupModal = false;
 
@@ -40,16 +41,10 @@
         const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
         customerInfo = await fetchCustomerData();
-        console.log(customerInfo);
         vendorInfo = await getVendor();
-        console.log(vendorInfo);
         vendorMenu = await getMenu();
-        console.log(vendorMenu);
         vendoropdays = getDays();
-        console.log(vendoropdays);
         cart = await fetchCart();
-        console.log(cart);
-        //All these console logs, open console to check.
     })
 
     async function fetchCustomerData() {

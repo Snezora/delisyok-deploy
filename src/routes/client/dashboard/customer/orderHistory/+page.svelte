@@ -27,6 +27,7 @@
 		console.log('im here start');
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
+		console.log("you are in OH");
 		customerData = await fetchCustomerData();
 		orders = await fetchOrders();
 		// for (let order of orders) {
@@ -62,7 +63,8 @@
 			.from('cusorder')
 			.select('*, orderitem(*), sale(*)')
 			.eq('customerid', customerData.customerid)
-			.eq('cartstatus', 'completed');
+			.eq('cartstatus', 'completed')
+			.order('ordergenerated', { ascending: false });
 
 		if (error) {
 			console.error('Error fetching orders: ', error);
@@ -93,12 +95,12 @@
 					<span slot="header">{order.orderid}</span>
 					<p class="mb-2 text-gray-600 dark:text-gray-500 flex flex-col gap-1">
 						{#each order.sale as sale}
-							<span>Receipt generated: {sale.receiptgenerated}</span>
+							<span>Receipt Generated: {new Date(sale.receiptgenerated).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(',', '')}</span>
 						{/each}
 
 						{#each order.sale as sale}
 							<span>
-								Sale id: {sale.saleid}
+								Sale ID: {sale.saleid}
 							</span>
 						{/each}
 					</p>
@@ -109,14 +111,14 @@
 					{#each order.orderitem as orderitem}
 						<div style="display: flex; justify-content: space-between; margin-left: 20px">
 							{orderitem.itemname}
-							<span>RM{orderitem.itemprice}</span>
+							<span>RM {orderitem.itemprice}</span>
 						</div>
 					{/each}
 
 					<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
 					<div>
 						{#each order.sale as sale}
-							<span>Total price: RM{sale.totalamount}</span>
+							<span>Total price: RM {sale.totalamount}</span>
 						{/each}
 					</div>
 
@@ -125,7 +127,7 @@
 					<div>
 						{#each order.sale as sale}
 						<p>
-							Delivery address: {sale.deliveryaddress}
+							Delivery Address: {sale.deliveryaddress}
 						</p>
 						<p>
 							<span style="
@@ -138,7 +140,7 @@
 						sale.vendororderstatus === 'failed' ? 'red': 'gray'};
                         margin-right: 5px;
                     "></span>
-							Order status: {sale.vendororderstatus}
+							Order Status: {sale.vendororderstatus.charAt(0).toUpperCase() + sale.vendororderstatus.slice(1)}
 						</p>
 						<p>
 							<span style="
@@ -151,7 +153,7 @@
 						sale.deliverystatus === 'failed' ? 'red': 'gray'};
                         margin-right: 5px;
                     "></span>
-							Delivery status: {sale.deliverystatus}
+							Delivery Status: {sale.deliverystatus.charAt(0).toUpperCase() + sale.deliverystatus.slice(1)}
 						</p>
 						{/each}
 					</div>

@@ -1,6 +1,5 @@
 <script>
 	import { TrashCanRegular } from 'svelte-awesome-icons';
-    /** @type {import('./$types').PageData} */
     import { supabaseClient } from "$lib/supabase";
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
