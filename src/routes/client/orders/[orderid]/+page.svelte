@@ -1,7 +1,7 @@
 <script>
     import { page } from '$app/stores';
 	import { supabaseClient } from '$lib/supabase';
-	import { Button, StepIndicator } from 'flowbite-svelte';
+	import { Button, StepIndicator, DarkMode } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
     const orderid = $page.params.orderid;
@@ -41,6 +41,7 @@
     let riderComm;
 
     let currentStep = 1;
+    let colour = "default";
 
     let steps = ['Your Order has been received by the Vendor', 'Vendor is cooking your order...', 'On Delivery', 'Delivered'];
 
@@ -62,7 +63,22 @@
         riderComm = 5;
         ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
         uploadData();
+        determineStep();
     })
+
+    function determineStep(){
+        if (orderdeets.vendororderstatus == 'pending' && orderdeets.deliverystatus != 'cancelled') {
+            currentStep = 1;
+        } else if (orderdeets.vendororderstatus == 'ongoing' && orderdeets.deliverystatus != 'cancelled') {
+            currentStep = 2;
+        } else if (orderdeets.deliverystatus == 'ongoing' && orderdeets.vendororderstatus == 'completed') {
+            currentStep = 3;
+        } else if (orderdeets.vendororderstatus == 'completed' && orderdeets.vendororderstatus == 'completed') {
+            currentStep = 4;
+        } else {
+            currentStep = 5;
+        }
+    }
 
     async function fetchOrderData(){
 
@@ -113,13 +129,13 @@
 
 </script>
 
-<div class="maincontainer flex w-[100%]  flex-col">
-    <div class="topbar flex justify-between align-middle h-[52px] bg-red-400 p-2">
+<div class="maincontainer flex w-[100%] flex-col dark:bg-gray-800 dark:text-white">
+    <div class="topbar flex justify-between align-middle h-[52px] bg-red-400 dark:bg-red-900 p-2">
         <Button color="red" on:click={() => {history.back()}}>Back</Button>
         <div class="text-2xl font-bold">Order #{orderid}</div>
-        <div class="blank w-5"> </div>
+        <DarkMode />
     </div>
-    <div class="customerdeets flex bg-gray-300 flex-col p-3 gap-4">
+    <div class="customerdeets flex bg-gray-300 flex-col p-3 gap-4 dark:bg-gray-600">
         <div class="title text-xl font-bold text-center">Customer Details</div>
         <hr />
         <div class="customerdetails grid md:grid-flow-col justify-center gap-5 md:gap-[5rem] sm:grid-flow-row">
@@ -174,7 +190,7 @@
             <div class="totalprice text-xl font-bold pt-1">Total: RM {ordertotalprice}</div>
         </div>
     </div>
-    <div class="deliveryinfo py-3 bg-gray-100 px-10 justify-center flex flex-col gap-4">
+    <div class="deliveryinfo py-3 bg-gray-100 px-10 justify-center flex flex-col gap-4 dark:bg-gray-600">
         <div class="title text-xl font-bold pb-2 text-center pt-2">Delivery Details</div>
         <div class="customerdetails grid md:grid-flow-col justify-center gap-5 md:gap-[5rem] sm:grid-flow-row pb-2">
             <div class="firsthalfcd flex flex-col gap-2">
@@ -186,11 +202,14 @@
                 <div class="phone">Phone: {orderdeets?.deliveryrider?.riderhp}</div>
             </div>
         </div>
-        {#if orderdeets.deliverystatus != 'completed'}
-        <Button color="red" class="self-center" href="/client/orders/{orderid}/track">Track Delivery</Button>
-        {/if}
         <div class="trackingsection bg-black text-white p-6 rounded-xl">
-            <StepIndicator {currentStep} {steps} />
+            {#if currentStep == 1 || currentStep == 2 || currentStep == 3} 
+                <StepIndicator {currentStep} {steps} color="blue"/>
+            {:else if currentStep == 4}
+                <StepIndicator {currentStep} {steps} color="green"/>
+            {:else if currentStep == 5}
+            <StepIndicator currentStep={1} steps={["Your order has been cancelled. Please contact customer service."]} color="red"/>
+            {/if}
         </div>
     </div>
 </div>

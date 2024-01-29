@@ -37,7 +37,7 @@ const logout = () => {
     <Button href="" on:mouseenter={() => (placement = 'right')} id="settingsInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <GearSolid />
     </Button> -->
-    <Button href="/"  data-sveltekit-reload on:click={() => logout()} on:mouseenter={() => (placement = 'right')} id="logoutInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
+    <Button data-sveltekit-reload on:click={() => logout()} on:mouseenter={() => (placement = 'right')} id="logoutInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <RightFromBracketSolid />
     </Button>
     <DarkMode class="text-primary-500 mx-2 my-4 bg-white dark:bg-gray-800 dark:text-primary-600 border dark:border-gray-800"/>

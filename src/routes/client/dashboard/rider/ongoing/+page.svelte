@@ -1,7 +1,7 @@
 <script>
 	import { StoreSolid } from 'svelte-awesome-icons';
 	import SpinnerSet from './../../../SpinnerSet.svelte';
-	import { Accordion, AccordionItem, Button, CloseButton, Drawer, Label, Select, Toast } from "flowbite-svelte";
+	import { Accordion, AccordionItem, Button, CloseButton, Drawer, Label, Modal, Select, Toast } from "flowbite-svelte";
 	import SidebarRider from "../SidebarRider.svelte";
 	import Sidebar from "../../../../Sidebar.svelte";
     import { CircleUserRegular } from 'svelte-awesome-icons';
@@ -9,6 +9,7 @@
 	import { sineIn } from "svelte/easing";
 	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/supabase';
+	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 
     let transitionParams = {
         x: -320,
@@ -41,6 +42,8 @@
 	 * @type {{ value: any; name: string; }[]}
 	 */
     let orderOptions;
+
+    let popupModal = false;
 
 onMount(async () => {
     const userLog = await supabaseClient.auth.getUser();
@@ -171,6 +174,33 @@ async function deliveredOrder(saleid){
         window.location.reload();
     }
 }
+
+async function cancelOrder(saleid){
+    const { error } = await supabaseClient
+    .from('sale')
+    .update({ deliverystatus: "cancelled" })
+    .eq('saleid', saleid);
+
+    if (error) {
+        console.error('Error updating order status:', error);
+    } else {
+        console.log('Order status updated successfully');
+        alert('Order status cancelled successfully');
+        window.location.reload();
+    }
+}
+
+	/**
+	 * @type {any}
+	 */
+let selectedItemDelete;
+	/**
+	 * @param {any} saleid
+	 */
+function clickedCancel(saleid){
+    selectedItemDelete = saleid;
+    popupModal = true;
+}
 </script>
 
 <SpinnerSet />
@@ -266,8 +296,10 @@ async function deliveredOrder(saleid){
                             <div class="buttoncontainers flex flex-row gap-3 self-center">
                                 {#if selectedOrder.deliverystatus === "ongoing"}
                                     <Button color="green" on:click={() => {deliveredOrder(selectedOrder.saleid)}}>Order Delivered</Button>
+                                    <Button color="red" on:click={() => {cancelOrder(selectedOrder.saleid)}}>Cancel Order</Button>
                                 {:else if selectedOrder.deliverystatus === "pending"}
                                     <Button color="green" on:click={() => {collectOrder(selectedOrder.saleid)}}>Order Collected</Button>
+                                    <Button color="red" on:click={() => {cancelOrder(selectedOrder.saleid)}}>Cancel Order</Button>
                                 {:else}
                                     <Button color="red" disabled>Order Completed</Button>
                                 {/if}
@@ -348,11 +380,13 @@ async function deliveredOrder(saleid){
                             <hr class="w-[100%] my-3 px-4"/>
                         </div>
 
-                        <div class="buttoncontainers flex flex-row gap-3 self-center">
+                        <div class="buttoncontainers flex flex-col gap-3 self-center">
                             {#if selectedOrder.deliverystatus === "ongoing"}
                                 <Button color="green" on:click={() => {deliveredOrder(selectedOrder.saleid)}}>Order Delivered</Button>
+                                <Button color="red" on:click={() => {cancelOrder(selectedOrder.saleid)}}>Cancel Order</Button>
                             {:else if selectedOrder.deliverystatus === "pending"}
                                 <Button color="green" on:click={() => {collectOrder(selectedOrder.saleid)}}>Order Collected</Button>
+                                <Button color="red" on:click={() => {cancelOrder(selectedOrder.saleid)}}>Cancel Order</Button>
                             {:else}
                                 <Button color="red" disabled>Order Completed</Button>
                             {/if}
@@ -367,3 +401,12 @@ async function deliveredOrder(saleid){
         {/if}
     </div>
 </div>
+
+<Modal bind:open={popupModal} size="xs" autoclose>
+    <div class="text-center">
+      <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
+      <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this item from your cart?</h3>
+      <Button color="red" class="me-2" on:click={() => {cancelOrder(selectedItemDelete)}}>Yes</Button>
+      <Button color="alternative" on:click={() => (popupModal = false)}>No</Button>
+    </div>
+</Modal>

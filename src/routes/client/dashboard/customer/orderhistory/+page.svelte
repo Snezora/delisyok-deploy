@@ -191,6 +191,7 @@
 								</p>
 							{/each}
 						</div>
+						<Button class="mt-3" href="/client/orders/{order.orderid}">View & Track Order</Button>
 					</div>
 				</AccordionItem>
 			</Accordion>

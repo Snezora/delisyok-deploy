@@ -3,7 +3,20 @@
     import { UserGroupSolid, MobilePhoneSolid, UserSettingsSolid, UserSolid, QuestionCircleSolid, BookSolid } from 'flowbite-svelte-icons';
     import "./Sidebar.css";
 	import { ArrowRightFromBracketSolid } from 'svelte-awesome-icons';
+	import { supabaseClient } from '$lib/supabase';
     let spanClass = 'flex-1 ms-0 whitespace-nowrap ';
+
+    async function signOut(){
+		  const { error } = await supabaseClient.auth.signOut();
+		  if (error) {
+		  	alert(error.message);
+		  } else {
+		  	if (typeof window !== 'undefined') {
+		  		window.location.href = '/auth/login';
+        
+		  	}
+		}
+	}
   </script>
 
 <Sidebar id="customerSidebar" class="sidebar">
@@ -40,7 +53,7 @@
            </svelte:fragment>
          </SidebarItem>
          <DarkMode class=" -translate-x-1"/>
-         <SidebarItem label="Sign Out">
+         <SidebarItem label="Sign Out" on:click={signOut}>
             <svelte:fragment slot="icon">
               <ArrowRightFromBracketSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white icon-container" />
             </svelte:fragment>
