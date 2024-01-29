@@ -66,11 +66,15 @@
         }
 
         newOrders = await getNewOrders();
-        console.log(newOrders);
         currentOrders = await getCurrentOrders();
-        console.log(currentOrders);
         pastOrders = await getPastOrders();
-        console.log(pastOrders);
+
+        const channels = supabaseClient
+			  .channel('custom-update-channel')
+			  .on('postgres_changes', { event: '*', schema: 'public', table: 'sale', filter: `vendorid=eq.${vendorid}` }, (payload) => {
+				  window.location.reload();
+			  })
+			  .subscribe();
     })
 
     async function getNewOrders() {

@@ -38,6 +38,13 @@
         console.log(riderid);
         completedOrders = await fetchCompletedOrders();
         console.log(completedOrders);
+
+        const channels = supabaseClient
+			.channel('custom-update-channel')
+			.on('postgres_changes', { event: '*', schema: 'public', table: 'sale', filter: `riderid=eq.${riderid}` }, (payload) => {
+				window.location.reload();
+			})
+			.subscribe();
     })
 
     async function fetchRiderInfo() {

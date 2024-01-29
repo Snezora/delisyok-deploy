@@ -41,6 +41,14 @@
         riderData = await fetchRiderInfo();
         newOrders = await fetchNewOrders();
         console.log(newOrders);
+
+        
+		const channels = supabaseClient
+			.channel('custom-update-channel')
+			.on('postgres_changes', { event: '*', schema: 'public', table: 'sale' }, (payload) => {
+				window.location.reload();
+			})
+			.subscribe();
     });
 
 

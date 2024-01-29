@@ -33,6 +33,10 @@ onMount(async () => {
             }
         }
     });
+
+    window.onfocus = function() {
+        location.reload();
+    };
 })
 </script>
 

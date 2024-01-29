@@ -48,6 +48,10 @@
 	 * @type {any}
 	 */
     let selectedItem;
+    /**
+	 * @type {any}
+	 */
+    let orderid;
 
     async function toggleSidebar() {
 		sidebarOpen = !sidebarOpen;
@@ -60,7 +64,7 @@
         vendorData = await getVendor();
         console.log(vendorData);
         cart = await fetchCart();
-        console.log(cart);
+        orderid = cart.orderid;
         orderItems = await fetchItems();
         console.log(orderItems);
         orderItems.forEach(element => {
@@ -73,6 +77,7 @@
         ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
         
         console.log(ordertotalprice);
+        uploadPrice();
 
     });
 
@@ -81,6 +86,17 @@
         pricetotal = pricelist.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
         return pricetotal;
+    }
+
+    async function uploadPrice(){
+        const { error } = await supabaseClient
+        .from('cusorder')
+        .update({ orderprice: ordertotalprice })
+        .eq('orderid', orderid);
+
+        if (error){
+            console.error('Error updating price: ', error);
+        }
     }
 
     async function fetchCustomerData(){
