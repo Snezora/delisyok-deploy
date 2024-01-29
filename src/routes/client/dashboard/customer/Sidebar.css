@@ -1,0 +1,17 @@
+body {
+    width: 100%;
+    position: relative;
+}
+
+.icon-container {
+    margin-right: 10px;
+}
+
+.sidebar {
+    position: fixed;
+    height: 100%;
+    background-color: #f8f9fa;
+    left: 0;
+    width: 200px !important;
+    transition: width 0.5s ease-in-out;
+}

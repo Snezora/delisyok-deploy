@@ -1,7 +1,7 @@
 <script>
     import { page } from '$app/stores';
 	import { supabaseClient } from '$lib/supabase';
-	import { Button } from 'flowbite-svelte';
+	import { Button, StepIndicator } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
     const orderid = $page.params.orderid;
@@ -39,6 +39,10 @@
 	 * @type {number}
 	 */
     let riderComm;
+
+    let currentStep = 1;
+
+    let steps = ['Your Order has been received by the Vendor', 'Vendor is cooking your order...', 'On Delivery', 'Delivered'];
 
     onMount(async () => {
         // Check if the user is signed in
@@ -170,7 +174,7 @@
             <div class="totalprice text-xl font-bold pt-1">Total: RM {ordertotalprice}</div>
         </div>
     </div>
-    <div class="deliveryinfo py-3 bg-stone-200 px-10 justify-center flex flex-col gap-4">
+    <div class="deliveryinfo py-3 bg-gray-100 px-10 justify-center flex flex-col gap-4">
         <div class="title text-xl font-bold pb-2 text-center pt-2">Delivery Details</div>
         <div class="customerdetails grid md:grid-flow-col justify-center gap-5 md:gap-[5rem] sm:grid-flow-row pb-2">
             <div class="firsthalfcd flex flex-col gap-2">
@@ -183,7 +187,10 @@
             </div>
         </div>
         {#if orderdeets.deliverystatus != 'completed'}
-        <Button color="red" class="self-center" on:click={() => {history.back()}}>Track Delivery</Button>
+        <Button color="red" class="self-center" href="/client/orders/{orderid}/track">Track Delivery</Button>
         {/if}
+        <div class="trackingsection bg-black text-white p-6 rounded-xl">
+            <StepIndicator {currentStep} {steps} />
+        </div>
     </div>
 </div>
