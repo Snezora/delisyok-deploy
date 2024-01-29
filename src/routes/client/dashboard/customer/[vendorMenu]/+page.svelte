@@ -200,7 +200,6 @@
                 <CartOutline class="w-4 h-4 text-white" />
             </Button>
         </div>
-
     </div>
     <div class="absolute z-10">
 		<button
