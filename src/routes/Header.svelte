@@ -60,6 +60,10 @@
 	 * @type {boolean}
 	 */
 	let isRider;
+	/**
+	 * @type {boolean}
+	 */
+	let isSysMan;
 
 	onMount(async () => {
 		// Check if the user is signed in
@@ -76,6 +80,7 @@
 			isVendor = true;
 			isCustomer = false;
 			isRider = false;
+			isSysMan = false;
 		}
 
 		let { data: customer} = await supabaseClient
@@ -87,6 +92,7 @@
 				isCustomer = true;
 				isVendor = false;
 				isRider = false;
+				isSysMan = false;
 			}
 
 		let { data: rider, error } = await supabaseClient
@@ -98,9 +104,22 @@
 					isRider = true;
 					isVendor = false;
 					isCustomer = false;
+					isSysMan = false;
 				}
 
-		usertype.set({isVendor, isCustomer, isRider});
+		let { data: sysman, error: sysmanerror } = await supabaseClient
+				.from('systemmanager')
+				.select('*')
+				.eq('user_id', user_id);
+
+		if (sysman && sysman.length > 0) {
+					isRider = false;
+					isVendor = false;
+					isCustomer = false;
+					isSysMan = true;
+				}
+
+		usertype.set({isVendor, isCustomer, isRider, isSysMan});
 
 		console.log($usertype);
 	})
@@ -109,6 +128,7 @@
 		isVendor = value.isVendor;
 		isCustomer = value.isCustomer;
 		isRider = value.isRider;
+		isSysMan = value.isSysMan;
 	})
 
 </script>

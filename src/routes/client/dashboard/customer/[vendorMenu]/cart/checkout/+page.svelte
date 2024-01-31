@@ -250,7 +250,10 @@
 		
 		const { error: error2 } = await supabaseClient
 		.from('cusorder')
-		.update({ cartstatus: 'completed' })
+		.update({ 
+			cartstatus: 'completed',
+			foodtotalprice : ordertotalprice
+		 })
 		.eq('orderid', cart.orderid)
 
 		if (error2) {

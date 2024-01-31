@@ -76,14 +76,23 @@
 					if (typeof window !== 'undefined') {
 						window.location.href = '/auth/login';
 					}
-				} else {
-					isRider = true;
+
+				const { data: sysman } = await supabaseClient
+					.from('systemmanager')
+					.select('*')
+					.eq('user_id', user_id);
+
+				if (error || sysman?.length == 0) {
+					if (typeof window !== 'undefined') {
+						window.location.href = '/auth/login';
+					}
 				}
 			} else {
 				if (typeof window !== 'undefined') {
 					window.location.href = '/auth/login';
 				}
 			}
+		}
 		});
 	});
 
@@ -105,6 +114,8 @@
 	export let isVendor = false;
 	// @ts-ignore
 	export let isRider = false;
+	// @ts-ignore
+	export let isSysMan = false;
 </script>
 
 <!-- CUSTOMER SIDEBAR -->

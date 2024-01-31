@@ -63,10 +63,10 @@
 			addPrices(element.itemprice);
 		});
 		console.log(pricetotal);
-		salestax = (pricetotal * 0.08).toFixed(2);
+		salestax = ((pricetotal * 0.08).toFixed(2));
 		console.log(salestax);
 		riderComm = 5;
-		ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
+		ordertotalprice = Number.parseFloat((pricetotal + riderComm + salestax).toFixed(2));
 		uploadData();
 		determineStep();
 
