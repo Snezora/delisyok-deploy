@@ -126,12 +126,24 @@
 						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
 
 						Order items:
-						{#each order.orderitem as orderitem}
-							<div style="display: flex; justify-content: space-between; margin-left: 20px">
-								{orderitem.itemname}
-								<span>RM {orderitem.itemprice}</span>
-							</div>
-						{/each}
+						<table class="w-full table-auto">
+							<thead>
+							  <tr class="text-left">
+								<th class="px-4 py-2">Item Name</th>
+								<th class="px-4 py-2">Remark</th>
+								<th class="px-4 py-2">Item Price</th>
+							  </tr>
+							</thead>
+							<tbody>
+							  {#each order.orderitem as orderitem}
+							  <tr>
+								<td class="px-4 py-2">{orderitem.itemname}</td>
+								<td class="px-4 py-2">{orderitem.remark}</td>
+								<td class="px-4 py-2">RM {orderitem.itemprice.toFixed(2)}</td>
+							  </tr>
+							  {/each}
+							</tbody>
+						  </table>
 
 						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
 						<div>
