@@ -25,12 +25,51 @@
         </div>
     </div>
 
-
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
-        <h1>Deliver Order 1</h1>
-    </div>   
+        <div class = "orderBlock">
+            <div class ="ml-8 mt-6">
+                <h1>Deliver Order 1</h1>
+            </div>
+        </div>
+            
+    </div>
+    
+    <div class = "footer text-2xl ml-8 text-white text-xl bg-grey items-left justify-left">
+        <div class ="totalCommision">
+            <div class ="ml-8 mt-6">
+                <h1>Total Commision (RM) : </h1>
+            </div>
+        </div>
+    </div>
 
 </div>   
 
+<style>
+	.totalCommision {
+    box-sizing: border-box;
+    position: absolute;
+    width: 800px;
+    height: 80px;
+    bottom: 50px;
+
+    background: #111827;
+    border: 1px solid #000000;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+	}
+
+    .orderBlock {
+    width: 1200px;
+    height: 120px;
+    top: 616px;
+
+    background: #D9D9D9;
+    border-radius: 20px;
+
+    }
+
+
+
+</style>
 
 
