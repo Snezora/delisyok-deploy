@@ -167,7 +167,7 @@
 	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
 
 		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
-			<button class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"on:click={() => (window.history.back())}>
+			<button class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"on:click={() => (window.location.href="/client/dashboard/customer")}>
 				<ArrowLeftOutline class="h-5 w-5" />
 				<span class="hidden md:flex md:visible ml-2">Vendor List</span>
 			</button>

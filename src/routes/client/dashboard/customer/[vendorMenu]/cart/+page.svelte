@@ -91,7 +91,7 @@
     async function uploadPrice(){
         const { error } = await supabaseClient
         .from('cusorder')
-        .update({ orderprice: ordertotalprice })
+        .update({ foodtotalprice: ordertotalprice })
         .eq('orderid', orderid);
 
         if (error){
@@ -230,7 +230,11 @@
                         <div class="itemcontainer flex flex-col">
                             <div class="titlegrid grid grid-cols-4 place-items-center mb-5">
                                 <div class="itemname">{item.itemname}</div>
-                                <div class="remark">{item.remark}</div>
+                                {#if item.remark == "null"}
+                                    <div>-</div>
+                                {:else}
+                                    <div class="remark">{item.remark}</div>
+                                {/if}
                                 <div class="third flex flex-row items-center">
                                     <div class="price">RM {item.itemprice}</div>
                                 </div>
