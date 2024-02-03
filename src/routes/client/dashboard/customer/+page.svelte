@@ -167,16 +167,16 @@
 </script>
 
 <div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
-	<div class="p-4 bg-white rounded shadow-lg">
+	<div class="p-4 dark:bg-slate-800 dark:text-white bg-white rounded shadow-lg">
 	  <h2 class="text-2xl font-bold mb-2">Help</h2>
-	  <div class="mt-[20px]">
-		<p class="font-semibold text-xl">Welcome to the Customer Client Page.</p>
+	  <div class="mt-[20px] text-lg">
+		<p>Welcome to the Customer Client Page.</p>
 		<p>Here you can find the list of vendors.
 			Click on the desired vendor cards to view their menu.</p>
 			<p>
 	  </div>
-	  <div class="mt-[20px]">
-		<p class="font-semibold">
+	  <div class="mt-[30px]">
+		<p class="font-bold">
 			Need help to find your order history?
 		</p>
 		<p class="flex items-center">
@@ -185,7 +185,7 @@
 	  </div>
 	  
 	  <div class="mt-[20px]">
-		<p class="font-semibold">
+		<p class="font-bold">
 			Know a vendor?
 		</p>
 		<p>
@@ -197,7 +197,7 @@
 	</div>
   </div>
 
-<div class="fixed z-20  h-[100%]">
+<div class="fixed z-20  h-[100%] ">
 	{#if sidebarOpen}
 		<div class="fixed h-[100%]">
 			<SidebarCustomer/>
@@ -225,7 +225,8 @@
 
 
 		<div class="h-[100%] mt-auto mb-auto">
-			<button class="flex justify-center items-center hover:bg-slate-700 bg-slate-800 rounded-lg px-[14px] py-[6px] text-white mr-4" on:click={toggleHelp}>
+			<button class="flex justify-center items-center hover:bg-slate-700 bg-slate-800 rounded-lg px-[14px] py-[6px] text-white mr-4" 
+			on:click={toggleHelp} disabled={sidebarOpen}>
 				<QuestionCircleOutline class="h-6 w-6" />
 			</button>
 		</div>

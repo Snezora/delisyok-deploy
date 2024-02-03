@@ -35,6 +35,7 @@
 	let aboutUs = false;
 	let contactUs = false;
 	let upgrade = false;
+	let faq = false;
 
 	async function signOut() {
 		const { error } = await supabaseClient.auth.signOut();
@@ -81,7 +82,7 @@
 					/>
 				</svelte:fragment>
 			</SidebarItem>
-			<SidebarItem label="Help">
+			<SidebarItem label="FAQ" on:click={() => (faq = true)}>
 				<svelte:fragment slot="icon">
 					<QuestionCircleSolid
 						class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white icon-container"
@@ -174,6 +175,35 @@
   <Modal class="text-gray-800 dark:text-gray-100" bind:open={upgrade} autoclose outsideclose>
 	<p class="text-lg font-semibold">
 		We are cooking something up! Stay tune for plan and pricing updates.
+	</p>
+  </Modal>
+
+  <Modal title="FAQ" class="text-gray-800 dark:text-gray-100" bind:open={faq} autoclose outsideclose>
+	<p class="font-medium text-lg">
+		1. What if my order gets rejected by vendor? Will I get a refund?
+	</p>
+	<p class="text-justify">
+		Yes, you will get a refund upon request.
+		Please do provide us with your email, contact number, and order number. 
+		You can reach out to us via email or contact number for the refund. 
+		We understand that waiting for a refund can be frustrating. 
+		We truly appreciate your patience and understanding during this time.
+	</p>
+	<p class="font-medium text-lg">
+		2. What if I do not receive my order? What should I do?
+	</p>
+	<p class="text-justify">
+		You can reach out to us via email or contact number. 
+		Please do provide us with your email, contact number, and order number. 
+		We will conduct an investigation for the cause of the failed delivery. 
+		Refund is dependent on the outcome of the investigation.
+	</p>
+	<p class="font-medium text-lg">
+		3. I would like to complain regarding a vendor or a rider. How do I do that?
+	</p>
+	<p class="text-justify">
+		You can reach out to us via email or contact number. 
+		We shall entertain your request and investigate further regarding the allegations.
 	</p>
   </Modal>
 
