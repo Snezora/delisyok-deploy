@@ -5,15 +5,15 @@
     import { page } from '$app/stores';
 	import { ArrowLeftOutline } from "flowbite-svelte-icons";
     import { Drawer, CloseButton, Accordion, AccordionItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button } from "flowbite-svelte";
-	import { hidden2 } from "../../../../stores/sidebar";
-	import Sidebar from "../../../../Sidebar.svelte";
+	import { hidden2 } from "../../../../../stores/sidebar";
+	import Sidebar from "../../../../../Sidebar.svelte";
 	import { sineIn } from "svelte/easing";
-	import SpinnerSet from "../../../SpinnerSet.svelte";
+	import SpinnerSet from "../../../../SpinnerSet.svelte";
 
     import { goto } from '$app/navigation';
 
 	function goTo() {
-		goto('manager');
+		goto('/client/dashboard/manager');
 	}
 
      
@@ -47,12 +47,11 @@
             </div>
         </div>
 
-        <div class =" text-white text-2xl flex flex-1">
-            <div class = "returnPosition">
-                <Button type="button" class="w-[325px] mt-4" on:input={goTo} id= returnbutton>Return</Button>
+        <div class="text-white text-2xl flex flex-1">
+            <div class="returnPosition">
+                <Button type="button" class="w-[325px] mt-4" on:click={goTo} id="returnbutton">Return</Button>
             </div>
         </div>
-        
     </div>
 
 </div>   
