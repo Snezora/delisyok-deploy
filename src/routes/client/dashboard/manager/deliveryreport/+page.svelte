@@ -4,11 +4,17 @@
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
 	import { ArrowLeftOutline } from "flowbite-svelte-icons";
-    import { Drawer, CloseButton, Accordion, AccordionItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
+    import { Drawer, CloseButton, Accordion, AccordionItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button } from "flowbite-svelte";
 	import { hidden2 } from "../../../../stores/sidebar";
 	import Sidebar from "../../../../Sidebar.svelte";
 	import { sineIn } from "svelte/easing";
 	import SpinnerSet from "../../../SpinnerSet.svelte";
+
+    import { goto } from '$app/navigation';
+
+	function goTo() {
+		goto('manager');
+	}
 
      
 </script>
@@ -34,29 +40,41 @@
             
     </div>
     
-    <div class = "footer text-2xl ml-8 text-white text-xl bg-grey items-left justify-left">
+    <div class = "footer text-2xl ml-8 mt-8 text-white text-xl bg-grey flex-parent items-left justify-left">
         <div class ="totalCommision">
             <div class ="ml-8 mt-6">
                 <h1>Total Commision (RM) : </h1>
             </div>
         </div>
+
+        <div class =" text-white text-2xl flex flex-1">
+            <div class = "returnPosition">
+                <Button type="button" class="w-[325px] mt-4" on:input={goTo} id= returnbutton>Return</Button>
+            </div>
+        </div>
+        
     </div>
 
 </div>   
 
 <style>
 	.totalCommision {
+    display: flex;
     box-sizing: border-box;
-    position: absolute;
     width: 800px;
     height: 80px;
-    bottom: 50px;
 
     background: #111827;
     border: 1px solid #000000;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
 	}
+
+    .returnPosition {
+    flex: 1;
+    border: 2px solid;
+    margin: 10px;
+    }
 
     .orderBlock {
     width: 1200px;
@@ -65,10 +83,7 @@
 
     background: #D9D9D9;
     border-radius: 20px;
-
     }
-
-
 
 </style>
 
