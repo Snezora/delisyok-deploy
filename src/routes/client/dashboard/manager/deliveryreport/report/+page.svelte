@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-center">
         <div class = "orderBlock">
             <div class ="ml-8 mt-1">
                 <h1>Sales ID:</h1>
@@ -43,7 +43,7 @@
             
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-center">
         <div class = "orderBlock">
             <div class ="ml-8 mt-1">
                 <h1>Sales ID:</h1>
@@ -55,7 +55,7 @@
             
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-center">
         <div class = "orderBlock">
             <div class ="ml-8 mt-1">
                 <h1>Sales ID:</h1>
@@ -67,7 +67,7 @@
             
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-center">
         <div class = "orderBlock">
             <div class ="ml-8 mt-1">
                 <h1>Sales ID:</h1>
@@ -79,7 +79,7 @@
             
     </div>
     
-    <div class = "footer text-2xl ml-8 mt-8 text-white text-xl bg-grey flex-parent items-left justify-left">
+    <div class = "footer text-2xl ml-8 mt-8 text-white text-xl bg-grey flex-parent items-center justify-center">
         <div class ="totalCommision">
             <div class ="ml-8 mt-6">
                 <h1>Total Commision (RM) : </h1>
@@ -99,13 +99,13 @@
 	.totalCommision {
     display: flex;
     box-sizing: border-box;
-    width: 800px;
-    height: 80px;
+    width: 99%;
+    height: 20%;
 
     background: #111827;
     border: 1px solid #000000;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
+    border-radius: 10px;
 	}
 
     .returnPosition {
@@ -115,14 +115,16 @@
     }
 
     .orderBlock {
-    width: 1200px;
-    height: 120px;
-    top: 616px;
-    font-family: 'Inria Sans', sans-serif;
-
-    background: #D9D9D9;
-    border-radius: 20px;
-    }
+            width: 80%;
+            height: 20%;
+            top: 616px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: #D9D9D9;
+            border-radius: 20px;
+            overflow: auto;
+        }
 
 </style>
 

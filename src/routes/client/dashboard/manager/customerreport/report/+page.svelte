@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
                 <h1>Order ID:</h1>
@@ -48,7 +48,7 @@
             
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
                 <h1>Order ID:</h1>
@@ -65,7 +65,7 @@
             
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
                 <h1>Order ID:</h1>
@@ -82,7 +82,7 @@
             
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
                 <h1>Order ID:</h1>
@@ -99,7 +99,7 @@
             
     </div>
 
-    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-center justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
                 <h1>Order ID:</h1>
@@ -116,7 +116,7 @@
             
     </div>
     
-    <div class = "footer text-2xl ml-8 mt-8 text-white text-xl bg-grey flex-parent items-left justify-left">
+    <div class = "footer text-2xl ml-8 mt-8 text-white text-xl bg-grey flex-parent items-center justify-center">
         
         <div class="text-white text-2xl flex flex-1">
             <div class="returnPosition">
@@ -134,18 +134,25 @@
     flex: 1;
     border: 2px solid;
     margin: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     }
 
-    .orderBlock {
-    width: 1200px;
-    height: 120px;
-    top: 616px;
 
-    background: #D9D9D9;
-    border-radius: 20px;
-    overflow : auto
-    }
+        .orderBlock {
+            width: 80%;
+            height: 20%;
+            top: 616px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: #D9D9D9;
+            border-radius: 20px;
+            overflow: auto;
+        }
+    </style>
 
-</style>
+
 
 
