@@ -1,10 +1,10 @@
 <script>
-	import { crossfade, draw, fade, fly, slide } from 'svelte/transition';
+	import { fade, slide } from 'svelte/transition';
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import SidebarCustomer from './SidebarCustomer.svelte';
-	import { Card, Toggle, Search, Button, DarkMode } from 'flowbite-svelte';
-	import { ArrowLeftOutline, BarsOutline, XCompanySolid } from 'flowbite-svelte-icons';
+	import { Card, Search } from 'flowbite-svelte';
+	import { BarsOutline, XCompanySolid, QuestionCircleOutline } from 'flowbite-svelte-icons';
 
 	let sidebarOpen = false;
 
@@ -135,7 +135,7 @@
 	 */
 	let filteredVendors = [];
 
-	$: filteredVendors = vendors.filter((vendor) =>
+	$: filteredVendors = vendors.filter((/** @type {{ businessname: string; }} */ vendor) =>
     	vendor.businessname.toLowerCase().includes(searchInput.toLowerCase())
 	);
 	
@@ -147,7 +147,44 @@
 	function directToVendorMenu(vendorid){
 		window.location.href = `/client/dashboard/customer/${vendorid}`
 	}
+
+	let showHelp = false;
+
+  function toggleHelp() {
+    showHelp = !showHelp;
+  }
 </script>
+
+<div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
+	<div class="p-4 bg-white rounded shadow-lg">
+	  <h2 class="text-2xl font-bold mb-2">Help</h2>
+	  <div class="mt-[20px]">
+		<p class="font-semibold text-xl">Welcome to the Customer Client Page.</p>
+		<p>Here you can find the list of vendors.
+			Click on the desired vendor cards to view their menu.</p>
+			<p>
+	  </div>
+	  <div class="mt-[20px]">
+		<p class="font-semibold">
+			Need help to find your order history?
+		</p>
+		<p class="flex items-center">
+			It is in the menu sidebar. You can access it with the menu button with icon <BarsOutline class="w-4 h-4 ml-1 mr-1"/>.
+		</p>
+	  </div>
+	  
+	  <div class="mt-[20px]">
+		<p class="font-semibold">
+			Know a vendor?
+		</p>
+		<p>
+			You can use our search bar to search for the vendor name!
+		</p>
+	  </div>
+	  <button class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
+	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center" on:click={toggleHelp}>Close</button>
+	</div>
+  </div>
 
 <div class="fixed z-20  h-[100%]">
 	{#if sidebarOpen}
@@ -160,11 +197,7 @@
 <div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-stone-500">
 	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
 
-		<div class="justify-start items-center h-[100%] mt-auto mb-auto">
-			<button class="justify-center ml-4 px-4 py-2 bg-slate-700 text-white rounded-lg inline-flex items-center">
-				<ArrowLeftOutline class="h-5 w-5" />
-				<span class="hidden md:flex md:visible ml-2"> Home</span>
-			</button>
+		<div class="justify-start items-center ml-20 h-[100%] mt-auto mb-auto">
 		</div>
 
 
@@ -179,7 +212,11 @@
 		</div>
 
 
-		<DarkMode class=" mt-auto mb-auto mr-5" />
+		<div class="justify-start items-center h-[100%] mt-auto mb-auto">
+			<button class="text-white mr-4" on:click={toggleHelp}>
+				<QuestionCircleOutline class="h-7 w-7" />
+			</button>
+		</div>
 	</div>
 
 	<div class="absolute z-10">
@@ -233,3 +270,8 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.block { display: block; }
+	.bg-semi-transparent { background-color: rgba(0, 0, 0, 0.5); }
+  </style>
