@@ -3,7 +3,7 @@
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import SidebarCustomer from './SidebarCustomer.svelte';
-	import { Card, Search } from 'flowbite-svelte';
+	import { Card, Search, DarkMode } from 'flowbite-svelte';
 	import { BarsOutline, XCompanySolid, QuestionCircleOutline, ArrowRightFromBracketSolid } from 'flowbite-svelte-icons';
 
 	let sidebarOpen = false;
@@ -196,6 +196,10 @@
 	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center" on:click={toggleHelp}>Close</button>
 	</div>
   </div>
+
+  <div class="bg-slate-900 fixed right-0 bottom-0 px-3 rounded-l-lg">
+	<DarkMode class="h-[60%]"></DarkMode>
+</div>
 
 <div class="fixed z-20 ">
 	{#if sidebarOpen}
