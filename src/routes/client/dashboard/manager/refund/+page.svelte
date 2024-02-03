@@ -55,7 +55,7 @@
     }
     .orderBlock {
     width: 1200px;
-    height: 120px;
+    height: 200px;
     top: 616px;
 
     background: #D9D9D9;
