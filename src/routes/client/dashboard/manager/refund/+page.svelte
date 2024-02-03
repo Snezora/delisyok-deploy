@@ -3,7 +3,7 @@
     import { goto } from '$app/navigation';
 
 	function goTo() {
-		goto('manager');
+		goto('/client/dashboard/manager/');
 	}
 
 
@@ -36,9 +36,9 @@
     
     <div class = "footer text-2xl ml-8 mt-8 text-white text-xl bg-grey flex-parent items-left justify-left">
         
-        <div class =" text-white text-2xl flex flex-1">
-            <div class = "returnPosition">
-                <Button type="button" class="w-[325px] mt-4" on:input={goTo} id= returnbutton>Return</Button>
+        <div class="text-white text-2xl flex flex-1">
+            <div class="returnPosition">
+                <Button type="button" class="w-[325px] mt-4" on:click={goTo} id="returnbutton">Return</Button>
             </div>
         </div>
         
