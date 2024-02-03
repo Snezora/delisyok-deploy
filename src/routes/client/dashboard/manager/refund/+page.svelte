@@ -1,4 +1,11 @@
 <script>
+	import { Button } from "flowbite-svelte";
+    import { goto } from '$app/navigation';
+
+	function goTo() {
+		goto('manager');
+	}
+
 
 </script>    
 
@@ -14,15 +21,38 @@
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
         <div class = "orderBlock">
             <div class ="ml-8 mt-6">
-                <h1>Deliver Order 1</h1>
+                <h1>Order 1 </h1>
+                    <div class = "yesNoButton">
+                        <Button>Yes</Button>
+                    </div>
+                    <div class = "yesNoButton">
+                        <Button>No</Button>
+                    </div>
             </div>
+
+
         </div>
     </div>
     
+    <div class = "footer text-2xl ml-8 mt-8 text-white text-xl bg-grey flex-parent items-left justify-left">
+        
+        <div class =" text-white text-2xl flex flex-1">
+            <div class = "returnPosition">
+                <Button type="button" class="w-[325px] mt-4" on:input={goTo} id= returnbutton>Return</Button>
+            </div>
+        </div>
+        
+    </div>
 
 </div>
 
 <style>
+
+    .returnPosition {
+    flex: 1;
+    border: 2px solid;
+    margin: 10px;
+    }
     .orderBlock {
     width: 1200px;
     height: 120px;
@@ -30,6 +60,14 @@
 
     background: #D9D9D9;
     border-radius: 20px;
+    }
+
+    .yesButton {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
     }
 
 </style>
