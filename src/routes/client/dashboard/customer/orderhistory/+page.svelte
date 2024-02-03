@@ -2,7 +2,7 @@
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import { AccordionItem, Accordion, Button, DarkMode, StepIndicator } from 'flowbite-svelte';
-	import { ArrowLeftOutline, CartOutline } from 'flowbite-svelte-icons';
+	import { ArrowLeftOutline, QuestionCircleOutline, CartOutline } from 'flowbite-svelte-icons';
 	let popupModal = false;
 
 	let userData;
@@ -131,24 +131,69 @@
 	}
 
 	//export let data;
+
+	let showHelp = false;
+
+  function toggleHelp() {
+    showHelp = !showHelp;
+  }
+
 </script>
 
+<div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
+	<div class="p-4 bg-white rounded shadow-lg">
+	  <h2 class="text-2xl font-bold mb-2">Help</h2>
+	  <div class="mt-[20px]">
+		<p class="font-semibold text-xl">Welcome to the Customer Client Page.</p>
+		<p>Here you can find the list of vendors.
+			Click on the desired vendor cards to view their menu.</p>
+			<p>
+	  </div>
+	  <div class="mt-[20px]">
+		<p class="font-semibold">
+			Need help to find your order history?
+		</p>
+	  </div>
+
+	  <div class="mt-[20px]">
+		<p class="font-semibold">
+			Know a vendor?
+		</p>
+		<p>
+			You can use our search bar to search for the vendor name!
+		</p>
+	  </div>
+	  <button class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
+	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center" on:click={toggleHelp}>Close</button>
+	</div>
+  </div>
+
 <div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-gray-600">
-	<div class="header h-16 bg-gray-900 px-4 flex flex-row justify-between">
-		<Button pill={true} outline={true} class="my-4" on:click={() => (window.history.back())}>
-			<ArrowLeftOutline class="w-4 h-4 text-white" />
-		</Button>
-		<div class="flex flex-col items-center">
-			<div class="font-bold text-2xl text-white w-full h-9 flex items-center justify-center">
+	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
+
+		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
+			<button class="justify-center px-4 py-2 bg-slate-700 text-white rounded-lg inline-flex items-center"on:click={() => (window.history.back())}>
+				<ArrowLeftOutline class="h-5 w-5" />
+				<span class="hidden md:flex md:visible ml-2">Vendor List</span>
+			</button>
+		</div>
+
+
+		<div class="textcontainer flex flex-col lg:-ml-24 md:-ml-24">
+			<div class="font-bold text-3xl text-white w-full h-12 flex items-center justify-center">
 				<h1>Hello, {customerData.customername}</h1>
 			</div>
-
-			<div class="text-base text-white w-full h-8 flex items-center justify-center">
-				<h1>Welcome to Your Order History</h1>
+	
+			<div class="text-lg text-white w-full h-12 flex items-center justify-center">
+				<h1>Your order history</h1>
 			</div>
 		</div>
-		<div class="rightside gap-3 flex flex-row">
-			<DarkMode class="h-[60%] mt-auto mb-auto"></DarkMode>
+
+
+		<div class="justify-start items-center h-[100%] mt-auto mb-auto">
+			<button class="text-white mr-4" on:click={toggleHelp}>
+				<QuestionCircleOutline class="h-7 w-7" />
+			</button>
 		</div>
 	</div>
 	<div class="text-black dark:text-white w-[100%]">
@@ -266,7 +311,7 @@
 						<div class="track m-4">
 							<span class="">Delivery Status:</span>
 							<div class="trackingsection bg-black text-white p-6 rounded-xl ml-auto mr-auto">
-								{#await determineStep(order.sale[0].saleid)}
+								{#await determineStep(order?.sale?.[0]?.saleid)}
 									<div>Loading...</div>
 								  {:then stepResult}
 									{#if stepResult == 1 || stepResult == 2 || stepResult == 3}

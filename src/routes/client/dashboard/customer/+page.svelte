@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import SidebarCustomer from './SidebarCustomer.svelte';
 	import { Card, Search } from 'flowbite-svelte';
-	import { BarsOutline, XCompanySolid, QuestionCircleOutline } from 'flowbite-svelte-icons';
+	import { BarsOutline, XCompanySolid, QuestionCircleOutline, ArrowRightFromBracketSolid } from 'flowbite-svelte-icons';
 
 	let sidebarOpen = false;
 
@@ -12,7 +12,7 @@
 	/**
 	 * @type {any}
 	 */
-	let customerData;
+	let customerData = [];
 	/**
 	 * @type {string | undefined}
 	 */
@@ -153,6 +153,17 @@
   function toggleHelp() {
     showHelp = !showHelp;
   }
+
+  async function signOut() {
+		const { error } = await supabaseClient.auth.signOut();
+		if (error) {
+			alert(error.message);
+		} else {
+			if (typeof window !== 'undefined') {
+				window.location.href = '/auth/login';
+			}
+		}
+	}
 </script>
 
 <div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
@@ -197,13 +208,14 @@
 <div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-stone-500">
 	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
 
-		<div class="justify-start items-center ml-20 h-[100%] mt-auto mb-auto">
+		<div class="justify-start items-center ml-24 h-[100%] mt-auto mb-auto">
+			
 		</div>
 
 
 		<div class="textcontainer flex flex-col mr-10">
 			<div class="font-bold text-3xl text-white w-full h-12 flex items-center justify-center">
-				<h1>Hi, Shopper.</h1>
+				<h1>Hello, {customerData.customername}</h1>
 			</div>
 	
 			<div class="text-lg text-white w-full h-12 flex items-center justify-center">
@@ -212,15 +224,15 @@
 		</div>
 
 
-		<div class="justify-start items-center h-[100%] mt-auto mb-auto">
-			<button class="text-white mr-4" on:click={toggleHelp}>
-				<QuestionCircleOutline class="h-7 w-7" />
+		<div class="h-[100%] mt-auto mb-auto">
+			<button class="flex justify-center items-center hover:bg-slate-700 bg-slate-800 rounded-lg px-[14px] py-[6px] text-white mr-4" on:click={toggleHelp}>
+				<QuestionCircleOutline class="h-6 w-6" />
 			</button>
 		</div>
 	</div>
 
 	<div class="absolute z-10">
-		<button class="justify-center m-4 ml-4 px-4 py-2 rounded-lg h-[40px] transition-[width] duration-[0.3s] ease-[ease-in-out] border bg-primary-600 border-solid border-[#EF562F]
+		<button class="md:w-[120px] lg:w-[120px] justify-center m-4 ml-4 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
 			hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center {sidebarOpen
 				? 'translate-x-[179px] translate-y-[-112px] fixed'
 				: ''}"
