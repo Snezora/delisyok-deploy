@@ -149,18 +149,13 @@
 			Click on the desired vendor cards to view their menu.</p>
 			<p>
 	  </div>
-	  <div class="mt-[20px]">
-		<p class="font-semibold">
-			Need help to find your order history?
-		</p>
-	  </div>
 
 	  <div class="mt-[20px]">
 		<p class="font-semibold">
-			Know a vendor?
+			Want to track your order?
 		</p>
 		<p>
-			You can use our search bar to search for the vendor name!
+			Just select an order number and you will see your order details. Plus, you get to track your order!
 		</p>
 	  </div>
 	  <button class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
@@ -172,7 +167,7 @@
 	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
 
 		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
-			<button class="justify-center px-4 py-2 bg-slate-700 text-white rounded-lg inline-flex items-center"on:click={() => (window.history.back())}>
+			<button class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"on:click={() => (window.history.back())}>
 				<ArrowLeftOutline class="h-5 w-5" />
 				<span class="hidden md:flex md:visible ml-2">Vendor List</span>
 			</button>
@@ -191,8 +186,8 @@
 
 
 		<div class="justify-start items-center h-[100%] mt-auto mb-auto">
-			<button class="text-white mr-4" on:click={toggleHelp}>
-				<QuestionCircleOutline class="h-7 w-7" />
+			<button class="flex justify-center items-center hover:bg-slate-700 bg-slate-800 rounded-lg px-[14px] py-[6px] text-white mr-4"  on:click={toggleHelp}>
+				<QuestionCircleOutline class="h-6 w-6" />
 			</button>
 		</div>
 	</div>
@@ -200,7 +195,7 @@
 		{#each orders as order}
 			<Accordion>
 				<AccordionItem class="text-black dark:text-white w-[100%]">
-					<span slot="header">{order.orderid}</span>
+					<span slot="header">Order ID: {order.orderid}</span>
 					<div class="container text-black dark:text-white w-[100%]">
 						<p class="mb-2 text-black dark:text-white flex flex-col gap-1">
 							{#each order.sale as sale}
@@ -241,7 +236,7 @@
 							  <tr>
 								<td class="px-4 py-2">{orderitem.itemname}</td>
 								<td class="px-4 py-2">{orderitem.remark}</td>
-								<td class="px-4 py-2">RM {orderitem.itemprice}</td>
+								<td class="px-4 py-2">RM {Number(orderitem.itemprice).toFixed(2)}</td>
 							  </tr>
 							  {/each}
 							</tbody>
@@ -268,13 +263,9 @@
 									<span
 										style="
 							display: inline-block;
-							width: 10px;
-							height: 10px;
-							background-color: {sale.vendororderstatus === null
-											? 'grey'
-											: sale.vendororderstatus === 'pending'
-												? 'yellow'
-												: sale.vendororderstatus === 'completed'
+							width: 20px;
+							height: 12px;
+							background-color: {sale.vendororderstatus === 'completed'
 													? 'green'
 													: sale.vendororderstatus === 'failed'
 														? 'red'
@@ -289,17 +280,13 @@
 									<span
 										style="
 							display: inline-block;
-							width: 10px;
-							height: 10px;
-							background-color: {sale.deliverystatus === null
-											? 'grey'
-											: sale.deliverystatus === 'pending'
-												? 'yellow'
-												: sale.deliverystatus === 'completed'
+							width: 20px;
+							height: 12px;
+							background-color: {sale.deliverystatus === 'completed'
 													? 'green'
 													: sale.deliverystatus === 'failed'
 														? 'red'
-														: 'gray'};
+														: 'grey'};
 							margin-right: 5px;
 						"
 									></span>
@@ -308,7 +295,7 @@
 								</p>
 							{/each}
 						</div>
-						<div class="track m-4">
+						<div class="track mt-4">
 							<span class="">Delivery Status:</span>
 							<div class="trackingsection bg-black text-white p-6 rounded-xl ml-auto mr-auto">
 								{#await determineStep(order?.sale?.[0]?.saleid)}
@@ -336,3 +323,8 @@
 		{/each}
 	</div>
 </div>
+
+<style>
+	.block { display: block; }
+	.bg-semi-transparent { background-color: rgba(0, 0, 0, 0.5); }
+  </style>

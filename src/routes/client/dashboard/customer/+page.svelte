@@ -177,7 +177,7 @@
 	  </div>
 	  <div class="mt-[30px]">
 		<p class="font-bold">
-			Need help to find your order history?
+			Need help to find your order history, switch themes, and more?
 		</p>
 		<p class="flex items-center">
 			It is in the menu sidebar. You can access it with the menu button with icon <BarsOutline class="w-4 h-4 ml-1 mr-1"/>.

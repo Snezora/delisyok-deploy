@@ -219,7 +219,7 @@ console.log("here");
 		"Convenient, Healthy, Fast"
 	</p>
 	<p class="text-justify">
-		We provide rapid meal preparation and delivery service to our valued customers, ensuring convenience whilst ensuring a healthy, well-portioned meal for a healthy diet. 
+		We provide rapid meal preparation and delivery service to our valued customers, ensuring convenience whilst ensuring a healthy, well-portioned meal for a healthy diet.
 	</p>
   </Modal>
 
