@@ -139,19 +139,18 @@
     flex-direction: column;
     }
 
-
-        .orderBlock {
-            width: 80%;
-            height: 20%;
-            top: 616px;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background: #D9D9D9;
-            border-radius: 20px;
-            overflow: auto;
-        }
-    </style>
+    .orderBlock {
+        width: 80%;
+        height: 20%;
+        top: 616px;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background: #D9D9D9;
+        border-radius: 20px;
+        overflow: auto;
+    }
+</style>
 
 
 

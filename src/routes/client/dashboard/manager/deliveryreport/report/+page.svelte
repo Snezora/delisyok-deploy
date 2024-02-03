@@ -99,8 +99,8 @@
 	.totalCommision {
     display: flex;
     box-sizing: border-box;
-    width: 99%;
-    height: 20%;
+    width: 95%;
+    height: 80px;
 
     background: #111827;
     border: 1px solid #000000;

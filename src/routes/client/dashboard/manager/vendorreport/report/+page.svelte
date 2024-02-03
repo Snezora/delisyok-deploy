@@ -88,7 +88,7 @@
     </div>
     
     <div class = "footer text-2xl ml-8 mt-8 text-white text-xl bg-grey flex-parent items-center justify-center">
-        <div class ="totalCommision">
+        <div class ="totalCommision ml-3">
             <div class ="ml-8 mt-6">
                 <h1>Total Earnings (RM) : </h1>
             </div>
@@ -108,8 +108,8 @@
 	.totalCommision {
     display: flex;
     box-sizing: border-box;
-    width: 99%;
-    height: 20%;
+    width: 95%;
+    height: 80px;
 
     background: #111827;
     border: 1px solid #000000;
