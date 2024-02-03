@@ -23,7 +23,7 @@
     <div class="header h-20 bg-gray-900 px-6 flex flex-row justify-between">
         
         <div class="text-4xl mt-5 text-white w-full h-full flex items-left justify-left">
-            <h1>Customer Order Report</h1>
+            <h1>Customer Order History</h1>
         </div>
 
         <div class="text-2xl mt-6 text-white w-full h-full flex justify-items-start">
