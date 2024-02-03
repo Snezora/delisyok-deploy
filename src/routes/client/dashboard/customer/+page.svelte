@@ -192,12 +192,21 @@
 			You can use our search bar to search for the vendor name!
 		</p>
 	  </div>
+
+	  <div class="mt-[20px]">
+		<p class="font-bold">
+			Want to change your theme?
+		</p>
+		<p>
+			Quick shortcut is at the bottom-right of your page. You can change your theme whenever you want.
+		</p>
+	  </div>
 	  <button class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
 	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center" on:click={toggleHelp}>Close</button>
 	</div>
   </div>
 
-  <div class="bg-slate-900 fixed right-0 bottom-0 px-3 rounded-l-lg">
+  <div class="border-4 border-solid border-slate-200 bg-slate-200 dark:border-slate-900 dark:bg-slate-900 fixed right-0 bottom-0 rounded-l-lg">
 	<DarkMode class="h-[60%]"></DarkMode>
 </div>
 

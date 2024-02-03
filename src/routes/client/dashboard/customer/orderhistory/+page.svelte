@@ -140,6 +140,10 @@
 
 </script>
 
+<div class="border-4 border-solid border-slate-200 bg-slate-200 dark:border-slate-900 dark:bg-slate-900 fixed right-0 bottom-0 rounded-l-lg">
+	<DarkMode class="h-[60%]"></DarkMode>
+</div>
+
 <div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
 	<div class="p-4 bg-white rounded shadow-lg">
 	  <h2 class="text-2xl font-bold mb-2">Help</h2>
@@ -156,6 +160,14 @@
 		</p>
 		<p>
 			Just select an order number and you will see your order details. Plus, you get to track your order!
+		</p>
+	  </div>
+	  <div class="mt-[20px]">
+		<p class="font-bold">
+			Want to change your theme?
+		</p>
+		<p>
+			Quick shortcut is at the bottom-right of your page. You can change your theme whenever you want.
 		</p>
 	  </div>
 	  <button class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
