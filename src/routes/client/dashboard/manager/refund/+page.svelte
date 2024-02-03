@@ -20,14 +20,74 @@
 
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
         <div class = "orderBlock">
-            <div class ="ml-8 mt-6">
-                <h1>Order 1 </h1>
-                    <div class = "yesNoButton">
-                        <Button>Yes</Button>
-                    </div>
-                    <div class = "yesNoButton">
-                        <Button>No</Button>
-                    </div>
+            <div class ="ml-8 mt-1">
+                <h1>Sales ID:  </h1>
+                <h1>Receipt Generated:  </h1>
+                <h1>Vendor Order Status</h1>
+                <h1>Delivery Status:  </h1>
+                <h1>Total Amount: RM</h1>
+                <h1>Refund: </h1>
+                <div class="yesNoButton flex">
+                    <Button class="w-10 h-10">Yes</Button>
+                    <Button class="w-10 h-10">No</Button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class = "orderBlock">
+            <div class ="ml-8 mt-1">
+                <h1>Sales ID:  </h1>
+                <h1>Receipt Generated:  </h1>
+                <h1>Vendor Order Status</h1>
+                <h1>Delivery Status:  </h1>
+                <h1>Total Amount: RM</h1>
+                <h1>Refund: </h1>
+                <div class="yesNoButton flex">
+                    <Button class="w-10 h-10">Yes</Button>
+                    <Button class="w-10 h-10">No</Button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class = "orderBlock">
+            <div class ="ml-8 mt-1">
+                <h1>Sales ID:  </h1>
+                <h1>Receipt Generated:  </h1>
+                <h1>Vendor Order Status</h1>
+                <h1>Delivery Status:  </h1>
+                <h1>Total Amount: RM</h1>
+                <h1>Refund: </h1>
+                <div class="yesNoButton flex">
+                    <Button class="w-10 h-10">Yes</Button>
+                    <Button class="w-10 h-10">No</Button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class = "orderBlock">
+            <div class ="ml-8 mt-1">
+                <h1>Sales ID:  </h1>
+                <h1>Receipt Generated:  </h1>
+                <h1>Vendor Order Status</h1>
+                <h1>Delivery Status:  </h1>
+                <h1>Total Amount: RM</h1>
+                <h1>Refund: </h1>
+                <div class="yesNoButton flex">
+                    <Button class="w-10 h-10">Yes</Button>
+                    <Button class="w-10 h-10">No</Button>
+                </div>
             </div>
 
 
@@ -55,11 +115,12 @@
     }
     .orderBlock {
     width: 1200px;
-    height: 200px;
+    height: 120px;
     top: 616px;
 
     background: #D9D9D9;
     border-radius: 20px;
+    overflow : auto;
     }
 
     .yesButton {
