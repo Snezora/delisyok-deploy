@@ -197,9 +197,9 @@
 	</div>
   </div>
 
-<div class="fixed z-20  h-[100%] ">
+<div class="fixed z-20 ">
 	{#if sidebarOpen}
-		<div class="fixed h-[100%]">
+		<div class="fixed h-[100%] ">
 			<SidebarCustomer/>
 		</div>
 	{/if}

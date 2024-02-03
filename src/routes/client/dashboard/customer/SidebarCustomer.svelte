@@ -69,6 +69,9 @@
 		customerData = await fetchCustomerData();
 		console.log(customerData);
 		console.log('fetch from sidebar side');
+
+		customername = customerData.customername;
+		customerhp = customerData.customerhp;
 	});
 
 	async function fetchCustomerData() {
@@ -96,10 +99,10 @@
 		}
 	}
 
-   customerProfile.subscribe(value => {
-        customername = value.customername;
-		customerhp = value.customerhp;
-    })
+   	// customerProfile.subscribe(value => {
+    //     customername = value.customername;
+	// 	customerhp = value.customerhp;
+    // })
 
 	async function saveNewInfo() {
 
@@ -121,10 +124,10 @@ console.log("here");
 	.eq('user_id', user_id);
 
 	if (customerError) {
-		alert('Error updating vendor data');
+		alert('Error updating customer data');
 		console.error(customerError);
 	} else {
-		alert('Vendor data updated successfully');
+		alert('Customer data updated successfully');
 	}
 }
 
@@ -183,8 +186,8 @@ console.log("here");
       <div >
         <DarkMode class="mb-[30px] flex justify-center item-center ml-7 mr-3 w-28 h-10 text-gray-500 group-hover:text-gray-900" />
       </div>
-      <hr style="border-top: 2px solid rgba(243, 140, 16, 0.1); margin: 10px 0; margin-bottom:30px;" />
-      <SidebarItem label="Edit Profile" class="mt-[80px]" on:click={() => (settings = true)}>
+      <hr style="border-top: 2px solid rgba(243, 140, 16, 0.1); margin: 10px 0; margin-bottom:0px;" />
+      <SidebarItem label="Edit Profile" class="mt-[63px]" on:click={() => (settings = true)}>
 				<svelte:fragment slot="icon">
 					<UserSettingsSolid
 						class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white icon-container"
