@@ -5,6 +5,7 @@
 	import { ExclamationCircleOutline, ArrowLeftOutline, PenSolid } from 'flowbite-svelte-icons';
 	import { page } from '$app/stores';
 	import SidebarCustomer from '../../../SidebarCustomer.svelte';
+	import { goto } from '$app/navigation';
 	let sidebarOpen = false;
 	let popupModal = false;
 
@@ -188,10 +189,8 @@
 		}
 	}
 
-	async function uploadCardData(){
-		const { error } = await supabaseClient
-		.from('sale')
-		.insert([
+	async function uploadCardData() {
+		const { error } = await supabaseClient.from('sale').insert([
 			{
 				receiptgenerated: new Date().toISOString(),
 				paymentmethod: 'Card',
@@ -209,30 +208,35 @@
 				deliverystatus: 'pending',
 				vendorid: vendorid
 			}
-		])
-
-		const { error: error2 } = await supabaseClient
-		.from('cusorder')
-		.update({ cartstatus: 'completed' })
-		.eq('orderid', cart.orderid)
-
-		if (error2) {
-			console.error('Error updating cart status: ', error2);
-		}
+		]);
 
 		if (error) {
 			console.error('Error uploading the data: ', error);
+		}
+
+		const { error: error2 } = await supabaseClient
+			.from('cusorder')
+			.update({ cartstatus: 'completed' })
+			.eq('orderid', cart.orderid);
+
+		if (error2) {
+			console.error('Error updating cart status: ', error2);
 		} else {
-			window.location.href="/client/dashboard/customer/"+vendorid+"/cart/checkout/success";
+			alert('Your Order has been Submitted. Please check order history for updates!');
+			setTimeout(() => {
+				window.location.href = '/client/dashboard/customer/orderhistory';
+			}, 2000); // Delay the redirection for 2000 milliseconds (2 seconds)		
 		}
 	}
 
-	async function uploadCashData(){
-		
+	async function uploadCashData() {
+		cardnumber = 0;
+		cardexpiry = '-';
+		cvv = 0;
+		nameoncard = '-';
+
 		let date = new Date();
-		const { error } = await supabaseClient
-		.from('sale')
-		.insert([
+		const { error } = await supabaseClient.from('sale').insert([
 			{
 				receiptgenerated: new Date().toISOString(),
 				paymentmethod: 'Cash',
@@ -242,29 +246,34 @@
 				vendorearning: vendorearn,
 				orderid: cart.orderid,
 				deliveryaddress,
+				nameoncard,
+				cardnumber,
+				cardexpiry,
+				cvv,
 				vendororderstatus: 'pending',
 				deliverystatus: 'pending',
 				vendorid: vendorid
 			}
-		])
-		
-		const { error: error2 } = await supabaseClient
-		.from('cusorder')
-		.update({ 
-			cartstatus: 'completed',
-			foodtotalprice : ordertotalprice
-		 })
-		.eq('orderid', cart.orderid)
-
-		if (error2) {
-			console.error('Error updating cart status: ', error2);
-		}
+		]);
 
 		if (error) {
 			console.error('Error uploading the data: ', error);
 		}
-	}
 
+		const { error: error2 } = await supabaseClient
+			.from('cusorder')
+			.update({ cartstatus: 'completed' })
+			.eq('orderid', cart.orderid);
+
+		if (error2) {
+			console.error('Error updating cart status: ', error2);
+		} else {
+			alert('Your Order has been Submitted. Please check order history for updates!');
+			setTimeout(() => {
+				window.location.href = '/client/dashboard/customer/orderhistory';
+			}, 2000); // Delay the redirection for 2000 milliseconds (2 seconds)
+		}
+	}
 
 	//export let data;
 </script>
@@ -304,9 +313,7 @@
 	<div
 		class="maincontainer flex flex-wrap w-[100%] mt-[50px] justify-items-center lg:pl-[60px] md:pl-[60px] md:justify-between lg:justify-between sm:justify-center pb-8 dark:text-white gap-8"
 	>
-		<div
-			class="leftside flex flex-col items-center md:items-start gap-5 flex-1 min-w-[320px]"
-		>
+		<div class="leftside flex flex-col items-center md:items-start gap-5 flex-1 min-w-[320px]">
 			<div class="name text-xl font-bold">
 				Vendor: {vendorData.businessname}
 			</div>
@@ -328,7 +335,11 @@
 			</div>
 			<hr color="black" class="w-[100%] border-black" />
 			{#if orderItems.length == 0}
-			<div class="text text-2xl text-center w-[100%] h-[100%] flex flex-col justify-center font-bold">No Items. Please add items to your cart.</div>
+				<div
+					class="text text-2xl text-center w-[100%] h-[100%] flex flex-col justify-center font-bold"
+				>
+					No Items. Please add items to your cart.
+				</div>
 			{:else}
 				{#each orderItems as item}
 					<div class="itemcontainer flex flex-col w-[100%] mt-5">
@@ -336,7 +347,7 @@
 							<div class="itemname">{item.itemname}</div>
 							<div class="remark">{item.remark}</div>
 							<div class="third flex flex-row items-center">
-							<div class="price">RM {item.itemprice}</div>
+								<div class="price">RM {item.itemprice}</div>
 							</div>
 						</div>
 					</div>
@@ -354,36 +365,73 @@
 		<div
 			class="rightside flex flex-col md:items-start lg:items-start items-center sm:pl-auto sm:pr-auto w-[100vh] md:w-auto lg:w-auto flex-2"
 		>
-			<div class="rectanglecontainer bg-gray-600 text-white w-[90%] self-center items-center rounded p-5 ">
+			<div
+				class="rectanglecontainer bg-gray-600 text-white w-[90%] self-center items-center rounded p-5"
+			>
 				<div class="filler w-[100%] flex flex-col items-center font-bold text-xl gap-4">
 					<div class="cardtitle text-center">Please fill in your card details</div>
 					<div class="carddetails text-white flex flex-col gap-2">
 						<div>
 							<Label for="first_name" class="mb-1 text-white">Name on Card</Label>
-							<Input type="text" id="fullname" placeholder="John Cena" required class="dark:bg-white" bind:value={nameoncard} />
+							<Input
+								type="text"
+								id="fullname"
+								placeholder="John Cena"
+								required
+								class="dark:bg-white dark:text-black"
+								bind:value={nameoncard}
+							/>
 						</div>
 						<div>
 							<Label for="card_no" class="mb-1 text-white">Card Number</Label>
-							<Input type="number" id="card_no" placeholder="1234567890123456" pattern="[0-9]{16}" required class="dark:bg-white" bind:value={cardnumber}/>
+							<Input
+								type="number"
+								id="card_no"
+								placeholder="1234567890123456"
+								pattern="[0-9]{16}"
+								required
+								class="dark:bg-white dark:text-black"
+								bind:value={cardnumber}
+							/>
 						</div>
 						<div>
 							<Label for="exp" class="mb-1 text-white">Card Expiry Date</Label>
-							<Input type="text" id="exp" placeholder="MM/YY" pattern="[0-9]{2}/[0-9]{2}" required class="dark:bg-white" bind:value={cardexpiry}/>
+							<Input
+								type="text"
+								id="exp"
+								placeholder="MM/YY"
+								pattern="[0-9]{2}/[0-9]{2}"
+								required
+								class="dark:bg-white dark:text-black"
+								bind:value={cardexpiry}
+							/>
 						</div>
 						<div>
 							<Label for="cvv" class="mb-1 text-white">CVV</Label>
-							<Input type="number" id="exp" placeholder="000" pattern="[0-9]{3}" required class="dark:bg-white" bind:value={cvv} />
+							<Input
+								type="number"
+								id="exp"
+								placeholder="000"
+								pattern="[0-9]{3}"
+								required
+								class="dark:bg-white dark:text-black"
+								bind:value={cvv}
+							/>
 						</div>
 					</div>
 					<div class="totalprice">Total: RM {ordertotalprice}</div>
 					{#if orderItems.length == 0}
 						<Button class="w-[100%] rounded-2xl text-[18px] pt-2" disabled>Pay With Card</Button>
-						<hr class="w-[100%]"/>
+						<hr class="w-[100%]" />
 						<Button class="w-[100%] rounded-2xl text-[18px] pt-2" disabled>Pay With Cash</Button>
 					{:else}
-						<Button class="w-[100%] rounded-2xl text-[18px] pt-2" on:click={uploadCardData}>Pay With Card</Button>
-						<hr class="w-[100%]"/>
-						<Button class="w-[100%] rounded-2xl text-[18px] pt-2" on:click={uploadCashData}>Pay With Cash</Button>
+						<Button class="w-[100%] rounded-2xl text-[18px] pt-2" on:click={uploadCardData}
+							>Pay With Card</Button
+						>
+						<hr class="w-[100%]" />
+						<Button class="w-[100%] rounded-2xl text-[18px] pt-2" on:click={uploadCashData}
+							>Pay With Cash</Button
+						>
 					{/if}
 				</div>
 			</div>
