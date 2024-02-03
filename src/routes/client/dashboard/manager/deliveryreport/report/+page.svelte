@@ -33,8 +33,47 @@
 
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
         <div class = "orderBlock">
-            <div class ="ml-8 mt-6">
-                <h1>Deliver Order 1</h1>
+            <div class ="ml-8 mt-1">
+                <h1>Sales ID:</h1>
+                <h1>Receipt Generated:</h1>
+                <h1>Delivery Status: </h1>
+                <h1>Commission: RM </h1>
+            </div>
+        </div>
+            
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class = "orderBlock">
+            <div class ="ml-8 mt-1">
+                <h1>Sales ID:</h1>
+                <h1>Receipt Generated:</h1>
+                <h1>Delivery Status: </h1>
+                <h1>Commission: RM </h1>
+            </div>
+        </div>
+            
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class = "orderBlock">
+            <div class ="ml-8 mt-1">
+                <h1>Sales ID:</h1>
+                <h1>Receipt Generated:</h1>
+                <h1>Delivery Status: </h1>
+                <h1>Commission: RM </h1>
+            </div>
+        </div>
+            
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class = "orderBlock">
+            <div class ="ml-8 mt-1">
+                <h1>Sales ID:</h1>
+                <h1>Receipt Generated:</h1>
+                <h1>Delivery Status: </h1>
+                <h1>Commission: RM </h1>
             </div>
         </div>
             
@@ -79,6 +118,7 @@
     width: 1200px;
     height: 120px;
     top: 616px;
+    font-family: 'Inria Sans', sans-serif;
 
     background: #D9D9D9;
     border-radius: 20px;

@@ -32,10 +32,86 @@
     </div>
 
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
-        <div class = "orderBlock">
-            <div class ="ml-8 mt-6">
-                <h1>Customer Order 1</h1>
+        <div class="orderBlock">
+            <div class="ml-8 mt-1">
+                <h1>Order ID:</h1>
+                <h1>Order Generated:</h1>
+                <h1>Vendor ID:</h1>
+                <h1>Rider ID:</h1>
+                <h1>Food Total Price: RM </h1>
+                <h1>Delivery Fee: RM</h1>
+                <h1>Order Status: </h1>
+                <h1>Refund: </h1>
             </div>
+            
+        </div>
+            
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class="orderBlock">
+            <div class="ml-8 mt-1">
+                <h1>Order ID:</h1>
+                <h1>Order Generated:</h1>
+                <h1>Vendor ID:</h1>
+                <h1>Rider ID:</h1>
+                <h1>Food Total Price: RM </h1>
+                <h1>Delivery Fee: RM</h1>
+                <h1>Order Status: </h1>
+                <h1>Refund: </h1>
+            </div>
+            
+        </div>
+            
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class="orderBlock">
+            <div class="ml-8 mt-1">
+                <h1>Order ID:</h1>
+                <h1>Order Generated:</h1>
+                <h1>Vendor ID:</h1>
+                <h1>Rider ID:</h1>
+                <h1>Food Total Price: RM </h1>
+                <h1>Delivery Fee: RM</h1>
+                <h1>Order Status: </h1>
+                <h1>Refund: </h1>
+            </div>
+            
+        </div>
+            
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class="orderBlock">
+            <div class="ml-8 mt-1">
+                <h1>Order ID:</h1>
+                <h1>Order Generated:</h1>
+                <h1>Vendor ID:</h1>
+                <h1>Rider ID:</h1>
+                <h1>Food Total Price: RM </h1>
+                <h1>Delivery Fee: RM</h1>
+                <h1>Order Status: </h1>
+                <h1>Refund: </h1>
+            </div>
+            
+        </div>
+            
+    </div>
+
+    <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
+        <div class="orderBlock">
+            <div class="ml-8 mt-1">
+                <h1>Order ID:</h1>
+                <h1>Order Generated:</h1>
+                <h1>Vendor ID:</h1>
+                <h1>Rider ID:</h1>
+                <h1>Food Total Price: RM </h1>
+                <h1>Delivery Fee: RM</h1>
+                <h1>Order Status: </h1>
+                <h1>Refund: </h1>
+            </div>
+            
         </div>
             
     </div>
@@ -67,6 +143,7 @@
 
     background: #D9D9D9;
     border-radius: 20px;
+    overflow : auto
     }
 
 </style>

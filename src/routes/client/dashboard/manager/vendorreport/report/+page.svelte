@@ -34,14 +34,11 @@
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
-                <h1>Order ID:</h1>
-                <h1>Order Generated:</h1>
-                <h1>Vendor ID:</h1>
-                <h1>Rider ID:</h1>
-                <h1>Food Total Price: RM </h1>
-                <h1>Delivery Fee: RM</h1>
-                <h1>Order Status: </h1>
-                <h1>Refund: </h1>
+                <h1>Sales ID:</h1>
+                <h1>Receipt Generated:</h1>
+                <h1>Vendor Order Status: </h1>
+                <h1>Total Amount: RM </h1>
+                <h1>Vendor Earning: RM </h1>
             </div>
             
         </div>
@@ -51,14 +48,11 @@
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
-                <h1>Order ID:</h1>
-                <h1>Order Generated:</h1>
-                <h1>Vendor ID:</h1>
-                <h1>Rider ID:</h1>
-                <h1>Food Total Price: RM </h1>
-                <h1>Delivery Fee: RM</h1>
-                <h1>Order Status: </h1>
-                <h1>Refund: </h1>
+                <h1>Sales ID:</h1>
+                <h1>Receipt Generated:</h1>
+                <h1>Vendor Order Status: </h1>
+                <h1>Total Amount: RM </h1>
+                <h1>Vendor Earning: RM </h1>
             </div>
             
         </div>
@@ -68,14 +62,11 @@
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
-                <h1>Order ID:</h1>
-                <h1>Order Generated:</h1>
-                <h1>Vendor ID:</h1>
-                <h1>Rider ID:</h1>
-                <h1>Food Total Price: RM </h1>
-                <h1>Delivery Fee: RM</h1>
-                <h1>Order Status: </h1>
-                <h1>Refund: </h1>
+                <h1>Sales ID:</h1>
+                <h1>Receipt Generated:</h1>
+                <h1>Vendor Order Status: </h1>
+                <h1>Total Amount: RM </h1>
+                <h1>Vendor Earning: RM </h1>
             </div>
             
         </div>
@@ -85,14 +76,11 @@
     <div class = "body ml-8 mt-8 text-xl bg-grey flex flex-col items-left justify-left">
         <div class="orderBlock">
             <div class="ml-8 mt-1">
-                <h1>Order ID:</h1>
-                <h1>Order Generated:</h1>
-                <h1>Vendor ID:</h1>
-                <h1>Rider ID:</h1>
-                <h1>Food Total Price: RM </h1>
-                <h1>Delivery Fee: RM</h1>
-                <h1>Order Status: </h1>
-                <h1>Refund: </h1>
+                <h1>Sales ID:</h1>
+                <h1>Receipt Generated:</h1>
+                <h1>Vendor Order Status: </h1>
+                <h1>Total Amount: RM </h1>
+                <h1>Vendor Earning: RM </h1>
             </div>
             
         </div>
@@ -137,7 +125,7 @@
 
     .orderBlock {
     width: 1200px;
-    height: 120px;
+    height: 150px;
     top: 616px;
     font-family: 'Inria Sans', sans-serif;
 
