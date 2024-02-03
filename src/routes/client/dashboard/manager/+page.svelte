@@ -1,4 +1,22 @@
+<script>
 
+  import { goto } from '$app/navigation';
+
+function goToVendorReport() {
+  goto('/client/dashboard/manager/vendorreport/vendorlist');
+}
+function goToDeliveryReport() {
+  goto('/client/dashboard/manager/deliveryreport/riderlist');
+}
+function goToRefund() {
+  goto('/client/dashboard/manager/refund');
+}
+function goToCustomerReport() {
+  goto('/client/dashboard/manager/customerreport/customerlist');
+}
+
+</script>
+  
   <div class="page-container min-h-[100vh] overflow-x-hidden bg-white dark:bg-stone-500">
     <div class="header h-20 bg-gray-900 px-6 flex flex-row justify-between">
   
@@ -11,10 +29,10 @@
   </div>
 
   <div class= "buttons">
-    <button>View Vendors Sales Report</button>
-    <button>View Delivery Report</button>
-    <button>Refund Undelivered/Rejected Orders</button>
-    <button>View Customer Order History</button>
+    <button on:click={goToVendorReport}>View Vendor Sales Report</button>
+    <button on:click={goToDeliveryReport}>View Delivery Report</button>
+    <button on:click={goToRefund}>Refund Undelivered/Rejected Order</button>
+    <button on:click={goToCustomerReport}>View Customer Order History</button>
   </div>
   </div>
 
