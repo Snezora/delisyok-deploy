@@ -15,7 +15,13 @@
 
 		Li,
 
-		Heading
+		Heading,
+
+		Label,
+
+		Input
+
+
 
 
 
@@ -31,11 +37,53 @@
 	import './Sidebar.css';
 	import { ArrowRightFromBracketSolid } from 'svelte-awesome-icons';
 	import { supabaseClient } from '$lib/supabase';
+	import { uploadingFile, customerProfile } from '../../../stores/customer.js';
+	import { onMount } from 'svelte';
 	let spanClass = 'flex-1 ms-0 whitespace-nowrap ';
 	let aboutUs = false;
 	let contactUs = false;
 	let upgrade = false;
 	let faq = false;
+	let settings = false;
+	/**
+	 * @type {any}
+	 */
+	 let customername;
+/**
+	 * @type {any}
+	 */
+	 let customerhp;
+	 /**
+	 * @type {string | undefined}
+	 */
+	let user_id;
+	/**
+	 * @type {any}
+	 */
+	 let customerData = [];
+
+	 onMount(async () => {
+		console.log('im here start');
+		const userLog = await supabaseClient.auth.getUser();
+		user_id = userLog.data.user?.id;
+		customerData = await fetchCustomerData();
+		console.log(customerData);
+		console.log('fetch from sidebar side');
+	});
+
+	async function fetchCustomerData() {
+		const { data, error } = await supabaseClient
+			.from('customer')
+			.select('*')
+			.eq('user_id', user_id);
+
+		if (error) {
+			console.error('Error fetching customer name: ', error);
+		} else if (data && data.length > 0) {
+			return data[0];
+		}
+		return customerData;
+	}
 
 	async function signOut() {
 		const { error } = await supabaseClient.auth.signOut();
@@ -47,7 +95,39 @@
 			}
 		}
 	}
-  
+
+   customerProfile.subscribe(value => {
+        customername = value.customername;
+		customerhp = value.customerhp;
+    })
+
+	async function saveNewInfo() {
+
+// // Fetch the businessname from the vendor table
+// const { data, error } = await supabaseClient
+//     .from('vendor')
+//     .select('*')
+//     .eq('user_id', user_id);
+
+console.log("here");
+	const { error: customerError } = await supabaseClient
+	.from('customer')
+	.update([
+		{
+			customername,
+			customerhp
+		},
+	])
+	.eq('user_id', user_id);
+
+	if (customerError) {
+		alert('Error updating vendor data');
+		console.error(customerError);
+	} else {
+		alert('Vendor data updated successfully');
+	}
+}
+
 </script>
 
 <Sidebar id="customerSidebar" class="sidebar">
@@ -104,7 +184,7 @@
         <DarkMode class="mb-[30px] flex justify-center item-center ml-7 mr-3 w-28 h-10 text-gray-500 group-hover:text-gray-900" />
       </div>
       <hr style="border-top: 2px solid rgba(243, 140, 16, 0.1); margin: 10px 0; margin-bottom:30px;" />
-      <SidebarItem label="Settings" class="mt-[80px] ">
+      <SidebarItem label="Edit Profile" class="mt-[80px]" on:click={() => (settings = true)}>
 				<svelte:fragment slot="icon">
 					<UserSettingsSolid
 						class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white icon-container"
@@ -199,12 +279,27 @@
 		Refund is dependent on the outcome of the investigation.
 	</p>
 	<p class="font-medium text-lg">
-		3. I would like to complain regarding a vendor or a rider. How do I do that?
+		3. I would like to report a vendor / a rider. How do I do that?
 	</p>
 	<p class="text-justify">
 		You can reach out to us via email or contact number. 
 		We shall entertain your request and investigate further regarding the allegations.
 	</p>
+  </Modal>
+
+  <Modal bind:open={settings} size="xs" autoclose={false} class="w-full">
+	<form class="flex flex-col space-y-6" action="#">
+	  <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Profile</h3>
+	  <Label class="space-y-2">
+		<span>Edit Name</span>
+		<Input id="customername" type="text" placeholder={customerData.customername} bind:value={customername} />
+	  </Label>
+	  <Label class="space-y-2">
+		<span>Edit Phone Number</span>
+		<Input id="customerhp" type="text" placeholder={customerData.customerhp} bind:value={customerhp} />
+	  </Label>
+	  <Button on:click={saveNewInfo} href="/client/dashboard/customer">Save Information</Button>
+	</form>
   </Modal>
 
 <style>
