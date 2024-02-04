@@ -4,5 +4,6 @@ export const user = writable(false);
 export const usertype = writable({
     isVendor: false,
     isCustomer: false,
-    isRider: false
+    isRider: false,
+    isSysMan: false
 })

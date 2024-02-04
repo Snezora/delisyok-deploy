@@ -60,6 +60,25 @@
 	 * @type {boolean}
 	 */
 	let isRider;
+	/**
+	 * @type {boolean}
+	 */
+	let isSysMan;
+
+	/**
+	 * @type {any[]}
+	 */
+	let userinfo;
+
+	/**
+	 * @type {any}
+	 */
+	let useremail;
+
+	/**
+	 * @type {string}
+	 */
+	let role;
 
 	onMount(async () => {
 		// Check if the user is signed in
@@ -76,6 +95,9 @@
 			isVendor = true;
 			isCustomer = false;
 			isRider = false;
+			isSysMan = false;
+			useremail = vendor[0].vendoremail;
+			role = "Vendor";
 		}
 
 		let { data: customer} = await supabaseClient
@@ -87,7 +109,10 @@
 				isCustomer = true;
 				isVendor = false;
 				isRider = false;
-			}
+				isSysMan = false;
+				useremail = customer[0].customeremail;
+				role = "Customer";
+		}
 
 		let { data: rider, error } = await supabaseClient
 				.from('deliveryrider')
@@ -98,10 +123,27 @@
 					isRider = true;
 					isVendor = false;
 					isCustomer = false;
+					isSysMan = false;
+					useremail = rider[0].rideremail;
+					role = "Delivery Rider";
 				}
 
-		usertype.set({isVendor, isCustomer, isRider});
+		let { data: sysman } = await supabaseClient
+				.from('systemmanager')
+				.select('*')
+				.eq('user_id', user_id);
 
+		if (sysman && sysman.length > 0) {
+					isRider = false;
+					isVendor = false;
+					isCustomer = false;
+					isSysMan = true;
+					useremail = sysman[0].manageremail;
+					role = "System Manager";
+				}
+
+		usertype.set({isVendor, isCustomer, isRider, isSysMan});
+		console.log(userinfo);
 		console.log($usertype);
 	})
 
@@ -109,6 +151,7 @@
 		isVendor = value.isVendor;
 		isCustomer = value.isCustomer;
 		isRider = value.isRider;
+		isSysMan = value.isSysMan;
 	})
 
 </script>
@@ -143,8 +186,10 @@
 				  </div>
 				  <Dropdown placement="bottom" triggeredBy="#avatar-menu">
 					<DropdownHeader>
-					  <span class="block text-sm">Bonnie Green</span>
-					  <span class="block truncate text-sm font-medium">name@flowbite.com</span>
+						<span class="block truncate text-sm font-medium">{role}</span>
+					</DropdownHeader>
+					<DropdownHeader>
+						<span class="block truncate text-sm font-medium">{useremail}</span>
 					</DropdownHeader>
 					{#if isVendor}
 					<DropdownItem href="/client/dashboard/vendor" data-sveltekit-reload>Dashboard</DropdownItem>
@@ -152,9 +197,9 @@
 					<DropdownItem href="/client/dashboard/customer" data-sveltekit-reload>Dashboard</DropdownItem>
 					{:else if isRider}
 					<DropdownItem href="/client/dashboard/rider" data-sveltekit-reload>Dashboard</DropdownItem>
+					{:else if isSysMan}
+					<DropdownItem href="/client/dashboard/manager" data-sveltekit-reload>Manager Dashboard</DropdownItem>
 					{/if}
-					<DropdownItem>Settings</DropdownItem>
-					<DropdownItem>Earnings</DropdownItem>
 					<DropdownDivider />
 					<DropdownItem on:click={logout}>Sign out</DropdownItem>
 				  </Dropdown>
