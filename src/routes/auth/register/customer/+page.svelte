@@ -1,6 +1,5 @@
 <script>
-// @ts-nocheck
-
+	// @ts-nocheck
 
 	import { Label, Input, Button, Checkbox, Popover, Select } from 'flowbite-svelte';
 	import {
@@ -45,6 +44,7 @@
 	 * @type {any}
 	 */
 	let password;
+	let passwordconfirm;
 	let customername;
 	let customerhp;
 	let customerdob;
@@ -55,69 +55,70 @@
 	let customeraddressstate;
 	let isCustomer = true;
 
-	const handleSignup = async() => {
-		try {
-			loading = true;
-			console.log(email);
+	const handleSignup = async () => {
+		if (password == passwordconfirm) {
+			try {
+				loading = true;
+				console.log(email);
 
-			const {error} = await supabaseClient.auth.signUp({
-				email,
-				password
-			})
-          
-			if (error) throw error;
+				const { error } = await supabaseClient.auth.signUp({
+					email,
+					password
+				});
 
-			const {error: SigninError} = await supabaseClient.auth.signInWithPassword({
-				email,
-				password
-			})
+				if (error) throw error;
 
-			if (SigninError) throw SigninError;
+				const { error: SigninError } = await supabaseClient.auth.signInWithPassword({
+					email,
+					password
+				});
 
-			const user = await supabaseClient.auth.getUser();
-			const user_id = user.data.user.id;
+				if (SigninError) throw SigninError;
 
-			const { error: customerError } = await supabaseClient
-			.from('customer')
-			.insert([
-				{
-					user_id,
-					customeremail: email,
-					customername,
-					customerhp,
-					customerdob,
-					customeraddressl1,
-					customeraddressl2,
-					customeraddresscity,
-					customeraddressposcode,
-					customeraddressstate
-				},
-			])
-			.select();
+				const user = await supabaseClient.auth.getUser();
+				const user_id = user.data.user.id;
 
-			if (customerError) {
-				console.log(customerError);
-				throw customerError;
+				const { error: customerError } = await supabaseClient
+					.from('customer')
+					.insert([
+						{
+							user_id,
+							customeremail: email,
+							customername,
+							customerhp,
+							customerdob,
+							customeraddressl1,
+							customeraddressl2,
+							customeraddresscity,
+							customeraddressposcode,
+							customeraddressstate
+						}
+					])
+					.select();
+
+				if (customerError) {
+					console.log(customerError);
+					throw customerError;
+				}
+
+				alert('Sign up successful!');
+				if (typeof window !== 'undefined') {
+					window.location.href = '/auth/login';
+				}
+			} catch (error) {
+				console.error(error);
+				alert(error);
+			} finally {
+				loading = false;
 			}
-
-			alert('Sign up successful!')
-			if (typeof window !== 'undefined') {
-                window.location.href = '/auth/login';
-            }
-
-
-		} catch (error) {
-			console.error(error);
-			alert(error);
-		} finally {
+		} else {
+			alert('Password does not match');
 			loading = false;
 		}
-
-	}
-
+	};
 
 	// @ts-ignore
-	export const form=null;
+	export const form = null;
 
 	// export let data
 	// let { supabase } = data
@@ -132,7 +133,6 @@
 	// 	},
 	// 	})
 	// }
-
 </script>
 
 <div
@@ -143,7 +143,11 @@
 	>
 		<div class="flex-1">
 			<form class="flex flex-col justify-around mt-5 gap-4">
-                <div class="registration-text text-center flex-3 text-[40px] mb-4 dark:text-white font-extrabold align-middle mt-3">Customer Registration</div>
+				<div
+					class="registration-text text-center flex-3 text-[40px] mb-4 dark:text-white font-extrabold align-middle mt-3"
+				>
+					Customer Registration
+				</div>
 				<div class="formcontainer flex flex-wrap justify-around mt-5 gap-4">
 					<div class="personalinfo flex flex-col gap-4">
 						<span class=" dark:text-white font-bold mb-2">Login Information</span>
@@ -183,6 +187,7 @@
 								name="passwordconfirmation"
 								placeholder="••••••••••"
 								required
+								bind:value={passwordconfirm}
 								class="w-[325px] text-black password-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -240,7 +245,7 @@
 					</div>
 
 					<div class="addressinfo flex flex-col gap-4">
-						<span class=" dark:text-white font-bold mb-2 ">Delivery Information</span>
+						<span class=" dark:text-white font-bold mb-2">Delivery Information</span>
 						<Label>
 							<span class=" dark:text-white">Address Line 1</span>
 							<Input
@@ -316,10 +321,16 @@
 						</Label>
 					</div>
 				</div>
-                <div class=" flex flex-col items-center">
-                    <Button type="submit" class="btn-primary w-[325px] mt-9" on:click={handleSignup}>Register</Button>
-                    <p class="text-xs font-medium text-gray-500 dark:text-gray-300 mt-2">By registering, you agree to the <a href="../../" class="underline">Terms & Conditions</a>.</p>
-                </div>
+				<div class=" flex flex-col items-center">
+					<Button type="submit" class="btn-primary w-[325px] mt-9" on:click={handleSignup}
+						>Register</Button
+					>
+					<p class="text-xs font-medium text-gray-500 dark:text-gray-300 mt-2">
+						By registering, you agree to the <a href="../../" class="underline"
+							>Terms & Conditions</a
+						>.
+					</p>
+				</div>
 			</form>
 		</div>
 	</div>
