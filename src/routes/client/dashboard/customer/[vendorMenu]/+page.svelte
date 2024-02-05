@@ -243,4 +243,4 @@
       <Button color="red" class="me-2" on:click={() => (window.location.href="/client/dashboard/customer/")}>Yes, I'm sure</Button>
       <Button color="alternative" on:click={(() => (popupModal = false))}>No, cancel</Button>
     </div>
-  </Modal>
+</Modal>

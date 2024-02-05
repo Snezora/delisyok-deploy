@@ -12,14 +12,13 @@
 		NavHamburger,
 		Button,
 		Input,
-
 		DarkMode
-
 	} from 'flowbite-svelte';
 
+	import { user, usertype } from '../../../routes/stores/authStore.js';
 
-    let googleButtonSVG = "../src/lib/assets/socmed/google_light_round.svg";
-    let facebookButtonSVG = "../src/lib/assets/socmed/facebook-svgrepo-com.svg";
+	let googleButtonSVG = '../src/lib/assets/socmed/google_light_round.svg';
+	let facebookButtonSVG = '../src/lib/assets/socmed/facebook-svgrepo-com.svg';
 
 	let loading = false;
 	/**
@@ -30,39 +29,121 @@
 	 * @type {any}
 	 */
 	let password;
+	/**
+	 * @type {boolean}
+	 */
+	let isCustomer;
+	/**
+	 * @type {boolean}
+	 */
+	let isVendor;
+	/**
+	 * @type {boolean}
+	 */
+	let isRider;
+	/**
+	 * @type {boolean}
+	 */
+	let isSysMan;
 
-	const handleLogin = async(event) => {
-		console.log("before");
+	let user_id;
+
+	const handleLogin = async (event) => {
+		console.log('before');
 		event.preventDefault();
-		console.log("after");
-    try {
-        loading = true;
-        const {error} = await supabaseClient.auth.signInWithPassword({
-            email,
-            password
-        })
+		console.log('after');
+		try {
+			loading = true;
+			const { error } = await supabaseClient.auth.signInWithPassword({
+				email,
+				password
+			});
 
-        if (error) throw error;
-		window.location.href="/";
+			if (error) throw error;
+		} catch (error) {
+			console.error(error);
+			alert(error);
+		} finally {
+			loading = false;
+			const userLog = await supabaseClient.auth.getUser();
+			user_id = userLog.data.user?.id;
 
-    } catch (error) {
-        console.error(error);
-        alert(error);
-    } finally {
-        loading = false;
-    }
-}
+			const { data, error } = await supabaseClient
+				.from('customer')
+				.select('*')
+				.eq('user_id', user_id);
 
+			if (error || data?.length == 0) {
+			} else {
+				isCustomer = true;
+				isVendor = false;
+				isRider = false;
+				isSysMan = false;
+			}
 
+			const { data: vendor } = await supabaseClient
+				.from('vendor')
+				.select('*')
+				.eq('user_id', user_id);
 
-// 	const handleLogin = async () => {
-//     await supabase.auth.signInWithPassword({
-//       email,
-//       password,
-//     })
-//   }
+			if (vendor && vendor.length > 0) {
+				isVendor = true;
+				isCustomer = false;
+				isRider = false;
+				isSysMan = false;
+			}
 
-    
+			const { data: rider } = await supabaseClient
+				.from('deliveryrider')
+				.select('*')
+				.eq('user_id', user_id);
+
+			if (rider && rider.length > 0) {
+				isRider = true;
+				isCustomer = false;
+				isVendor = false;
+				isSysMan = false;
+			}
+
+			const { data: sysman } = await supabaseClient
+				.from('systemmanager')
+				.select('*')
+				.eq('user_id', user_id);
+
+			if (sysman && sysman.length > 0) {
+				isSysMan = true;
+				isCustomer = false;
+				isVendor = false;
+				isRider = false;
+			}
+
+			usertype.set({
+				isCustomer,
+				isVendor,
+				isRider,
+				isSysMan
+			});
+
+			if (isCustomer) {
+				window.location.href="/client/dashboard/customer";
+			} else if (isVendor) {
+				window.location.href="/client/dashboard/vendor";
+			} else if (isRider) {
+				window.location.href="/client/dashboard/rider";
+			} else if (isSysMan) {
+				window.location.href="/client/dashboard/manager";
+			} else {
+				window.location.href="/";
+			}
+		}
+	};
+
+	// 	const handleLogin = async () => {
+	//     await supabase.auth.signInWithPassword({
+	//       email,
+	//       password,
+	//     })
+	//   }
 </script>
 
 <div class="flex flex-wrap container-full bg-pdark-100 h-[100%]">
@@ -72,8 +153,7 @@
 	>
 		<form
 			class=" flex flex-col items-center justify-center align-middle bg-zinc-100 dark:bg-pdark-100 mb-0 login-form h-auto"
-			
-			>
+		>
 			<div
 				class="flex flex-col login-card w-[75%] h-[430px] items-center rounded-[30px] dark:bg-pdark-100"
 			>
@@ -97,7 +177,8 @@
 						color="white"
 					/>
 				</Label>
-				<Label class="space-y-2 mt-[10px] password-label"> <!-- Password -->
+				<Label class="space-y-2 mt-[10px] password-label">
+					<!-- Password -->
 					<span>Your password</span>
 					<Input
 						type="password"
@@ -109,7 +190,7 @@
 						color="white"
 					/>
 				</Label>
-				<div class="flex flex-row mt-[10px] justify-between py-[7px] w-[325px] ">
+				<div class="flex flex-row mt-[10px] justify-between py-[7px] w-[325px]">
 					<Checkbox>Remember me</Checkbox>
 					<a
 						href="/"
@@ -118,8 +199,16 @@
 						Forgot password?
 					</a>
 				</div>
-				<Button type="submit" class="w-[325px] mt-4" on:click={(event) => handleLogin(event)} href="/" id="submitbutton">Login</Button>
-				<div class="text-sm font-medium text-gray-500 dark:text-gray-300 text-xs mt-1 w-[325px] text-center">
+				<Button
+					type="submit"
+					class="w-[325px] mt-4"
+					on:click={(event) => handleLogin(event)}
+					href="/"
+					id="submitbutton">Login</Button
+				>
+				<div
+					class="text-sm font-medium text-gray-500 dark:text-gray-300 text-xs mt-1 w-[325px] text-center"
+				>
 					Don't have an account? Register <a
 						href="/auth/register"
 						class="text-primary-700 hover:underline dark:text-primary-500">here</a
@@ -141,17 +230,15 @@
 			<div class="text-sm font-medium text-gray-500 dark:text-gray-300 text-xs mt-2">
 				Login with
 			</div>
-            <div class=" flex flex-row items-center justify-between mt-3 gap-1">
-                <input type="image" src={googleButtonSVG} alt="Sign in with Google">
-                <input type="image" src={facebookButtonSVG} alt="Sign in with Facebook" class="mb-1">
-            </div>
+			<div class=" flex flex-row items-center justify-between mt-3 gap-1">
+				<input type="image" src={googleButtonSVG} alt="Sign in with Google" />
+				<input type="image" src={facebookButtonSVG} alt="Sign in with Facebook" class="mb-1" />
+			</div>
 		</div>
 	</div>
 </div>
 
 <style>
-
-
 	.page-image {
 		width: 50%;
 		height: auto;
@@ -167,9 +254,9 @@
 	}
 
 	@media (max-width: 800px) {
-        .container-full{
-            height: 100%;
-        }
+		.container-full {
+			height: 100%;
+		}
 
 		.page-image {
 			object-fit: cover;
@@ -178,16 +265,16 @@
 		}
 
 		.card-holder {
-            /* position: relative; */
+			/* position: relative; */
 			width: 100%;
-            height: 100%;
-            padding-top:0px;
-            padding-bottom: 50px;
+			height: 100%;
+			padding-top: 0px;
+			padding-bottom: 50px;
 		}
 
-        .login-form{
-            width:100%;
-        }
+		.login-form {
+			width: 100%;
+		}
 
 		.login-card {
 			width: 80%;
