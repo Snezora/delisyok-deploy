@@ -30,7 +30,10 @@
 	let customers = [];
 
 	onMount(async () => {
-		const { data, error } = await supabaseClient.from('customer').select('*');
+		const { data, error } = await supabaseClient
+		.from('customer')
+		.select('*')
+		.order('customerid', { ascending: true });;
 
 		if (error) {
 			console.error('Error fetching customers:', error);
