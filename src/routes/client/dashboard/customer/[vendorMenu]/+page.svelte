@@ -169,19 +169,21 @@
 <div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
 	<div class="p-4 bg-white rounded shadow-lg">
 	  <h2 class="text-2xl font-bold mb-2">Help</h2>
-	  <div class="mt-[20px]">
-		<p class="font-semibold text-xl">Welcome to the Customer Client Page.</p>
-		<p>Here you can find the list of vendors.
-			Click on the desired vendor cards to view their menu.</p>
-			<p>
-	  </div>
 
 	  <div class="mt-[20px]">
-		<p class="font-semibold">
-			Want to track your order?
+		<p class="font-bold">
+			Want to see the description of a menu item or purchase an item?
 		</p>
 		<p>
-			Just select an order number and you will see your order details. Plus, you get to track your order!
+			Just click on the Add to cart button.
+		</p>
+	  </div>
+      <div class="mt-[20px]">
+		<p class="font-bold">
+			Want to check out your cart?
+		</p>
+		<p class="flex items-center">
+			Just click on the cart button with <CartOutline class="w-4 h-4 ml-1 mr-1"/> icon.
 		</p>
 	  </div>
 	  <div class="mt-[20px]">
@@ -244,7 +246,7 @@
 	<div
 		class="dark:bg-gray-800 dark:text-white bg-gray-100 p-3 grid grid-cols-[1fr,7fr] gap-3"
 	>
-		<div class="h-[200px] w-[200px] relative">
+		<div class="h-[200px] w-[220px] relative">
             <img
             src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/vendorstore/{vendorInfo.storephoto}"
             alt=""
@@ -255,20 +257,20 @@
         </div>
 		<div class="ml-3 overflow-hidden flex flex-col justify-between" style="word-wrap: break-word;">
             <div>
-                <h1>Business Description:</h1>
-                <h1>{vendorInfo.businessdescription ? vendorInfo.businessdescription : '-No Description-'}</h1>
+                <h1 class="font-medium">Business Description:</h1>
+                <h1 class="text-sm">{vendorInfo.businessdescription ? vendorInfo.businessdescription : '-No Description-'}</h1>
             </div>
 
-            <div class = "mt-2">
-                <div>
+            <div class = "mt-2 font-medium">
+                <div class="mt-1">
                     KKM Listing No: {vendorInfo.vendorkkmlistingno}
                 </div>
-                <div class="hours">
+                <div class="hours mt-2">
                     Operating Hours: {formatTime(vendorInfo.businessstarttime)} - {formatTime(
                         vendorInfo.businessclosingtime
                     )}
                 </div>
-                <div>
+                <div class = "mt-2">
                     Operating Days: {printDay}
                 </div>
             </div>
@@ -280,7 +282,7 @@
 	>
 		{#each vendorMenu as menuItem}
 			<div
-				class="h-[122px] w-[100%] border-black border dark:bg-gray-800 dark:border-gray-900 dark:text-white"
+				class="h-[122px] w-[100%] border-black border dark:bg-gray-800 dark:border-gray-900 dark:text-white shadow-md rounded-lg"
 				in:slide
 				out:fade
 			>
@@ -291,13 +293,13 @@
 						alt=""
 						height="100"
 						width="120"
-						class="align-middle bg-white"
+						class="align-middle bg-white rounded-l-lg"
 					/>
 					<div class="iteminfo w-[100%] flex flex-col justify-between items-center">
 						<h1 class="text-xl font-bold text-center">{menuItem.itemname}</h1>
 
                         <div class="p-1">
-                            <h1 class="text-xl font-semibold text-center">RM {menuItem.itemprice}</h1>
+                            <h1 class="text-xl font-semibold text-center">RM {Number(menuItem.itemprice).toFixed(2)}</h1>
                         <Button class="justify-center sm:w-[160px] rounded-full" on:click={() => goToItemPage(menuItem.itemid)}
                             href="#">
                             Add to cart

@@ -5,7 +5,7 @@
     import  { Button, Modal, DarkMode, Label, Textarea } from 'flowbite-svelte';
     import { page } from '$app/stores';
     import SidebarCustomer from '../../SidebarCustomer.svelte';
-    import {ExclamationCircleOutline, ArrowLeftOutline, CartOutline } from 'flowbite-svelte-icons';
+    import {ExclamationCircleOutline, ArrowLeftOutline, CartOutline, QuestionCircleOutline } from 'flowbite-svelte-icons';
     let popupModal = false;
 
 
@@ -24,7 +24,6 @@
 	 * @type {any[][]}
 	 */
     let menuItemData = []; //Here is the menu Item Data
-    let sidebarOpen = false;
     /**
 	 * @type {any}
 	 */
@@ -46,10 +45,6 @@
 	 * @type {never[]}
 	 */
     let cart = [];
-
-    async function toggleSidebar() {
-		sidebarOpen = !sidebarOpen;
-	}
 
     onMount(async () => {
         const userLog = await supabaseClient.auth.getUser();
@@ -158,58 +153,117 @@
     }
 
     //export let data;
+    let showHelp = false;
+
+	function toggleHelp() {
+		showHelp = !showHelp;
+	}
 
 </script>
 
-<div class="fixed z-10">
-	{#if sidebarOpen}
-		<div class="fixed">
-			<SidebarCustomer />
-		</div>
-	{/if}
+<div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
+	<div class="p-4 bg-white rounded shadow-lg">
+	  <h2 class="text-2xl font-bold mb-2">Help</h2>
+
+	  <div class="mt-[20px]">
+		<p class="font-bold">
+            Want to let the chef know your speific request for this food item?
+		</p>
+		<p class="text-justify">
+			There is a remark box provided to write regarding your preferences, allergies, and more. 
+            We and our collaborating vendors value our customer opinions. Our vendor will do their best to make 
+            your meal best suit your palate.
+		</p>
+	  </div>
+      <div class="mt-[20px]">
+		<p class="font-bold">
+            Done with your customisation?
+		</p>
+		<p>
+			Click on the confirm button to add your order to the cart.
+		</p>
+	  </div>
+      <div class="mt-[20px]">
+		<p class="font-bold">
+			Want to check out your cart?
+		</p>
+		<p class="flex items-center">
+			Just click on the cart button with <CartOutline class="w-4 h-4 ml-1 mr-1"/> icon.
+		</p>
+	  </div>
+	  <div class="mt-[20px]">
+		<p class="font-bold">
+			Want to change your theme?
+		</p>
+		<p>
+			Quick shortcut is at the bottom-right of your page. You can change your theme whenever you want.
+		</p>
+	  </div>
+	  <button class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
+	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center" on:click={toggleHelp}>Close</button>
+	</div>
+  </div>
+
+<div
+	class="border-4 border-solid border-slate-200 bg-slate-200 dark:border-slate-900 dark:bg-slate-900 fixed right-0 bottom-0 rounded-l-lg"
+>
+	<DarkMode class="h-[60%]"></DarkMode>
 </div>
 
-<div class="page-container min-h-[100vh] mb-10 overflow-x-hidden bg-white dark:bg-stone-500">
-    <div class="header h-16 bg-gray-900 px-4 flex flex-row justify-between">
-        <Button pill={true} outline={true} class="my-4" on:click={() => window.history.back()}>
-            <ArrowLeftOutline class="w-4 h-4 text-white" />
-        </Button>
-        <div class="flex flex-col items-center mt-auto mb-auto">
-            <div class="font-bold text-2xl text-white w-full h-9 flex items-center justify-center">
-                <h1>{vendorName} Menu</h1>
-            </div>
-        </div>
-        <div class="rightside gap-3 flex flex-row">
-            <DarkMode class="h-[60%] mt-auto mb-auto"></DarkMode>
-            <Button pill={true} outline={true} class="my-4" on:click={() => (window.location.href=`/client/dashboard/customer/${vendorid}/cart/`)}>
-                <CartOutline class="w-4 h-4 text-white" />
-            </Button>
-        </div>
-    </div>
-    <div class="absolute z-10">
-        <button
-            class="z-10 w-[50px] h-[50px] transition-[width] duration-[0.3s] ease-[ease-in-out] border bg-[#f8f9fa] border-solid border-[#f8f9fa] hover:bg-slate-300 {sidebarOpen
-                ? 'translate-x-[200px] translate-y-[-65px] fixed'
-                : ''}"
-            on:click={toggleSidebar}
-        >
-            Menu
-        </button>
-    </div>
-    <div class="maincontainer grid md:grid-cols-2 lg:grid-cols-2 grid-rows-1 place-items-center w-[100%] mt-10 md:justify-between lg:justify-between sm:justify-center dark:text-white gap-5">
-        <div class="leftside flex flex-col gap-5 items-center">
+<div class="page-container min-h-[100vh] overflow-x-hidden bg-white dark:bg-stone-600">
+    <div class="flex flex-row justify-between w-[100%] bg-gray-900">
+		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
+			<button
+				class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"
+				on:click={() => window.history.back()}
+			>
+				<ArrowLeftOutline class="h-5 w-5" />
+				<span class="hidden md:flex md:visible ml-2">Menu</span>
+			</button>
+		</div>
+
+		<div class="textcontainer flex flex-col lg:-ml-18 md:-ml-24">
+			<div class="mt-2 font-bold text-3xl text-white w-full h-16 flex items-center justify-center">
+				<h1>{vendorName}</h1>
+			</div>
+
+			<div class="flex justify-center items-center h-[100%]">
+				<Button
+					class="w-[100px] lg:w-[200px] md:w-[200px] mt-1 h-[30px] flex  bg-primary-600 rounded-lg text-white"
+					on:click={() => (window.location.href = `/client/dashboard/customer/${vendorid}/cart/`)}
+				>
+					<CartOutline class="w-5 h-5 text-white" />
+					<span class="hidden md:flex md:visible ml-2">Cart</span>
+				</Button>
+			</div>
+		</div>
+
+		<div class="justify-start items-center h-[100%] mt-auto mb-auto">
+			<button
+				class="flex justify-center items-center hover:bg-slate-700 bg-slate-800 rounded-lg px-[14px] py-[6px] text-white mr-4"
+				on:click={toggleHelp}
+			>
+				<QuestionCircleOutline class="h-6 w-6" />
+			</button>
+		</div>
+	</div>
+    
+    <div class="maincontainer grid md:grid-cols-2 lg:grid-cols-2 place-items-center w-[100%] mt-10 md:justify-between lg:justify-between sm:justify-center dark:text-white gap-10 p-6">
+        <div class="leftside flex flex-col gap-1 items-center">
             <img src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/menuitemimage/{menuItemData.itemimage}" alt="" height="100" width="250" class="align-middle rounded-xl shadow-md justify-center"/>
             <h1 class="text-3xl font-bold text-center">{menuItemData.itemname}</h1>
-            <div class="description text-center">{menuItemData.itemdescription}</div>
+            <div class="description text-center w-[300px]" style="word-wrap: break-word;">{menuItemData.itemdescription}</div>
         </div>
         <div class="rightside w-[100%] flex flex-col items-center">
-            <div class="cardcontainer bg-gray-300 w-[80%] p-5 rounded-xl flex flex-col gap-5 dark:text-black">
+            <div class="cardcontainer dark:text-white dark:bg-gray-700 bg-gray-300 w-[80%] p-5 rounded-xl flex flex-col gap-5">
                 <div class="text">
-                    <Label for="textarea-id" class="mb-2 dark:text-black">Write your remark for the food here!</Label>
-                    <Textarea id="textarea-id" placeholder="Remark" rows="8" name="message" bind:value={remark} />
+                    <Label for="textarea-id" class="mb-2">Write your remark for the food here!</Label>
+                    <Textarea class="dark:bg-gray-100" id="textarea-id" placeholder="Remark" rows="8" name="message" bind:value={remark} />
                 </div>
-                <div class="price text-center text-xl font-bold">RM {menuItemData.itemprice}</div>
-                <Button on:click={addItemIntoCart}>Add to cart</Button>
+                <div class="price text-center text-xl font-bold">Price: RM {Number(menuItemData.itemprice).toFixed(2)}</div>
+                <div class="flex flex-col justify-center items-center">
+                    <Button class="rounded-full w-[200px]" on:click={addItemIntoCart}>Confirm</Button>
+                </div>
             </div>
         </div>
     </div>
@@ -241,4 +295,7 @@
         width: 100%;
         height: 30px;
     }
+
+    .block { display: block; }
+	.bg-semi-transparent { background-color: rgba(0, 0, 0, 0.5); }
 </style>

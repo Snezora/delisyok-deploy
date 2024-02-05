@@ -218,7 +218,7 @@
 	{/if}
 </div>
 
-<div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-stone-500">
+<div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-stone-600">
 	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
 
 		<div class="justify-start items-center ml-24 h-[100%] mt-auto mb-auto">
