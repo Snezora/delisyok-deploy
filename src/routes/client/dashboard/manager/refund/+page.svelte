@@ -18,6 +18,9 @@
 
     let user_id;
 	let searchQuery = '';
+    /**
+	 * @type {never[]}
+	 */
     let sysmanInfo = [];
     	/**
 	 * @type {any[] | undefined}
@@ -74,6 +77,17 @@
 	 * @param {any} saleid
 	 */
 	async function approveRefund(saleid) {
+		const { error: adderror } = await supabaseClient
+			.from('systemmanager_sale')
+			.insert({
+				managerid: sysmanInfo.managerid,
+				saleid: saleid
+			})
+
+		if (adderror) {
+			console.error('Error adding refund into table: ', adderror);
+		}
+
 		const { data, error } = await supabaseClient
 			.from('sale')
 			.update({ refund: true })
