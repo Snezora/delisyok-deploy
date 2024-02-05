@@ -43,6 +43,27 @@
 	 * @type {any}
 	 */
 	let customerhp;
+
+	/**
+	 * @type {any}
+	 */
+	let customeraddressl1;
+	/**
+	 * @type {any}
+	 */
+  	let customeraddressl2;
+  /**
+	 * @type {any}
+	 */
+  	let customeraddresscity;
+  /**
+	 * @type {any}
+	 */
+  	let customeraddressposcode;
+  /**
+	 * @type {any}
+	 */
+  	let customeraddressstate;
 	/**
 	 * @type {string | undefined}
 	 */
@@ -62,6 +83,11 @@
 
 		customername = customerData.customername;
 		customerhp = customerData.customerhp;
+		customeraddressl1 = customerData.customeraddressl1;
+		customeraddressl2 = customerData.customeraddressl2;
+		customeraddresscity = customerData.customeraddresscity;
+		customeraddressposcode = customerData.customeraddressposcode;
+		customeraddressstate = customerData.customeraddressstate;
 	});
 
 	async function fetchCustomerData() {
@@ -108,7 +134,12 @@
 				.update([
 					{
 						customername,
-						customerhp
+						customerhp,
+  						customeraddressl1,
+  						customeraddressl2,
+  						customeraddresscity,
+  						customeraddressposcode,
+  						customeraddressstate,
 					}
 				])
 				.eq('user_id', user_id);
@@ -128,6 +159,14 @@
 			alert('Please enter a valid phone number.');
 		}
 		return isValidHp;
+	}
+
+	function validatePoscode() {
+		const isValidPoscode = /^\d{5}$/.test(customeraddressposcode);
+		if (!isValidPoscode) {
+			alert('Please enter a postcode.');
+		}
+		return isValidPoscode;
 	}
 </script>
 
@@ -250,6 +289,7 @@
 	<p>+603-82794453</p>
 	<hr style="border-top: 2px solid rgba(0, 0, 0, 0.1); margin: 10px 0; margin-bottom:30px;" />
 	<p class="font-medium text-lg">Our Email</p>
+	<p>Customer Service: services@delisyok.com</p>
 	<p>Headquarters: hq@delisyok.com</p>
 	<p>Human Resource: hr@delisyok.com</p>
 	<p>Marketing: marketing@delisyok.com</p>
@@ -308,6 +348,51 @@
 			<span class="text-xs font-medium text-gray-500 dark:text-gray-300">
 				Do not include +6
 			</span>
+		</Label>
+		<hr
+		style="border-top: 1px solid rgba(0, 0, 0, 0.1); margin: 10px 0; margin-bottom:0px;"
+	/>
+		<Label class="space-y-1">
+			<span>Edit Address</span>
+			<Input
+				id="customeraddressl1"
+				type="text"
+				placeholder={customerData.customeraddressl1}
+				bind:value={customeraddressl1}
+			/>
+		</Label>
+		<Label class="space-y-1">
+			<Input
+				id="customeraddressl2"
+				type="text"
+				placeholder={customerData.customeraddressl2}
+				bind:value={customeraddressl2}
+			/>
+		</Label>
+		<Label class="space-y-1">
+			<Input
+				id="customeraddresscity"
+				type="text"
+				placeholder={customerData.customeraddresscity}
+				bind:value={customeraddresscity}
+			/>
+		</Label>
+		<Label class="space-y-1">
+			<Input
+				id="customeraddressposcode"
+				type="text"
+				placeholder={customerData.customeraddressposcode}
+				bind:value={customeraddressposcode}
+				on:blur={validatePoscode}
+			/>
+		</Label>
+		<Label class="space-y-1">
+			<Input
+				id="customeraddressstate"
+				type="text"
+				placeholder={customerData.customeraddressstate}
+				bind:value={customeraddressstate}
+			/>
 		</Label>
 		<Button on:click={saveNewInfo} href="/client/dashboard/customer">Save Information</Button>
 	</form>

@@ -48,12 +48,15 @@
 		console.log(customerData);
 		console.log(orders);
 
-		
 		const channels = supabaseClient
 			.channel('custom-update-channel')
-			.on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'sale', filter: `customerid=eq.${customerid}` }, (payload) => {
-				window.location.reload();
-			})
+			.on(
+				'postgres_changes',
+				{ event: 'UPDATE', schema: 'public', table: 'sale', filter: `customerid=eq.${customerid}` },
+				(payload) => {
+					window.location.reload();
+				}
+			)
 			.subscribe();
 	});
 
@@ -91,8 +94,6 @@
 				return 5;
 			}
 		}
-
-
 	}
 
 	async function fetchCustomerData() {
@@ -134,71 +135,81 @@
 
 	let showHelp = false;
 
-  function toggleHelp() {
-    showHelp = !showHelp;
-  }
-
+	function toggleHelp() {
+		showHelp = !showHelp;
+	}
 </script>
 
-<div class="border-4 border-solid border-slate-200 bg-slate-200 dark:border-slate-900 dark:bg-slate-900 fixed right-0 bottom-0 rounded-l-lg">
+<div
+	class="border-2 border-solid border-gray-200 bg-gray-200 dark:border-slate-900 dark:bg-slate-900 fixed right-0 bottom-0 rounded-l-lg"
+>
 	<DarkMode class="h-[60%]"></DarkMode>
 </div>
 
-<div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
+<div
+	class="{showHelp
+		? 'block'
+		: 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center"
+>
 	<div class="p-4 bg-white rounded shadow-lg">
-	  <h2 class="text-2xl font-bold mb-2">Help</h2>
-	  <div class="mt-[20px]">
-		<p class="font-semibold text-xl">Welcome to the Customer Client Page.</p>
-		<p>Here you can find the list of vendors.
-			Click on the desired vendor cards to view their menu.</p>
+		<h2 class="text-2xl font-bold mb-2">Help</h2>
+		<div class="mt-[20px]">
+			<p class="font-semibold text-xl">Welcome to the Customer Client Page.</p>
 			<p>
-	  </div>
+				Here you can find the list of vendors. Click on the desired vendor cards to view their menu.
+			</p>
+			<p></p>
+		</div>
 
-	  <div class="mt-[20px]">
-		<p class="font-semibold">
-			Want to track your order?
-		</p>
-		<p>
-			Just select an order number and you will see your order details. Plus, you get to track your order!
-		</p>
-	  </div>
-	  <div class="mt-[20px]">
-		<p class="font-bold">
-			Want to change your theme?
-		</p>
-		<p>
-			Quick shortcut is at the bottom-right of your page. You can change your theme whenever you want.
-		</p>
-	  </div>
-	  <button class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
-	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center" on:click={toggleHelp}>Close</button>
+		<div class="mt-[20px]">
+			<p class="font-semibold">Want to track your order?</p>
+			<p>
+				Just select an order number and you will see your order details. Plus, you get to track your
+				order!
+			</p>
+		</div>
+		<div class="mt-[20px]">
+			<p class="font-bold">Want to change your theme?</p>
+			<p>
+				Quick shortcut is at the bottom-right of your page. You can change your theme whenever you
+				want.
+			</p>
+		</div>
+		<button
+			class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
+	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center"
+			on:click={toggleHelp}>Close</button
+		>
 	</div>
-  </div>
+</div>
 
 <div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-gray-600">
 	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
-
 		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
-			<button class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"on:click={() => (window.location.href="/client/dashboard/customer")}>
+			<button
+				class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"
+				on:click={() => (window.location.href = '/client/dashboard/customer')}
+			>
 				<ArrowLeftOutline class="h-5 w-5" />
 				<span class="hidden md:flex md:visible ml-2">Vendor List</span>
 			</button>
 		</div>
 
-
 		<div class="textcontainer flex flex-col lg:-ml-24 md:-ml-24">
 			<div class="font-bold text-3xl text-white w-full h-12 flex items-center justify-center">
 				<h1>Hello, {customerData.customername}</h1>
 			</div>
-	
+
 			<div class="text-lg text-white w-full h-12 flex items-center justify-center">
 				<h1>Your order history</h1>
 			</div>
 		</div>
 
-
 		<div class="justify-start items-center h-[100%] mt-auto mb-auto">
-			<button class="flex justify-center items-center hover:bg-slate-700 bg-slate-800 rounded-lg px-[14px] py-[6px] text-white mr-4"  on:click={toggleHelp}>
+			<button
+				class="flex justify-center items-center hover:bg-slate-700 bg-slate-800 rounded-lg px-[14px] py-[6px] text-white mr-4"
+				on:click={toggleHelp}
+			>
 				<QuestionCircleOutline class="h-6 w-6" />
 			</button>
 		</div>
@@ -237,22 +248,22 @@
 						Order items:
 						<table class="w-full table-auto">
 							<thead>
-							  <tr class="text-left">
-								<th class="px-4 py-2">Item Name</th>
-								<th class="px-4 py-2">Remark</th>
-								<th class="px-4 py-2">Item Price</th>
-							  </tr>
+								<tr class="text-left">
+									<th class="px-4 py-2">Item Name</th>
+									<th class="px-4 py-2">Remark</th>
+									<th class="px-4 py-2">Item Price</th>
+								</tr>
 							</thead>
 							<tbody>
-							  {#each order.orderitem as orderitem}
-							  <tr>
-								<td class="px-4 py-2">{orderitem.itemname}</td>
-								<td class="px-4 py-2">{orderitem.remark}</td>
-								<td class="px-4 py-2">RM {Number(orderitem.itemprice).toFixed(2)}</td>
-							  </tr>
-							  {/each}
+								{#each order.orderitem as orderitem}
+									<tr>
+										<td class="px-4 py-2">{orderitem.itemname}</td>
+										<td class="px-4 py-2">{orderitem.remark}</td>
+										<td class="px-4 py-2">RM {Number(orderitem.itemprice).toFixed(2)}</td>
+									</tr>
+								{/each}
 							</tbody>
-						  </table>
+						</table>
 
 						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
 						<div>
@@ -278,10 +289,10 @@
 							width: 20px;
 							height: 12px;
 							background-color: {sale.vendororderstatus === 'completed'
-													? 'green'
-													: sale.vendororderstatus === 'failed'
-														? 'red'
-														: 'gray'};
+											? 'green'
+											: sale.vendororderstatus === 'failed'
+												? 'red'
+												: 'gray'};
 							margin-right: 5px;
 						"
 									></span>
@@ -295,10 +306,10 @@
 							width: 20px;
 							height: 12px;
 							background-color: {sale.deliverystatus === 'completed'
-													? 'green'
-													: sale.deliverystatus === 'failed'
-														? 'red'
-														: 'grey'};
+											? 'green'
+											: sale.deliverystatus === 'failed'
+												? 'red'
+												: 'grey'};
 							margin-right: 5px;
 						"
 									></span>
@@ -312,22 +323,22 @@
 							<div class="trackingsection bg-black text-white p-6 rounded-xl ml-auto mr-auto">
 								{#await determineStep(order?.sale?.[0]?.saleid)}
 									<div>Loading...</div>
-								  {:then stepResult}
+								{:then stepResult}
 									{#if stepResult == 1 || stepResult == 2 || stepResult == 3}
-									  <StepIndicator currentStep={stepResult} {steps} color="blue" />
+										<StepIndicator currentStep={stepResult} {steps} color="blue" />
 									{:else if stepResult == 4}
-									  <StepIndicator currentStep={stepResult} {steps} color="green" />
+										<StepIndicator currentStep={stepResult} {steps} color="green" />
 									{:else if stepResult == 5}
-									  <StepIndicator
-										  currentStep={1}
-										  steps={['Your order has been cancelled. Please contact customer service.']}
-										  color="red"
-									  />
+										<StepIndicator
+											currentStep={1}
+											steps={['Your order has been cancelled. Please contact customer service.']}
+											color="red"
+										/>
 									{/if}
-							  {:catch error}
-								<div>Error: {error.message}</div>
-							  {/await}
-							</div>	
+								{:catch error}
+									<div>Error: {error.message}</div>
+								{/await}
+							</div>
 						</div>
 					</div>
 				</AccordionItem>
@@ -337,6 +348,10 @@
 </div>
 
 <style>
-	.block { display: block; }
-	.bg-semi-transparent { background-color: rgba(0, 0, 0, 0.5); }
-  </style>
+	.block {
+		display: block;
+	}
+	.bg-semi-transparent {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+</style>
