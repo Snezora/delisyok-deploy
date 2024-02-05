@@ -3,7 +3,6 @@
 	import { page } from '$app/stores';
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
-	import SidebarCustomer from '../SidebarCustomer.svelte';
 	import {
 		ArrowLeftOutline,
 		CartOutline,
@@ -166,41 +165,41 @@
 	}
 </script>
 
-<div class="{showHelp ? 'block' : 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center">
+<div
+	class="{showHelp
+		? 'block'
+		: 'hidden'} z-20 fixed inset-0 bg-semi-transparent flex items-center justify-center"
+>
 	<div class="p-4 bg-white rounded shadow-lg">
-	  <h2 class="text-2xl font-bold mb-2">Help</h2>
+		<h2 class="text-2xl font-bold mb-2">Help</h2>
 
-	  <div class="mt-[20px]">
-		<p class="font-bold">
-			Want to see the description of a menu item or purchase an item?
-		</p>
-		<p>
-			Just click on the Add to cart button.
-		</p>
-	  </div>
-      <div class="mt-[20px]">
-		<p class="font-bold">
-			Want to check out your cart?
-		</p>
-		<p class="flex items-center">
-			Just click on the cart button with <CartOutline class="w-4 h-4 ml-1 mr-1"/> icon.
-		</p>
-	  </div>
-	  <div class="mt-[20px]">
-		<p class="font-bold">
-			Want to change your theme?
-		</p>
-		<p>
-			Quick shortcut is at the bottom-right of your page. You can change your theme whenever you want.
-		</p>
-	  </div>
-	  <button class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
-	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center" on:click={toggleHelp}>Close</button>
+		<div class="mt-[20px]">
+			<p class="font-bold">Want to see the description of a menu item or purchase an item?</p>
+			<p>Just click on the Add to cart button.</p>
+		</div>
+		<div class="mt-[20px]">
+			<p class="font-bold">Want to view your cart?</p>
+			<p class="flex items-center">
+				Just click on the cart button with <CartOutline class="w-4 h-4 ml-1 mr-1" /> icon.
+			</p>
+		</div>
+		<div class="mt-[20px]">
+			<p class="font-bold">Want to change your theme?</p>
+			<p>
+				Quick shortcut is at the bottom-right of your page. You can change your theme whenever you
+				want.
+			</p>
+		</div>
+		<button
+			class="justify-center mt-3 px-4 py-2 rounded-lg h-[40px] border bg-primary-600 border-solid border-[#EF562F]
+	  hover:bg-slate-700 hover:border-slate-700 shadow-md font-bold text-white inline-flex items-center"
+			on:click={toggleHelp}>Close</button
+		>
 	</div>
-  </div>
+</div>
 
 <div
-	class="border-4 border-solid border-slate-200 bg-slate-200 dark:border-slate-900 dark:bg-slate-900 fixed right-0 bottom-0 rounded-l-lg"
+	class="border-2 border-solid border-gray-200 bg-gray-200 dark:border-slate-900 dark:bg-slate-900 fixed right-0 bottom-0 rounded-l-lg"
 >
 	<DarkMode class="h-[60%]"></DarkMode>
 </div>
@@ -243,37 +242,37 @@
 		</div>
 	</div>
 
-	<div
-		class="dark:bg-gray-800 dark:text-white bg-gray-100 p-3 grid grid-cols-[1fr,7fr] gap-3"
-	>
+	<div class="dark:bg-gray-800 dark:text-white bg-gray-100 p-3 grid grid-cols-[1fr,7fr] gap-3">
 		<div class="h-[200px] w-[220px] relative">
-            <img
-            src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/vendorstore/{vendorInfo.storephoto}"
-            alt=""
-            height="200"
-            width="220"
-            class="absolute inset-0 w-full h-full object cover object-center align-middle bg-white"
-        />
-        </div>
+			<img
+				src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/vendorstore/{vendorInfo.storephoto}"
+				alt=""
+				height="200"
+				width="220"
+				class="absolute inset-0 w-full h-full object cover object-center align-middle bg-white"
+			/>
+		</div>
 		<div class="ml-3 overflow-hidden flex flex-col justify-between" style="word-wrap: break-word;">
-            <div>
-                <h1 class="font-medium">Business Description:</h1>
-                <h1 class="text-sm">{vendorInfo.businessdescription ? vendorInfo.businessdescription : '-No Description-'}</h1>
-            </div>
+			<div>
+				<h1 class="font-medium">Business Description:</h1>
+				<h1 class="text-sm">
+					{vendorInfo.businessdescription ? vendorInfo.businessdescription : '-No Description-'}
+				</h1>
+			</div>
 
-            <div class = "mt-2 font-medium">
-                <div class="mt-1">
-                    KKM Listing No: {vendorInfo.vendorkkmlistingno}
-                </div>
-                <div class="hours mt-2">
-                    Operating Hours: {formatTime(vendorInfo.businessstarttime)} - {formatTime(
-                        vendorInfo.businessclosingtime
-                    )}
-                </div>
-                <div class = "mt-2">
-                    Operating Days: {printDay}
-                </div>
-            </div>
+			<div class="mt-2 font-medium">
+				<div class="mt-1">
+					KKM Listing No: {vendorInfo.vendorkkmlistingno}
+				</div>
+				<div class="hours mt-2">
+					Operating Hours: {formatTime(vendorInfo.businessstarttime)} - {formatTime(
+						vendorInfo.businessclosingtime
+					)}
+				</div>
+				<div class="mt-2">
+					Operating Days: {printDay}
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -286,9 +285,8 @@
 				in:slide
 				out:fade
 			>
-				<div
-					class="flex flex-row h-[120px] w-[100%]"
-					><img
+				<div class="flex flex-row h-[120px] w-[100%]">
+					<img
 						src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/menuitemimage/{menuItem.itemimage}"
 						alt=""
 						height="100"
@@ -298,13 +296,18 @@
 					<div class="iteminfo w-[100%] flex flex-col justify-between items-center">
 						<h1 class="text-xl font-bold text-center">{menuItem.itemname}</h1>
 
-                        <div class="p-1">
-                            <h1 class="text-xl font-semibold text-center">RM {Number(menuItem.itemprice).toFixed(2)}</h1>
-                        <Button class="justify-center sm:w-[160px] rounded-full" on:click={() => goToItemPage(menuItem.itemid)}
-                            href="#">
-                            Add to cart
-                        </Button>
-                        </div>
+						<div class="p-1">
+							<h1 class="text-xl font-semibold text-center">
+								RM {Number(menuItem.itemprice).toFixed(2)}
+							</h1>
+							<Button
+								class="justify-center sm:w-[160px] rounded-full"
+								on:click={() => goToItemPage(menuItem.itemid)}
+								href="#"
+							>
+								Add to cart
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -331,6 +334,10 @@
 </Modal>
 
 <style>
-	.block { display: block; }
-	.bg-semi-transparent { background-color: rgba(0, 0, 0, 0.5); }
-  </style>
+	.block {
+		display: block;
+	}
+	.bg-semi-transparent {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+</style>
