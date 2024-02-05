@@ -4,6 +4,11 @@ import { writable } from 'svelte/store';
 export const customerProfile = writable({
   customername:'',
   customerhp:'',
+  customeraddressl1:'',
+  customeraddressl2:'',
+  customeraddresscity:'',
+  customeraddressposcode:'',
+  customeraddressstate:''
 });
 
 export const uploadingFile = writable(false);
