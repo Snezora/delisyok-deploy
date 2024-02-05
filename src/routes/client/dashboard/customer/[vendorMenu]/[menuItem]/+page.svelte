@@ -215,7 +215,7 @@
 		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
 			<button
 				class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"
-				on:click={() => window.history.back()}
+				on:click={backMenu}
 			>
 				<ArrowLeftOutline class="h-5 w-5" />
 				<span class="hidden md:flex md:visible ml-2">Menu</span>
@@ -227,14 +227,8 @@
 				<h1>{vendorName}</h1>
 			</div>
 
-			<div class="flex justify-center items-center h-[100%]">
-				<Button
-					class="w-[100px] lg:w-[200px] md:w-[200px] mt-1 h-[30px] flex  bg-primary-600 rounded-lg text-white"
-					on:click={() => (window.location.href = `/client/dashboard/customer/${vendorid}/cart/`)}
-				>
-					<CartOutline class="w-5 h-5 text-white" />
-					<span class="hidden md:flex md:visible ml-2">Cart</span>
-				</Button>
+			<div class="flex justify-center items-center h-[100%] text-white font-semibold text-lg">
+				Customise your food
 			</div>
 		</div>
 
@@ -274,7 +268,6 @@
       <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
       <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Item Added!</h3>
       <Button color="red" class="me-2" on:click={backMenu}>Back to Menu</Button>
-      <Button color="alternative" on:click={() => {window.location.href=`/client/dashboard/customer/${vendorid}/cart/`;}}>View Cart</Button>
     </div>
 </Modal>
 

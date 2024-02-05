@@ -5,7 +5,7 @@
     import { page } from '$app/stores';
     import TrashBin from './trash.svelte';
     import  { Button, DarkMode, Label, Modal, Textarea } from 'flowbite-svelte';
-    import {ArrowLeftOutline, CartOutline, ExclamationCircleOutline} from 'flowbite-svelte-icons';
+    import {ArrowLeftOutline, CartOutline, ExclamationCircleOutline, QuestionCircleOutline} from 'flowbite-svelte-icons';
 	import SidebarCustomer from "../../SidebarCustomer.svelte";
     let popupModal = false;
 
@@ -14,7 +14,7 @@
     /**
 	 * @type {any}
 	 */
-    let customerData;
+    let customerData = [];
     /**
 	 * @type {never[]}
 	 */
@@ -28,7 +28,9 @@
 	 */
     let orderItems = [];
     let user_id;
-    let sidebarOpen = false;
+    /**
+	 * @type {any[]}
+	 */
     let pricelist = [];
     let pricetotal = 0;
     /**
@@ -52,10 +54,6 @@
 	 * @type {any}
 	 */
     let orderid;
-
-    async function toggleSidebar() {
-		sidebarOpen = !sidebarOpen;
-	}
 
     onMount(async () => {
         console.log('im here start');
@@ -81,6 +79,9 @@
 
     });
 
+    /**
+	 * @param {any} price
+	 */
     async function addPrices(price){
         pricelist.push(price);
         pricetotal = pricelist.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
@@ -175,76 +176,75 @@
         }
     }
 
+    let showHelp = false;
+
+  function toggleHelp() {
+    showHelp = !showHelp;
+  }
     //export let data;
 
 </script>
 
-<div class="fixed z-10">
-	{#if sidebarOpen}
-		<div class="fixed">
-			<SidebarCustomer />
+<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
+
+		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
+			<button class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"on:click={() => window.history.back()}>
+				<ArrowLeftOutline class="h-5 w-5" />
+				<span class="hidden md:flex md:visible ml-2">Vendor List</span>
+			</button>
 		</div>
-	{/if}
+
+
+		<div class="textcontainer flex flex-col lg:-ml-24 md:-ml-24">
+			<div class="font-bold text-3xl text-white w-full h-12 flex items-center justify-center">
+				<h1>Hello, {customerData.customername}</h1>
+			</div>
+	
+			<div class="text-lg text-white w-full h-12 flex items-center justify-center">
+				<h1>Your cart in {vendorData.businessname}</h1>
+			</div>
+		</div>
+
+
+		<div class="justify-start items-center h-[100%] mt-auto mb-auto">
+			<button class="flex justify-center items-center hover:bg-slate-700 bg-slate-800 rounded-lg px-[14px] py-[6px] text-white mr-4"  on:click={toggleHelp}>
+				<QuestionCircleOutline class="h-6 w-6" />
+			</button>
+		</div>
 </div>
 
-<div class="page-container min-h-[100vh] overflow-x-hidden bg-white dark:bg-gray-500">
-    <div class="header h-16 bg-gray-900 px-4 flex flex-row justify-between">
-        <Button pill={true} outline={true} class="my-4" on:click={() => window.history.back()}>
-            <ArrowLeftOutline class="w-4 h-4 text-white" />
-        </Button>
-        <div class="flex flex-col items-center pt-auto pb-auto">
-            <div class="font-bold text-2xl text-white w-full h-9 flex items-center justify-center">
-                <h1>Cart</h1>
-            </div>
-    
-            <div class="text-base text-white w-full h-8 flex items-center justify-center">
-                <h1>For {vendorData.businessname}</h1>
-            </div>
-        </div>
-        <div class="rightside gap-3 flex flex-row">
-            <DarkMode class="h-[60%] mt-auto mb-auto"></DarkMode>
-        </div>
-    </div>
-    <div class="absolute z-10">
-        <button
-            class="z-10 w-[50px] h-[50px] transition-[width] duration-[0.3s] ease-[ease-in-out] border bg-[#f8f9fa] border-solid border-[#f8f9fa] hover:bg-slate-300 {sidebarOpen
-                ? 'translate-x-[200px] translate-y-[-65px] fixed'
-                : ''}"
-            on:click={toggleSidebar}
-        >
-            Menu
-        </button>
-    </div>
+<div class="page-container min-h-[100vh] overflow-x-hidden bg-white dark:bg-stone-600">
     <div class="xlcontainer flex flex-col justify-between min-h-[100vh]">
-        <div class="maincontainer pl-10 pb-0 pr-0 pt-[3.1rem]">
-            <hr class="dark:border-gray-200 border-gray-700"/>
+        <div class="maincontainer ">
             <div class="main dark:text-white">
-                <div class="flex flex-col p-10 pt-5">
-                    <div class="titlegrid grid grid-cols-4 place-items-center mb-5 font-extrabold">
-                        <div class="itemname">Item Name</div>
-                        <div class="remark">Remark</div>
-                        <div class="price">Price</div>
+                <div class="flex flex-col p-5 lg:text-lg text-sm">
+                    <hr style="border-top: 2px solid rgba(0, 0, 0, 0.1);"/>
+                    <div class="titlegrid grid grid-cols-[4fr,4fr,2fr,1fr] gap-5 place-items-left p-1 font-semibold">
+                        <div class="itemname col-span-1 min-w-[80px]">Item Name</div>
+                        <div class="remark col-span-1 min-w-[100px]">Remark</div>
+                        <div class="price col-span-1 min-w-[40px]">Price</div>
+                        <div class="col-span-1 min-w-[50px]"></div>
                     </div>
-                    <hr class="dark:border-gray-200 border-gray-700 mb-5"/>
+                    <hr style="border-top: 2px solid rgba(0, 0, 0, 0.1);"/>
                     {#each orderItems as item}
                         <div class="itemcontainer flex flex-col">
-                            <div class="titlegrid grid grid-cols-4 place-items-center mb-5">
-                                <div class="itemname">{item.itemname}</div>
-                                {#if item.remark == "null"}
-                                    <div>-</div>
+                            <div class="titlegrid grid grid-cols-[4fr,4fr,2fr,1fr] gap-5 place-items-left p-1">
+                                <div class="itemname col-span-1 min-w-[80px] flex flex-row items-center">{item.itemname}</div>
+                                {#if item.remark == "-No Remarks-"}
+                                    <div class="remark col-span-1 min-w-[100px] flex flex-row items-center">-</div>
                                 {:else}
-                                    <div class="remark">{item.remark}</div>
+                                    <div class="remark col-span-1 min-w-[100px] flex flex-row items-center" style="word-wrap: break-word;">{item.remark}</div>
                                 {/if}
                                 <div class="third flex flex-row items-center">
-                                    <div class="price">RM {item.itemprice}</div>
+                                    <div class="price col-span-1 min-w-[40px]">RM {Number(item.itemprice).toFixed(2)}</div>
                                 </div>
                                 <Button color="none" on:click={() => {
                                     popupModal = true;
                                     selectedItem = item.orderitemid;
-                                }}><TrashCanRegular color="red" class="dark:text-red-800" /></Button>
+                                }}><TrashCanRegular color="red" class="dark:text-red-800 h-5 w-5" /></Button>
                             </div>
                         </div>
-                        <hr class="dark:border-gray-200 border-gray-700 mb-5"/>
+                        <hr style="border-top: 2px solid rgba(0, 0, 0, 0.1);"/>
                     {/each}
                 </div>
             </div>
@@ -267,20 +267,3 @@
       <Button color="alternative" on:click={() => (popupModal = false)}>No</Button>
     </div>
 </Modal>
-
-<style>
-    .titleBar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 30px;
-        background-color: orange;
-    }
-    .topSpace{
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 30px;
-    }
-</style>
