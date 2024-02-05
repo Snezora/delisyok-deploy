@@ -1,11 +1,9 @@
 <script>
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
-	import { AccordionItem, Accordion, Button, DarkMode, StepIndicator } from 'flowbite-svelte';
-	import { ArrowLeftOutline, QuestionCircleOutline, CartOutline } from 'flowbite-svelte-icons';
-	let popupModal = false;
+	import { AccordionItem, Accordion, DarkMode, StepIndicator } from 'flowbite-svelte';
+	import { ArrowLeftOutline, QuestionCircleOutline } from 'flowbite-svelte-icons';
 
-	let userData;
 	/**
 	 * @type {any}
 	 */
@@ -13,20 +11,13 @@
 	/**
 	 * @type {string | undefined}
 	 */
-	let user_id; //Customer ID
+	let user_id;
 	/**
 	 * @type {any}
 	 */
 	let orders = [];
-	/**
-	 * @type {any}
-	 */
-	let orderitems = [];
 
 	let customerid;
-
-	let currentStep = 1;
-	let colour = 'default';
 
 	let steps = [
 		'Your Order has been received by the Vendor',
@@ -36,16 +27,21 @@
 	];
 
 	onMount(async () => {
+		console.log('Start Test: Render Order Page');
+
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
+		console.log('Fetch Test: User ID ' + user_id);
+
+		console.log('Fetch Test: Customer Data Array');
 		customerData = await fetchCustomerData();
-		customerid = customerData.customerid;
-		orders = await fetchOrders();
-		// for (let order of orders) {
-		//     console.log(order);
-		// 	order.orderitems = await fetchOrderItems(order.orderid);
-		// }
 		console.log(customerData);
+
+		console.log('Fetch Test: Populate Variable');
+		customerid = customerData.customerid;
+
+		console.log('Fetch Test: Order Array, Sales Array, Order Item Array');
+		orders = await fetchOrders();
 		console.log(orders);
 
 		const channels = supabaseClient
@@ -58,6 +54,7 @@
 				}
 			)
 			.subscribe();
+			console.log('Render Test: Completed');
 	});
 
 	/**
@@ -114,10 +111,9 @@
 	}
 
 	async function fetchOrders() {
-		console.log('fetching orders');
 		const { data: order, error } = await supabaseClient
 			.from('cusorder')
-			.select('*, orderitem(*), sale(*, vendor(*))')
+			.select('orderid, ordergenerated, cartstatus, orderitem(*), sale(*, vendor(*))')
 			.eq('customerid', customerData.customerid)
 			.eq('cartstatus', 'completed')
 			.order('ordergenerated', { ascending: false });
@@ -162,7 +158,7 @@
 		</div>
 
 		<div class="mt-[20px]">
-			<p class="font-semibold">Want to track your order?</p>
+			<p class="font-bold">Want to track your order?</p>
 			<p>
 				Just select an order number and you will see your order details. Plus, you get to track your
 				order!
@@ -258,7 +254,13 @@
 								{#each order.orderitem as orderitem}
 									<tr>
 										<td class="px-4 py-2">{orderitem.itemname}</td>
-										<td class="px-4 py-2">{orderitem.remark}</td>
+										<td class="px-4 py-2">
+											{#if orderitem.remark}
+												{orderitem.remark}
+											{:else}
+												-
+											{/if}</td
+										>
 										<td class="px-4 py-2">RM {Number(orderitem.itemprice).toFixed(2)}</td>
 									</tr>
 								{/each}
@@ -292,6 +294,8 @@
 											? 'green'
 											: sale.vendororderstatus === 'failed'
 												? 'red'
+												: sale.vendororderstatus === 'ongoing'
+												? 'yellow'
 												: 'gray'};
 							margin-right: 5px;
 						"
@@ -309,6 +313,8 @@
 											? 'green'
 											: sale.deliverystatus === 'failed'
 												? 'red'
+												: sale.deliverystatus === 'ongoing'
+												? 'yellow'
 												: 'grey'};
 							margin-right: 5px;
 						"

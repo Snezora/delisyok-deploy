@@ -8,16 +8,14 @@
 		BarsOutline,
 		XCompanySolid,
 		QuestionCircleOutline,
-		ArrowRightFromBracketSolid
 	} from 'flowbite-svelte-icons';
 
 	let sidebarOpen = false;
 
-	let userData;
 	/**
 	 * @type {any}
 	 */
-	let customerData = [];
+	let customerData = []; //Data structure: Customer Data Array
 	/**
 	 * @type {string | undefined}
 	 */
@@ -25,17 +23,33 @@
 	/**
 	 * @type {any}
 	 */
-	let vendors = [];
+	let vendors = []; //List Vendor Array
+	let searchInput = '';
+
+	/**
+	 * @type {any[]}
+	 */
+	 let filteredVendors = [];
+	 let showHelp = false;
 
 	onMount(async () => {
-		console.log('im here start');
+		console.log('Start Test: Render Sidebar');
+
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
+		console.log('Fetch Test: User ID ' + user_id);
+
+		console.log('Fetch Test: Customer Data Array');
 		customerData = await fetchCustomerData();
-		vendors = await fetchVendor();
 		console.log(customerData);
+
+		console.log('Fetch Test: List Vendor Array');
+		vendors = await fetchVendor();
 		console.log(vendors);
-		clearCart();
+
+		clearCart(); //Cart tied to vendor, so must clear cart.
+
+		console.log('Render Test: Completed');
 	});
 
 	async function fetchCustomerData() {
@@ -53,7 +67,7 @@
 	}
 
 	async function fetchVendor() {
-		const { data: vendor, error } = await supabaseClient.from('vendor').select('*');
+		const { data: vendor, error } = await supabaseClient.from('vendor').select('vendorid, businessname, storephoto');
 
 		if (error) {
 			console.error('Error fetching business name: ', error);
@@ -63,26 +77,13 @@
 		return vendor;
 	}
 
-	/**
-	 * @param {string | undefined} [storephoto]
-	 */
-	async function getStorePhoto(storephoto) {
-		const { data } = supabaseClient.storage.from('vendorstore').getPublicUrl(`${storephoto}`);
-		console.log(data);
-		if (data) {
-			return data.publicUrl;
-		} else {
-			return '';
-		}
-	}
-
+	//Sidebar function
 	async function toggleSidebar() {
 		sidebarOpen = !sidebarOpen;
 	}
 	$: buttonText = sidebarOpen ? 'Close' : 'Menu';
 
-	let searchInput = '';
-
+	//Search Bar
 	/**
 	 * @param {any} event
 	 */
@@ -90,21 +91,24 @@
 		searchInput = event.target.value;
 	}
 
+	//Search for vendor
 	async function scrollToVendor() {
 		const vendorElement = document.querySelector(`.vendor-${searchInput}`);
 		if (vendorElement) {
 			vendorElement.scrollIntoView({ behavior: 'smooth' });
-		} else {
-			alert('No vendor found with that name');
 		}
 	}
+
+	$: filteredVendors = vendors.filter((/** @type {{ businessname: string; }} */ vendor) =>
+		vendor.businessname.toLowerCase().includes(searchInput.toLowerCase())
+	);
 
 	async function clearCart() {
 		const { data, error } = await supabaseClient
 			.from('cusorder')
 			.select('*')
 			.eq('customerid', customerData.customerid)
-			.eq('cartstatus', 'unpaid');
+			.eq('cartstatus', 'unpaid'); //unpaid status means cart
 
 		if (error) {
 			console.error('Error deleting cart: ', error);
@@ -127,15 +131,6 @@
 	}
 
 	/**
-	 * @type {any[]}
-	 */
-	let filteredVendors = [];
-
-	$: filteredVendors = vendors.filter((/** @type {{ businessname: string; }} */ vendor) =>
-		vendor.businessname.toLowerCase().includes(searchInput.toLowerCase())
-	);
-
-	/**
 	 * @param {any} vendorid
 	 */
 	//This is added to direct to vendor menu based on the vendorID
@@ -143,21 +138,8 @@
 		window.location.href = `/client/dashboard/customer/${vendorid}`;
 	}
 
-	let showHelp = false;
-
 	function toggleHelp() {
 		showHelp = !showHelp;
-	}
-
-	async function signOut() {
-		const { error } = await supabaseClient.auth.signOut();
-		if (error) {
-			alert(error.message);
-		} else {
-			if (typeof window !== 'undefined') {
-				window.location.href = '/auth/login';
-			}
-		}
 	}
 </script>
 
@@ -276,9 +258,6 @@
 				type="text"
 				placeholder="Search Vendor"
 			/>
-			<!-- <Button class="!p-2.5">
-				<SearchOutline class="w-5 h-5" />
-			</Button> -->
 		</form>
 
 		<div

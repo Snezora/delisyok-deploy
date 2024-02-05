@@ -23,7 +23,7 @@
 	/**
 	 * @type {never[] | { businessname: any; storephoto: any; businessstarttime: any; businessclosingtime: any; businessopday: any; vendorrkkmlistingno: any; businessdescription: any; vendorhp: any; } | undefined}
 	 */
-	let vendorInfo = []; //Vendor Information
+	let vendorInfo = []; //Vendor Info Array
 
 	/**
 	 * @type {any[] | undefined}

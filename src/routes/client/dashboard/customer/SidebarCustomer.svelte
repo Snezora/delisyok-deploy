@@ -2,14 +2,12 @@
 	import {
 		Sidebar,
 		SidebarWrapper,
-		SidebarBrand,
 		SidebarItem,
 		SidebarGroup,
 		DarkMode,
 		NavBrand,
 		Modal,
 		Button,
-		Carousel,
 		List,
 		Li,
 		Heading,
@@ -27,7 +25,6 @@
 	import './Sidebar.css';
 	import { ArrowRightFromBracketSolid } from 'svelte-awesome-icons';
 	import { supabaseClient } from '$lib/supabase';
-	import { uploadingFile, customerProfile } from '../../../stores/customer.js';
 	import { onMount } from 'svelte';
 	let spanClass = 'flex-1 ms-0 whitespace-nowrap ';
 	let aboutUs = false;
@@ -51,19 +48,19 @@
 	/**
 	 * @type {any}
 	 */
-  	let customeraddressl2;
-  /**
+	let customeraddressl2;
+	/**
 	 * @type {any}
 	 */
-  	let customeraddresscity;
-  /**
+	let customeraddresscity;
+	/**
 	 * @type {any}
 	 */
-  	let customeraddressposcode;
-  /**
+	let customeraddressposcode;
+	/**
 	 * @type {any}
 	 */
-  	let customeraddressstate;
+	let customeraddressstate;
 	/**
 	 * @type {string | undefined}
 	 */
@@ -74,13 +71,17 @@
 	let customerData = [];
 
 	onMount(async () => {
-		console.log('im here start');
+		console.log('Start Test: Render Sidebar');
+
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
+		console.log('Fetch Test: User ID ' + user_id);
+
+		console.log('Fetch Test: Customer Data Array');
 		customerData = await fetchCustomerData();
 		console.log(customerData);
-		console.log('fetch from sidebar side');
 
+		console.log('Fetch Test: Populating Variables');
 		customername = customerData.customername;
 		customerhp = customerData.customerhp;
 		customeraddressl1 = customerData.customeraddressl1;
@@ -88,6 +89,7 @@
 		customeraddresscity = customerData.customeraddresscity;
 		customeraddressposcode = customerData.customeraddressposcode;
 		customeraddressstate = customerData.customeraddressstate;
+		console.log('Render Test: Completed');
 	});
 
 	async function fetchCustomerData() {
@@ -115,31 +117,44 @@
 		}
 	}
 
-	// customerProfile.subscribe(value => {
-	//     customername = value.customername;
-	// 	customerhp = value.customerhp;
-	// })
+	//Validation
+	function validateaddress() {
+		if (!customeraddressl1 || !customeraddressl1 || !customeraddresscity || !customeraddressstate) {
+			alert('Please enter an address for delivery purposes.');
+		}
+		return true;
+	}
+
+	function validatePoscode() {
+		const isValidPoscode = /^\d{5}$/.test(customeraddressposcode);
+		if (!isValidPoscode) {
+			alert('Please enter a valid poscode.');
+		}
+		return isValidPoscode;
+	}
+
+	function validatePhoneNumber() {
+		const isValidHp = /^\d{9,11}$/.test(customerhp);
+		if (!isValidHp) {
+			alert('Please enter a valid phone number.');
+		}
+		return isValidHp;
+	}
 
 	async function saveNewInfo() {
-		// // Fetch the businessname from the vendor table
-		// const { data, error } = await supabaseClient
-		//     .from('vendor')
-		//     .select('*')
-		//     .eq('user_id', user_id);
-
-		if (validatePhoneNumber()) {
-			console.log('here');
+		if (validatePhoneNumber() && validateaddress() && validatePoscode()) {
+			console.log('Saving Information');
 			const { error: customerError } = await supabaseClient
 				.from('customer')
 				.update([
 					{
 						customername,
 						customerhp,
-  						customeraddressl1,
-  						customeraddressl2,
-  						customeraddresscity,
-  						customeraddressposcode,
-  						customeraddressstate,
+						customeraddressl1,
+						customeraddressl2,
+						customeraddresscity,
+						customeraddressposcode,
+						customeraddressstate
 					}
 				])
 				.eq('user_id', user_id);
@@ -152,29 +167,12 @@
 			}
 		}
 	}
-
-	function validatePhoneNumber() {
-		const isValidHp = /^\d{9,11}$/.test(customerhp);
-		if (!isValidHp) {
-			alert('Please enter a valid phone number.');
-		}
-		return isValidHp;
-	}
-
-	function validatePoscode() {
-		const isValidPoscode = /^\d{5}$/.test(customeraddressposcode);
-		if (!isValidPoscode) {
-			alert('Please enter a postcode.');
-		}
-		return isValidPoscode;
-	}
 </script>
 
 <Sidebar id="customerSidebar" class="sidebar">
 	<SidebarWrapper class="h-[100%]">
 		<SidebarGroup class={spanClass}>
 			<NavBrand>
-				<!-- <img src="/images/flowbite-svelte-icon-logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" /> -->
 				<span
 					class="font-plain text-3xl logo ml-[4px] self-center whitespace-nowrap dark:text-white"
 					>DeliSyok</span
@@ -345,13 +343,9 @@
 				bind:value={customerhp}
 				on:blur={validatePhoneNumber}
 			/>
-			<span class="text-xs font-medium text-gray-500 dark:text-gray-300">
-				Do not include +6
-			</span>
+			<span class="text-xs font-medium text-gray-500 dark:text-gray-300"> Do not include +6 </span>
 		</Label>
-		<hr
-		style="border-top: 1px solid rgba(0, 0, 0, 0.1); margin: 10px 0; margin-bottom:0px;"
-	/>
+		<hr style="border-top: 1px solid rgba(0, 0, 0, 0.1); margin: 10px 0; margin-bottom:0px;" />
 		<Label class="space-y-1">
 			<span>Edit Address</span>
 			<Input
