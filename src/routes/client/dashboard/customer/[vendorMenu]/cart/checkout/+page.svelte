@@ -309,9 +309,9 @@
 			if (error2) {
 				console.error('Error updating cart status: ', error2);
 			} else {
-				alert('Your Order has been Submitted. Please check order history for updates!');
 				setTimeout(() => {
-					window.location.href = '/client/dashboard/customer/orderhistory';
+					alert('Your Order has been Submitted. Please check order history for updates!');
+					window.location.href = '/client/dashboard/customer';
 				}, 2000); // Delay the redirection for 2000 milliseconds (2 seconds)
 			}
 		}

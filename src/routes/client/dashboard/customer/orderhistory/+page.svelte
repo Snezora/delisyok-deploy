@@ -151,14 +151,6 @@
 	<div class="p-4 bg-white rounded shadow-lg">
 		<h2 class="text-2xl font-bold mb-2">Help</h2>
 		<div class="mt-[20px]">
-			<p class="font-semibold text-xl">Welcome to the Customer Client Page.</p>
-			<p>
-				Here you can find the list of vendors. Click on the desired vendor cards to view their menu.
-			</p>
-			<p></p>
-		</div>
-
-		<div class="mt-[20px]">
 			<p class="font-bold">Want to track your order?</p>
 			<p>
 				Just select an order number and you will see your order details. Plus, you get to track your
@@ -180,7 +172,7 @@
 	</div>
 </div>
 
-<div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-gray-600">
+<div class="page-container min-h-[100vh] overflow-x-hidden dark:bg-stone-600">
 	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
 		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
 			<button
@@ -214,7 +206,7 @@
 	<div class="text-black dark:text-white w-[100%]">
 		{#each orders as order}
 			<Accordion>
-				<AccordionItem class="text-black dark:text-white w-[100%]">
+				<AccordionItem class="text-black dark:text-white w-[100%] dark:border-slate-100">
 					<span slot="header">Order ID: {order.orderid}</span>
 					<div class="container text-black dark:text-white w-[100%]">
 						<p class="mb-2 text-black dark:text-white flex flex-col gap-1">
@@ -240,7 +232,7 @@
 							{/each}
 						</p>
 
-						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
+						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.5); margin: 10px 0;" />
 
 						Order items:
 						<table class="w-full table-auto">
@@ -268,14 +260,14 @@
 							</tbody>
 						</table>
 
-						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
+						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.5); margin: 10px 0;" />
 						<div>
 							{#each order.sale as sale}
 								<span>Total price: RM {sale.totalamount}</span>
 							{/each}
 						</div>
 
-						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 10px 0;" />
+						<hr style="border: none; border-top: 1px solid rgba(0,0,0,0.5); margin: 10px 0;" />
 
 						<div>
 							{#each order.sale as sale}
