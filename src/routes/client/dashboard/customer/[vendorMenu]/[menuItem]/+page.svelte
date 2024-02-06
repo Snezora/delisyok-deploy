@@ -173,7 +173,7 @@
 			popupModal = true;
 			setTimeout(() => {
 				backMenu();
-			}, 1000);
+			}, 3000);
 		}
 	}
 
@@ -198,7 +198,7 @@
 		<h2 class="text-2xl font-bold mb-2">Help</h2>
 
 		<div class="mt-[20px]">
-			<p class="font-bold">Want to let the chef know your speific request for this food item?</p>
+			<p class="font-bold">Want to let the chef know your specific request for this food item?</p>
 			<p class="text-justify">
 				There is a remark box provided to write regarding your preferences, allergies, and more. We
 				and our collaborating vendors value our customer opinions. Our vendor will do their best to
@@ -311,7 +311,7 @@
 <Modal bind:open={popupModal} size="xs" autoclose>
 	<div class="text-center">
 		<ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-		<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Item Added!</h3>
+		<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Item Added! You will be redirected back to the Vendor's Menu.</h3>
 	</div>
 </Modal>
 
