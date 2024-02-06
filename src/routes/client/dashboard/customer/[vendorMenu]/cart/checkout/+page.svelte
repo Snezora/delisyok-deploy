@@ -356,9 +356,7 @@
 				console.error('Error updating cart status: ', error2);
 			} else {
 				alert('Your Order has been Submitted. Please check order history for updates!');
-				setTimeout(() => {
-					window.location.href = '/client/dashboard/customer/orderhistory';
-				}, 2000);
+				window.location.href = '/client/dashboard/customer/orderhistory';
 			}
 		}
 	}
