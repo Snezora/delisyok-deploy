@@ -261,13 +261,13 @@
 	<div
 		class="dark:bg-gray-800 dark:text-white bg-gray-100 p-3 lg:grid md:grid sm:grid flex flex-col justify-center lg:items-stretch md:items-stretch sm:items-stretch item items-center grid-cols-[1fr,7fr] gap-3"
 	>
-		<div class="h-[200px] w-[220px] relative">
+		<div class="h-[200px] w-[300px] relative">
 			<img
 				src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/vendorstore/{vendorInfo.storephoto}"
 				alt=""
 				height="200"
-				width="220"
-				class="absolute inset-0 w-full h-full object cover object-center align-middle bg-white"
+				width="300"
+				class="absolute inset-0 w-full h-full object-cover object-center align-middle bg-white"
 			/>
 		</div>
 		<div class="ml-3 overflow-hidden flex flex-col justify-between" style="word-wrap: break-word;">
