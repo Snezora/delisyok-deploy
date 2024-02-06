@@ -95,6 +95,7 @@
 	let cvv;
 
 	let datenow;
+	let popupModal = false;
 
 	onMount(async () => {
 		console.log('Start Test: Render Checkout Page');
@@ -242,7 +243,7 @@
 	}
 
 	function validateCardExpiry() {
-		if (!cardexpiry){
+		if (!cardexpiry) {
 			alert('Please enter a valid card expiry. Expired card is not accepted.');
 			return false;
 		}
@@ -309,8 +310,10 @@
 			if (error2) {
 				console.error('Error updating cart status: ', error2);
 			} else {
-				alert('Your Order has been Submitted. Please check order history for updates!');
-				window.location.href = '/client/dashboard/customer/orderhistory';
+				popupModal = true;
+				setTimeout(() => {
+					window.location.href = '/client/dashboard/customer/orderhistory';
+				}, 3000);
 			}
 		}
 	}
@@ -355,8 +358,10 @@
 			if (error2) {
 				console.error('Error updating cart status: ', error2);
 			} else {
-				alert('Your Order has been Submitted. Please check order history for updates!');
-				window.location.href = '/client/dashboard/customer/orderhistory';
+				popupModal = true;
+				setTimeout(() => {
+					window.location.href = '/client/dashboard/customer/orderhistory';
+				}, 3000);
 			}
 		}
 	}
@@ -443,7 +448,7 @@
 			<div class="name text-xl font-semibold">
 				Vendor: {vendorData.businessname}
 			</div>
-			<div class="deliveryAddress flex lg:flex-col md:flex-col flex-wrap">
+			<div class="deliveryAddress flex flex-col">
 				<div class="flex text-semibold">Delivery Address:</div>
 				<div class="area w-[300px]">
 					<Input type="text" placeholder="Address" size="md" bind:value={deliveryaddress}>
@@ -569,6 +574,15 @@
 		</div>
 	</div>
 </div>
+
+<Modal bind:open={popupModal} size="xs" autoclose>
+	<div class="text-center">
+		<ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
+		<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+			Your Order has been Submitted. You will be redirected to your order history for updates.
+		</h3>
+	</div>
+</Modal>
 
 <style>
 	.block {
