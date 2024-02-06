@@ -217,7 +217,7 @@
 
 	//Validation
 	function validateaddress() {
-		const isValid = /^[a-zA-Z0-9-,. ]+$/.test(deliveryaddress);
+		const isValid = /^[a-zA-Z0-9-,. ()\\\\]+$/.test(deliveryaddress);
 		if (!deliveryaddress || !isValid) {
 			alert('Please enter an address for delivery purposes.');
 			return false;
@@ -310,9 +310,7 @@
 				console.error('Error updating cart status: ', error2);
 			} else {
 				alert('Your Order has been Submitted. Please check order history for updates!');
-				setTimeout(() => {
-					window.location.href = '/client/dashboard/customer/orderhistory';
-				}, 2000);
+				window.location.href = '/client/dashboard/customer/orderhistory';
 			}
 		}
 	}
