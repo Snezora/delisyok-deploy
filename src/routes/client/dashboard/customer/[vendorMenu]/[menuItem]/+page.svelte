@@ -173,7 +173,7 @@
 			popupModal = true;
 			setTimeout(() => {
 				backMenu();
-			}, 3000);
+			}, 2000);
 		}
 	}
 

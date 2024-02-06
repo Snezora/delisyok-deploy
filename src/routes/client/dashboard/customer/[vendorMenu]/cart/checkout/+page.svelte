@@ -313,7 +313,7 @@
 				popupModal = true;
 				setTimeout(() => {
 					window.location.href = '/client/dashboard/customer/orderhistory';
-				}, 3000);
+				}, 2000);
 			}
 		}
 	}
@@ -361,7 +361,7 @@
 				popupModal = true;
 				setTimeout(() => {
 					window.location.href = '/client/dashboard/customer/orderhistory';
-				}, 3000);
+				}, 2000);
 			}
 		}
 	}
