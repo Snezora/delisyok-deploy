@@ -93,7 +93,8 @@
         }
     });
 
-    if (!$uploadingFile){
+    if ($uploadingFile == false){
+        console.log($uploadingFile + " File");
         window.onfocus = function() { (location.reload()); };
     }
 });
