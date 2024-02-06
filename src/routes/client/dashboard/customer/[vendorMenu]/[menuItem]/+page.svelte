@@ -171,7 +171,9 @@
 			console.error('Error adding item into cart: ', error);
 		} else {
 			popupModal = true;
-			backMenu();
+			setTimeout(() => {
+				backMenu();
+			}, 1000);
 		}
 	}
 
