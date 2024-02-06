@@ -122,6 +122,7 @@
 	function validateaddress() {
 		if (!customeraddressl1 || !customeraddressl1 || !customeraddresscity || !customeraddressstate) {
 			alert('Please enter an address for delivery purposes.');
+			return false;
 		}
 		return true;
 	}

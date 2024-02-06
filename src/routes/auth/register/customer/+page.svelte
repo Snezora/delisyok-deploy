@@ -44,6 +44,8 @@
 	 * @type {any}
 	 */
 	let password;
+	let showPassword = false;
+	let showcPassword = false;
 	let passwordconfirm;
 	let customername;
 	let customerhp;
@@ -56,14 +58,33 @@
 	let isCustomer = true;
 
 	const handleSignup = async () => {
-		if (password == passwordconfirm) {
+		console.log(customerdob);
+		console.log(customeraddressstate);
+		if (
+			password == passwordconfirm &&
+			isValidName() &&
+			validatePhoneNumber() &&
+			validateDOB() &&
+			validateaddress() &&
+			validatePoscode() &&
+			validateState()
+		) {
 			try {
 				loading = true;
 				console.log(email);
 
 				const { error } = await supabaseClient.auth.signUp({
 					email,
-					password
+					password,
+					passwordconfirm,
+					customername,
+					customerhp,
+					customerdob,
+					customeraddressl1,
+					customeraddressl2,
+					customeraddresscity,
+					customeraddressposcode,
+					customeraddressstate
 				});
 
 				if (error) throw error;
@@ -112,27 +133,78 @@
 				loading = false;
 			}
 		} else {
-			alert('Password does not match');
+			if(password != passwordconfirm){
+				alert('Password does not match');
+			}
 			loading = false;
 		}
 	};
 
-	// @ts-ignore
 	export const form = null;
 
-	// export let data
-	// let { supabase } = data
-	// $: ({ supabase } = data)
+	//Validation
+	function isValidName() {
+		if (!customername || customername.length < 3) {
+			alert(
+				'Please enter a valid name which only consist of alphabets and space. The name must be at least 3 letters.'
+			);
+			return false;
+		}
 
-	// const handleSignUp = async () => {
-	// 	await supabase.auth.signUp({
-	// 	email,
-	// 	password,
-	// 	options: {
-	// 		emailRedirectTo: `${location.origin}/auth/callback`,
-	// 	},
-	// 	})
-	// }
+		const isValidName = /^[a-zA-Z ]+$/.test(customername);
+		if (!isValidName) {
+			alert(
+				'Please enter a valid name which only consist of alphabets and space. The name must be at least 3 letters.'
+			);
+		}
+		return isValidName;
+	}
+
+	function validatePhoneNumber() {
+		const isValidHp = /^\d{9,11}$/.test(customerhp);
+		if (!isValidHp) {
+			alert('Please enter a valid phone number.');
+		}
+		return isValidHp;
+	}
+
+	function validateState(){
+		if(customeraddressstate === ""){
+			alert('Please choose a state.');
+			return false;
+		}
+		return true;
+	}
+
+	function validatePoscode() {
+		const isValidPoscode = /^\d{5}$/.test(customeraddressposcode);
+		if (!isValidPoscode) {
+			alert('Please enter a valid poscode.');
+		}
+		return isValidPoscode;
+	}
+
+	function validateDOB() {
+		if (!customerdob) {
+			alert('Please enter a date of birth.');
+			return false;
+		}
+		return true;
+	}
+
+	function validateaddress() {
+		const isValidCity = /^[a-zA-Z ]+$/.test(customeraddresscity);
+		const isValidL1 = /^[a-zA-Z0-9-,. ]+$/.test(customeraddressl1);
+		const isValidL2 = /^[a-zA-Z0-9-,. ]+$/.test(customeraddressl2);
+		if (!customeraddressl1 || !customeraddresscity || !isValidL1 || !isValidL2) {
+			alert('Please enter an address for delivery purposes.');
+			return false;
+		}else if(!isValidCity){
+			alert('Please enter a valid city for delivery purposes.');
+			return false;
+		}
+		return true;
+	}
 </script>
 
 <div
@@ -167,32 +239,54 @@
 						</Label>
 						<Label>
 							<span class=" dark:text-white">Password</span>
-							<Input
-								type="password"
-								name="password"
-								placeholder="••••••••••"
-								required
-								bind:value={password}
-								class="w-[325px] text-black password-input dark:bg-[#ECECEC]"
-								color="white"
-							>
-								<LockSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-							</Input>
+							<div class="relative">
+								<Input
+									type={showPassword ? 'text' : 'password'}
+									name="password"
+									placeholder="••••••••••"
+									required
+									bind:value={password}
+									class="w-[325px] text-black password-input dark:bg-[#ECECEC]"
+									color="white"
+								>
+									<LockSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+								</Input>
+								<button
+									type="button"
+									class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+									on:click={() => {
+										showPassword = !showPassword;
+									}}
+								>
+									{showPassword ? 'Hide' : 'Show'}
+								</button>
+							</div>
 						</Label>
 
 						<Label>
 							<span class=" dark:text-white">Confirm Password</span>
-							<Input
-								type="password"
-								name="passwordconfirmation"
-								placeholder="••••••••••"
-								required
-								bind:value={passwordconfirm}
-								class="w-[325px] text-black password-input dark:bg-[#ECECEC]"
-								color="white"
-							>
-								<LockSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-							</Input>
+							<div class="relative">
+								<Input
+									type={showcPassword ? 'text' : 'password'}
+									name="passwordconfirmation"
+									placeholder="••••••••••"
+									required
+									bind:value={passwordconfirm}
+									class="w-[325px] text-black password-input dark:bg-[#ECECEC]"
+									color="white"
+								>
+									<LockSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+								</Input>
+								<button
+									type="button"
+									class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+									on:click={() => {
+										showcPassword = !showcPassword;
+									}}
+								>
+									{showcPassword ? 'Hide' : 'Show'}
+								</button>
+							</div>
 						</Label>
 
 						<!-- Seperator for Personal Information -->
@@ -207,6 +301,7 @@
 								placeholder="John Doe"
 								required
 								bind:value={customername}
+								maxlength="50"
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -335,27 +430,3 @@
 		</div>
 	</div>
 </div>
-
-<!-- <Popover class="text-sm" triggeredBy=".password-input" placement="bottom">
-    <h3 class="font-semibold text-gray-900 dark:text-white">Must have at least 6 characters</h3>
-    <div class="grid grid-cols-4 gap-2">
-      <div class="h-1 bg-orange-300 dark:bg-orange-400" />
-      <div class="h-1 bg-orange-300 dark:bg-orange-400" />
-      <div class="h-1 bg-gray-200 dark:bg-gray-600" />
-      <div class="h-1 bg-gray-200 dark:bg-gray-600" />
-    </div>
-    <p class="py-2">It’s better to have:</p>
-    <ul>
-      <li class="flex items-center mb-1">
-        <CheckOutline class="me-2 w-4 h-4 text-green-400 dark:text-green-500" />
-        Upper &amp; lower case letters
-      </li>
-      <li class="flex items-center mb-1">
-        <CheckOutline class="me-2 w-4 h-4 text-green-400 dark:text-green-500" />
-        A symbol (#$&amp;)
-      </li>
-      <li class="flex items-center">
-        <CloseOutline class="me-2 w-4 h-4 text-gray-300 dark:text-gray-400" />A longer password (min. 12 chars.)
-      </li>
-    </ul>
-  </Popover> -->

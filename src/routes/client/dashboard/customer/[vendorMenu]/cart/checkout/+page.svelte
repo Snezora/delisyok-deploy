@@ -215,16 +215,19 @@
 		}
 	}
 
+	//Validation
 	function validateaddress() {
-		if (!deliveryaddress) {
+		const isValid = /^[a-zA-Z0-9-,. ]+$/.test(deliveryaddress);
+		if (!deliveryaddress || !isValid) {
 			alert('Please enter an address for delivery purposes.');
+			return false;
 		}
-		return deliveryaddress;
+		return true;
 	}
 
 	function validNameOnCard() {
 		const isValidName = /^[A-Za-z\s]+$/.test(nameoncard);
-		if (!isValidName) {
+		if (!isValidName || !nameoncard) {
 			alert('Please enter a valid name for the card holder.');
 		}
 		return isValidName;
@@ -232,13 +235,17 @@
 
 	function validateCardNumber() {
 		const isValidCard = /^\d{16,19}$/.test(cardnumber);
-		if (!isValidCard) {
+		if (!isValidCard || !cardnumber) {
 			alert('Please enter a valid card number.');
 		}
 		return isValidCard;
 	}
 
 	function validateCardExpiry() {
+		if (!cardexpiry){
+			alert('Please enter a valid card expiry. Expired card is not accepted.');
+			return false;
+		}
 		const currentMonth = ('0' + (new Date().getMonth() + 1)).slice(-2);
 		const currentYear = new Date().getFullYear().toString().slice(-2);
 		const isValidExpiry = /^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(cardexpiry);
@@ -248,7 +255,7 @@
 			expiryYear < currentYear ||
 			(expiryYear === currentYear && expiryMonth <= currentMonth)
 		) {
-			alert('Please enter a valid card expiry. Expired card is not accepted');
+			alert('Please enter a valid card expiry. Expired card is not accepted.');
 			return false;
 		}
 		return true;
@@ -256,7 +263,7 @@
 
 	function validateCVV() {
 		const isValidCVV = /^\d{3}$/.test(cvv);
-		if (!isValidCVV) {
+		if (!isValidCVV || !cvv) {
 			alert('Please enter a valid CVV.');
 		}
 		return isValidCVV;
@@ -267,96 +274,94 @@
 			validateaddress() &&
 			validNameOnCard() &&
 			validateCardNumber() &&
-			validateCVV() &&
-			validateCardExpiry()
+			validateCardExpiry() &&
+			validateCVV()
 		) {
-			if (nameoncard && cardnumber && cardexpiry && cvv) {
-				const { error } = await supabaseClient.from('sale').insert([
-					{
-						receiptgenerated: new Date().toISOString(),
-						paymentmethod: 'Card',
-						paymentstatus: 'Completed',
-						totalamount: ordertotalprice,
-						ridercomission: riderComm,
-						vendorearning: vendorearn,
-						orderid: cart.orderid,
-						deliveryaddress,
-						nameoncard,
-						cardnumber,
-						cardexpiry,
-						cvv,
-						vendororderstatus: 'pending',
-						deliverystatus: 'pending',
-						vendorid: vendorid
-					}
-				]);
-
-				if (error) {
-					console.error('Error uploading the data: ', error);
+			const { error } = await supabaseClient.from('sale').insert([
+				{
+					receiptgenerated: new Date().toISOString(),
+					paymentmethod: 'Card',
+					paymentstatus: 'Completed',
+					totalamount: ordertotalprice,
+					ridercomission: riderComm,
+					vendorearning: vendorearn,
+					orderid: cart.orderid,
+					deliveryaddress,
+					nameoncard,
+					cardnumber,
+					cardexpiry,
+					cvv,
+					vendororderstatus: 'pending',
+					deliverystatus: 'pending',
+					vendorid: vendorid
 				}
+			]);
 
-				const { error: error2 } = await supabaseClient
-					.from('cusorder')
-					.update({ cartstatus: 'completed' })
-					.eq('orderid', cart.orderid);
+			if (error) {
+				console.error('Error uploading the data: ', error);
+			}
 
-				if (error2) {
-					console.error('Error updating cart status: ', error2);
-				} else {
-					alert('Your Order has been Submitted. Please check order history for updates!');
-					setTimeout(() => {
-						window.location.href = '/client/dashboard/customer/orderhistory';
-					}, 2000); // Delay the redirection for 2000 milliseconds (2 seconds)
-				}
+			const { error: error2 } = await supabaseClient
+				.from('cusorder')
+				.update({ cartstatus: 'completed' })
+				.eq('orderid', cart.orderid);
+
+			if (error2) {
+				console.error('Error updating cart status: ', error2);
 			} else {
-				alert('Please fill in the payment information if you opt for Card payment method.');
+				alert('Your Order has been Submitted. Please check order history for updates!');
+				setTimeout(() => {
+					window.location.href = '/client/dashboard/customer/orderhistory';
+				}, 2000); // Delay the redirection for 2000 milliseconds (2 seconds)
 			}
 		}
 	}
 
 	async function uploadCashData() {
-		cardnumber = 0;
-		cardexpiry = '-';
-		cvv = 0;
-		nameoncard = '-';
+		if (validateaddress()) {
+			cardnumber = 0;
+			cardexpiry = '-';
+			cvv = 0;
+			nameoncard = '-';
 
-		let date = new Date();
-		const { error } = await supabaseClient.from('sale').insert([
-			{
-				receiptgenerated: new Date().toISOString(),
-				paymentmethod: 'Cash',
-				paymentstatus: 'Completed',
-				totalamount: ordertotalprice,
-				ridercomission: riderComm,
-				vendorearning: vendorearn,
-				orderid: cart.orderid,
-				deliveryaddress,
-				nameoncard,
-				cardnumber,
-				cardexpiry,
-				cvv,
-				vendororderstatus: 'pending',
-				deliverystatus: 'pending',
-				vendorid: vendorid
+			let date = new Date();
+			const { error } = await supabaseClient.from('sale').insert([
+				{
+					receiptgenerated: new Date().toISOString(),
+					paymentmethod: 'Cash',
+					paymentstatus: 'Completed',
+					totalamount: ordertotalprice,
+					ridercomission: riderComm,
+					vendorearning: vendorearn,
+					orderid: cart.orderid,
+					deliveryaddress,
+					nameoncard,
+					cardnumber,
+					cardexpiry,
+					cvv,
+					vendororderstatus: 'pending',
+					deliverystatus: 'pending',
+					vendorid: vendorid
+				}
+			]);
+
+			if (error) {
+				console.error('Error uploading the data: ', error);
 			}
-		]);
 
-		if (error) {
-			console.error('Error uploading the data: ', error);
-		}
+			const { error: error2 } = await supabaseClient
+				.from('cusorder')
+				.update({ cartstatus: 'completed' })
+				.eq('orderid', cart.orderid);
 
-		const { error: error2 } = await supabaseClient
-			.from('cusorder')
-			.update({ cartstatus: 'completed' })
-			.eq('orderid', cart.orderid);
-
-		if (error2) {
-			console.error('Error updating cart status: ', error2);
-		} else {
-			alert('Your Order has been Submitted. Please check order history for updates!');
-			setTimeout(() => {
-				window.location.href = '/client/dashboard/customer/orderhistory';
-			}, 2000); // Delay the redirection for 2000 milliseconds (2 seconds)
+			if (error2) {
+				console.error('Error updating cart status: ', error2);
+			} else {
+				alert('Your Order has been Submitted. Please check order history for updates!');
+				setTimeout(() => {
+					window.location.href = '/client/dashboard/customer/orderhistory';
+				}, 2000); // Delay the redirection for 2000 milliseconds (2 seconds)
+			}
 		}
 	}
 

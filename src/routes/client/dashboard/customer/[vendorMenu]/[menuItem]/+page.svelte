@@ -289,10 +289,10 @@
 						rows="8"
 						name="message"
 						bind:value={remark}
-						maxlength="254"
+						maxlength="255"
 					/>
 					{#if remark && remark.length}
-						<p>{remark.length} / 254</p>
+						<p>{remark.length} / 255</p>
 					{/if}
 				</div>
 				<div class="price text-center text-xl font-bold">
