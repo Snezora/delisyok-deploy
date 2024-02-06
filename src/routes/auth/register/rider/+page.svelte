@@ -281,11 +281,11 @@
 						<Label>
 							<span class=" dark:text-white">IC Number</span>
 							<Input
-								type="text"
+								type="string"
 								name="rideric"
 								required
 								bind:value={rideric}
-								placeholder="090930-20-3029"
+								placeholder="090930203029"
 								class="w-[325px] text-black dark:bg-[#ECECEC] placeholder:dark:text-gray-400"
 								color="white"
 							>

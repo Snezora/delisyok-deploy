@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 
 // Initialize your store with default values
 export const vendorStore = writable({
@@ -30,3 +30,5 @@ export const vendorStore = writable({
 });
 
 export const uploadingFile = writable(false);
+
+

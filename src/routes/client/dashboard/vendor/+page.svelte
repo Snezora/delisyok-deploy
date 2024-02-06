@@ -18,7 +18,8 @@
     import { hidden2 } from '../../../stores/sidebar.js';
     import { fade } from 'svelte/transition';
 	import SpinnerSet from '../../SpinnerSet.svelte';
-	import { vendorStore } from '../../../stores/businessStore';
+	import { vendorStore, uploadingFile } from '../../../stores/businessStore';
+
 
 
     let spanClass = 'flex-1 ms-3 whitespace-nowrap';
@@ -55,6 +56,7 @@
 
 
     onMount(async () => {
+        uploadingFile.set(false);
         vendorData = await fetchBusinessName();
         console.log(vendorData);
         businessname = vendorData.businessname;
