@@ -1,20 +1,20 @@
 <script>
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
-	import TrashBin from '../cart/trash.svelte';
 	import { Button, Modal, DarkMode, Label, Textarea } from 'flowbite-svelte';
 	import { page } from '$app/stores';
-	import SidebarCustomer from '../../SidebarCustomer.svelte';
 	import {
 		ExclamationCircleOutline,
 		ArrowLeftOutline,
-		CartOutline,
 		QuestionCircleOutline
 	} from 'flowbite-svelte-icons';
 	let popupModal = false;
 
 	const itemid = $page.params.menuItem;
-	let userData;
+	/**
+	 * @type {any}
+	 */
+	let vendorData;
 	/**
 	 * @type {any}
 	 */
@@ -23,11 +23,10 @@
 	 * @type {string | undefined}
 	 */
 	let user_id;
-
 	/**
-	 * @type {any[][]}
+	 * @type {any}
 	 */
-	let menuItemData = []; //Here is the menu Item Data
+	let menuItemData = '';
 	/**
 	 * @type {any}
 	 */
@@ -44,32 +43,45 @@
 	 * @type {any}
 	 */
 	let remark;
-
 	/**
-	 * @type {never[]}
+	 * @type {{ orderid: any; }}
 	 */
-	let cart = [];
+	let cart;
 
 	onMount(async () => {
+		console.log('Start Test: Render Menu Item Page');
+
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
+		console.log('Fetch Test: User ID ' + user_id);
+
+		console.log('Fetch Test: Menu Item Data');
 		menuItemData = await fetchMenuItemData();
 		console.log(menuItemData);
-		vendorid = menuItemData.vendor.vendorid;
-		vendorName = menuItemData.vendor.businessname;
-		console.log('im here start');
-		customerData = await fetchCustomerData();
-		console.log(customerData);
-		customerid = customerData.customerid;
+
+		console.log('Fetch Test: Vendor Data');
+		vendorData = await fetchVendorData();
+		console.log(vendorData);
+
+		console.log('Initialisation Test: Populating Variables');
+		vendorid = vendorData.vendorid;
+		vendorName = vendorData.businessname;
+		console.log(vendorid);
+		console.log(vendorName);
+
+		console.log('Fetch Test: Customer ID');
+		customerid = await fetchCustomerID();
+		console.log(customerid);
+
+		console.log('Fetch Test: Cart');
 		cart = await fetchCart();
 		console.log(cart);
+
+		console.log('Render Test: Completed');
 	});
 
 	async function fetchMenuItemData() {
-		const { data, error } = await supabaseClient
-			.from('menuitem')
-			.select('*, vendor(*)')
-			.eq('itemid', itemid);
+		const { data, error } = await supabaseClient.from('menuitem').select('*').eq('itemid', itemid);
 
 		if (error) {
 			console.error('Error fetching menu item: ', error);
@@ -78,17 +90,31 @@
 		}
 	}
 
-	async function fetchCustomerData() {
+	async function fetchVendorData() {
 		const { data, error } = await supabaseClient
-			.from('customer')
-			.select('*')
-			.eq('user_id', user_id);
+			.from('vendor')
+			.select('vendorid, businessname')
+			.eq('vendorid', menuItemData.vendorid);
 
 		if (error) {
-			console.error('Error fetching customer name: ', error);
-		} else if (data && data.length > 0) {
+			console.error('Error fetching vendor data: ', error);
+		} else {
 			return data[0];
 		}
+	}
+
+	async function fetchCustomerID() {
+		const { data, error } = await supabaseClient
+			.from('customer')
+			.select('customerid')
+			.eq('user_id', user_id);
+		if (error) {
+			console.error('Error fetching customer ID: ', error);
+			return null;
+		} else if (data && data.length > 0) {
+			return data[0].customerid;
+		}
+		return null;
 	}
 
 	async function fetchCart() {
@@ -145,8 +171,7 @@
 			console.error('Error adding item into cart: ', error);
 		} else {
 			popupModal = true;
-            backMenu();
-
+			backMenu();
 		}
 	}
 
@@ -215,7 +240,7 @@
 			</button>
 		</div>
 
-		<div class="textcontainer flex flex-col lg:-ml-18 md:-ml-24">
+		<div class="textcontainer flex flex-col lg:-ml-18 md:-ml-24 text-center">
 			<div class="mt-2 font-bold text-3xl text-white w-full h-16 flex items-center justify-center">
 				<h1>{vendorName}</h1>
 			</div>
@@ -264,11 +289,11 @@
 						rows="8"
 						name="message"
 						bind:value={remark}
-                        maxlength="254"
+						maxlength="254"
 					/>
-                    {#if remark && remark.length}
-                        <p>{remark.length} / 254</p>
-                    {/if}
+					{#if remark && remark.length}
+						<p>{remark.length} / 254</p>
+					{/if}
 				</div>
 				<div class="price text-center text-xl font-bold">
 					Price: RM {Number(menuItemData.itemprice).toFixed(2)}

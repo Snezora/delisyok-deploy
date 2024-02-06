@@ -12,10 +12,9 @@
 
 	let sidebarOpen = false;
 
-	/**
-	 * @type {any}
-	 */
-	let customerData = []; //Data structure: Customer Data Array
+	let customerName = '';
+	let customerID = '';
+
 	/**
 	 * @type {string | undefined}
 	 */
@@ -33,15 +32,19 @@
 	 let showHelp = false;
 
 	onMount(async () => {
-		console.log('Start Test: Render Sidebar');
+		console.log('Start Test: Render Client Page');
 
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
 		console.log('Fetch Test: User ID ' + user_id);
 
-		console.log('Fetch Test: Customer Data Array');
-		customerData = await fetchCustomerData();
-		console.log(customerData);
+		console.log('Fetch Test: Customer Name String');
+		customerName = await fetchCustomerName();
+		console.log(customerName);
+
+		console.log('Fetch Test: Customer ID String');
+		customerID = await fetchCustomerID();
+		console.log(customerID);
 
 		console.log('Fetch Test: List Vendor Array');
 		vendors = await fetchVendor();
@@ -52,20 +55,36 @@
 		console.log('Render Test: Completed');
 	});
 
-	async function fetchCustomerData() {
+	async function fetchCustomerID() {
 		const { data, error } = await supabaseClient
 			.from('customer')
-			.select('*')
+			.select('customerid')
 			.eq('user_id', user_id);
-
 		if (error) {
-			console.error('Error fetching customer name: ', error);
+			console.error('Error fetching customer ID: ', error);
+			return null;
 		} else if (data && data.length > 0) {
-			return data[0];
+			return data[0].customerid;
 		}
-		return customerData;
+		return null;
 	}
 
+
+	async function fetchCustomerName() {
+		const { data, error } = await supabaseClient
+			.from('customer')
+			.select('customername')
+			.eq('user_id', user_id);
+		if (error) {
+			console.error('Error fetching customer name: ', error);
+			return null;
+		} else if (data && data.length > 0) {
+			return data[0].customername;
+		}
+		return null;
+	}
+
+	//Data Structure: List Vendor Array
 	async function fetchVendor() {
 		const { data: vendor, error } = await supabaseClient.from('vendor').select('vendorid, businessname, storephoto');
 
@@ -107,7 +126,7 @@
 		const { data, error } = await supabaseClient
 			.from('cusorder')
 			.select('*')
-			.eq('customerid', customerData.customerid)
+			.eq('customerid', customerID)
 			.eq('cartstatus', 'unpaid'); //unpaid status means cart
 
 		if (error) {
@@ -204,12 +223,12 @@
 	<div class="flex flex-row justify-between h-30 w-[100%] bg-gray-900">
 		<div class="justify-start items-center ml-24 h-[100%] mt-auto mb-auto"></div>
 
-		<div class="textcontainer flex flex-col mr-10">
-			<div class="font-bold text-3xl text-white w-full h-12 flex items-center justify-center">
-				<h1>Hello, {customerData.customername}</h1>
+		<div class="textcontainer flex flex-col mr-10 text-center">
+			<div class="font-bold lg:text-3xl md:text-3xl text-2xl text-white w-full h-12 flex items-center justify-center">
+				<h1>Hello, {customerName}</h1>
 			</div>
 
-			<div class="text-lg text-white w-full h-12 flex items-center justify-center">
+			<div class="lg:text-lg md:text-lg text-[16px] text-white w-full h-12 flex items-center justify-center">
 				<h1>What will your next order be?</h1>
 			</div>
 		</div>

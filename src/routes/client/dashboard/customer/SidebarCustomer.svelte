@@ -68,7 +68,7 @@
 	/**
 	 * @type {any}
 	 */
-	let customerData = [];
+	let customerData;
 
 	onMount(async () => {
 		console.log('Start Test: Render Sidebar');
@@ -77,11 +77,11 @@
 		user_id = userLog.data.user?.id;
 		console.log('Fetch Test: User ID ' + user_id);
 
-		console.log('Fetch Test: Customer Data Array');
+		console.log('Fetch Test: Customer Data');
 		customerData = await fetchCustomerData();
 		console.log(customerData);
 
-		console.log('Fetch Test: Populating Variables');
+		console.log('Initialisation Test: Populating Variables');
 		customername = customerData.customername;
 		customerhp = customerData.customerhp;
 		customeraddressl1 = customerData.customeraddressl1;
@@ -92,6 +92,7 @@
 		console.log('Render Test: Completed');
 	});
 
+	//Fetch All: Future-Proofing
 	async function fetchCustomerData() {
 		const { data, error } = await supabaseClient
 			.from('customer')

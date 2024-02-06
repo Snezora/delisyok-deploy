@@ -27,7 +27,7 @@
 	];
 
 	onMount(async () => {
-		console.log('Start Test: Render Order Page');
+		console.log('Start Test: Render Order History Page');
 
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
@@ -93,6 +93,7 @@
 		}
 	}
 
+	//Data Structure: Customer Data Array
 	async function fetchCustomerData() {
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
@@ -110,6 +111,7 @@
 		return customerData;
 	}
 
+	//Data Structure: Order Array, Sale Array, Order Item Array
 	async function fetchOrders() {
 		const { data: order, error } = await supabaseClient
 			.from('cusorder')
@@ -123,7 +125,6 @@
 		} else if (order && order.length > 0) {
 			orders = order;
 		}
-		console.log('done fetching');
 		return order;
 	}
 
@@ -191,7 +192,7 @@
 			</button>
 		</div>
 
-		<div class="textcontainer flex flex-col lg:-ml-24 md:-ml-24">
+		<div class="textcontainer flex flex-col lg:-ml-24 md:-ml-24 text-center">
 			<div class="font-bold text-3xl text-white w-full h-12 flex items-center justify-center">
 				<h1>Hello, {customerData.customername}</h1>
 			</div>

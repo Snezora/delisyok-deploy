@@ -3,31 +3,32 @@
 	import { supabaseClient } from '$lib/supabase';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import TrashBin from './trash.svelte';
-	import { Button, DarkMode, Label, Modal, Textarea } from 'flowbite-svelte';
+	import { Button, DarkMode, Modal } from 'flowbite-svelte';
 	import {
 		ArrowLeftOutline,
-		CartOutline,
 		ExclamationCircleOutline,
 		QuestionCircleOutline
 	} from 'flowbite-svelte-icons';
-	import SidebarCustomer from '../../SidebarCustomer.svelte';
+
 	let popupModal = false;
 
 	const vendorid = $page.params.vendorMenu;
-	let userData;
+
 	/**
 	 * @type {any}
 	 */
-	let customerData = [];
+	let customerData = '';
+
 	/**
-	 * @type {never[]}
+	 * @type {any}
 	 */
-	let vendorData = [];
+	let vendorData = '';
+
 	/**
-	 * @type {never[]}
+	 * @type {any}
 	 */
-	let cart = [];
+	let cart = '';
+
 	/**
 	 * @type {any[] | undefined}
 	 */
@@ -61,27 +62,63 @@
 	let orderid;
 
 	onMount(async () => {
-		console.log('im here start');
+		console.log('Start Test: Render Cart Page');
+
+		console.log('Fetch Test: Customer Data');
 		customerData = await fetchCustomerData();
 		console.log(customerData);
+
+		console.log('Fetch Test: Vendor Data');
 		vendorData = await getVendor();
 		console.log(vendorData);
+
+		console.log('Fetch Test: Cart Data');
 		cart = await fetchCart();
+		console.log(cart);
+
+		console.log('Initialisation Test: Populating Variable');
 		orderid = cart.orderid;
+		console.log(orderid);
+
+		console.log('Fetch Test: Order Items Array');
 		orderItems = await fetchItems();
 		console.log(orderItems);
-		orderItems.forEach((element) => {
-			addPrices(element.itemprice);
-		});
+
+		console.log('Calculation Test: Calculate total');
+		if (orderItems) {
+			orderItems.forEach((element) => {
+				addPrices(element.itemprice);
+			});
+		}
+
 		console.log(pricetotal);
 		salestax = (pricetotal * 0.08).toFixed(2);
 		console.log(salestax);
 		riderComm = 5;
 		ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
-
 		console.log(ordertotalprice);
 		uploadPrice();
+
+		console.log('Render Test: Completed');
 	});
+
+	async function fetchCustomerData() {
+		const userLog = await supabaseClient.auth.getUser();
+		user_id = userLog.data.user?.id;
+
+		const { data, error } = await supabaseClient
+			.from('customer')
+			.select('*')
+			.eq('user_id', user_id);
+
+		if (error) {
+			console.error('Error fetching customer name: ', error);
+		} else if (data && data.length > 0) {
+			customerData = data[0];
+			console.log('enter');
+		}
+		return customerData;
+	}
 
 	/**
 	 * @param {any} price
@@ -102,25 +139,6 @@
 		if (error) {
 			console.error('Error updating price: ', error);
 		}
-	}
-
-	async function fetchCustomerData() {
-		const userLog = await supabaseClient.auth.getUser();
-		user_id = userLog.data.user?.id;
-		console.log('im here');
-
-		const { data, error } = await supabaseClient
-			.from('customer')
-			.select('*')
-			.eq('user_id', user_id);
-
-		if (error) {
-			console.error('Error fetching customer name: ', error);
-		} else if (data && data.length > 0) {
-			customerData = data[0];
-			console.log('enter');
-		}
-		return customerData;
 	}
 
 	async function getVendor() {
@@ -185,6 +203,10 @@
 	function toggleHelp() {
 		showHelp = !showHelp;
 	}
+
+	function alertNoItems() {
+		alert('No items in cart.');
+	}
 	//export let data;
 </script>
 
@@ -234,7 +256,7 @@
 		</button>
 	</div>
 
-	<div class="textcontainer flex flex-col lg:-ml-24 md:-ml-24">
+	<div class="textcontainer flex flex-col lg:-ml-24 md:-ml-24 text-center">
 		<div class="header font-bold text-3xl text-white w-full h-12 flex items-center justify-center">
 			<h1>Hello, {customerData.customername}</h1>
 		</div>
@@ -271,38 +293,40 @@
 						<div class="col-span-1 min-w-[50px]"></div>
 					</div>
 					<hr style="border-top: 2px solid rgba(0, 0, 0, 1);" />
-					{#each orderItems as item}
-						<div class="itemcontainer flex flex-col">
-							<div class="titlegrid grid grid-cols-[4fr,4fr,2fr,1fr] gap-5 place-items-left p-1">
-								<div class="itemname col-span-1 min-w-[80px] flex flex-row items-center">
-									{item.itemname}
-								</div>
-								<div
-									class="remark text-justify col-span-1 min-w-[100px] flex flex-row items-center"
-									style="word-wrap: break-word;"
-								>
-									{#if item.remark}
-										{item.remark}
-									{:else}
-										-
-									{/if}
-								</div>
-								<div class="third flex flex-row items-center">
-									<div class="price col-span-1 min-w-[40px]">
-										RM {Number(item.itemprice).toFixed(2)}
+					{#if orderItems}
+						{#each orderItems as item}
+							<div class="itemcontainer flex flex-col">
+								<div class="titlegrid grid grid-cols-[4fr,4fr,2fr,1fr] gap-5 place-items-left p-1">
+									<div class="itemname col-span-1 min-w-[80px] flex flex-row items-center">
+										{item.itemname}
 									</div>
+									<div
+										class="remark text-justify col-span-1 min-w-[100px] flex flex-row items-center"
+										style="word-wrap: break-word;"
+									>
+										{#if item.remark}
+											{item.remark}
+										{:else}
+											-
+										{/if}
+									</div>
+									<div class="third flex flex-row items-center">
+										<div class="price col-span-1 min-w-[40px]">
+											RM {Number(item.itemprice).toFixed(2)}
+										</div>
+									</div>
+									<Button
+										color="none"
+										on:click={() => {
+											popupModal = true;
+											selectedItem = item.orderitemid;
+										}}><TrashCanRegular class="dark:text-red-400 text-red-600 h-5 w-5" /></Button
+									>
 								</div>
-								<Button
-									color="none"
-									on:click={() => {
-										popupModal = true;
-										selectedItem = item.orderitemid;
-									}}><TrashCanRegular class="dark:text-red-400 text-red-600 h-5 w-5" /></Button
-								>
 							</div>
-						</div>
-						<hr style="border-top: 2px solid rgba(0, 0, 0, 0.2);" />
-					{/each}
+							<hr style="border-top: 2px solid rgba(0, 0, 0, 0.2);" />
+						{/each}
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -311,7 +335,11 @@
 			<div class="text-[18px]">Delivery fee: RM {Number(riderComm).toFixed(2)}</div>
 			<div class="tax text-[18px]">Sales Tax (8%): RM {Number(salestax).toFixed(2)}</div>
 			<div class="text-xl font-bold mb-3">Total: RM {Number(ordertotalprice).toFixed(2)}</div>
-			<Button href="/client/dashboard/customer/{vendorid}/cart/checkout">Checkout</Button>
+			{#if orderItems && orderItems.length > 0}
+				<Button href="/client/dashboard/customer/{vendorid}/cart/checkout">Checkout</Button>
+			{:else}
+				<Button disabled>Checkout</Button>
+			{/if}
 		</div>
 	</div>
 </div>

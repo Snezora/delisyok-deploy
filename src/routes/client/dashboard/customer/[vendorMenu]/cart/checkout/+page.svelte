@@ -9,60 +9,66 @@
 		QuestionCircleOutline
 	} from 'flowbite-svelte-icons';
 	import { page } from '$app/stores';
-	import SidebarCustomer from '../../../SidebarCustomer.svelte';
-	import { goto } from '$app/navigation';
-
-	let popupModal = false;
 
 	const vendorid = $page.params.vendorMenu;
 
-	let userData;
 	/**
-	 * @type {never[]}
+	 * @type {any}
 	 */
-	let customerData = [];
+	let customerData = '';
+
 	let user_id;
+
 	/**
 	 * @type {any}
 	 */
 	let customerid;
 
 	/**
-	 * @type {never[]}
+	 * @type {any}
 	 */
-	let vendorData = [];
+	let vendorData = '';
+
 	/**
-	 * @type {any[]}
+	 * @type {any}
 	 */
-	let cart = [];
+	let cart = '';
+
 	/**
 	 * @type {any[]}
 	 */
 	let orderItems = [];
+
 	/**
 	 * @type {any}
 	 */
 	let deliveryaddress;
+
 	/**
 	 * @type {string}
 	 */
 	let salestax;
+
 	/**
 	 * @type {number}
 	 */
 	let riderComm;
+
 	/**
 	 * @type {any}
 	 */
 	let ordertotalprice;
+
 	/**
 	 * @type {any[]}
 	 */
 	let pricelist = [];
+
 	/**
 	 * @type {number}
 	 */
 	let pricetotal;
+
 	/**
 	 * @type {number}
 	 */
@@ -72,30 +78,33 @@
 	 * @type {any}
 	 */
 	let nameoncard;
+
 	/**
 	 * @type {any}
 	 */
 	let cardnumber;
+
 	/**
 	 * @type {any}
 	 */
 	let cardexpiry;
+
 	/**
 	 * @type {any}
 	 */
 	let cvv;
+
 	let datenow;
 
 	onMount(async () => {
+		console.log('Start Test: Render Checkout Page');
+
+		console.log('Fetch Test: Customer Data');
 		customerData = await fetchCustomerData();
 		console.log(customerData);
+
+		console.log('Initialisation Test: Populating Variable');
 		customerid = customerData.customerid;
-		vendorData = await getVendor();
-		console.log(vendorData);
-		cart = await fetchCart();
-		console.log(cart);
-		orderItems = cart.orderitem;
-		console.log(orderItems);
 		deliveryaddress = toAddress(
 			customerData.customeraddressl1,
 			customerData.customeraddressl2,
@@ -105,6 +114,19 @@
 		);
 		console.log(deliveryaddress);
 
+		console.log('Fetch Test: Vendor Data');
+		vendorData = await getVendor();
+		console.log(vendorData);
+
+		console.log('Fetch Test: Cart Data');
+		cart = await fetchCart();
+		console.log(cart);
+
+		console.log('Fetch Test: Order Item Array from Cart Data');
+		orderItems = cart.orderitem;
+		console.log(orderItems);
+
+		console.log('Calculation Test: Calculate total');
 		orderItems.forEach((element) => {
 			addPrices(element.itemprice);
 		});
@@ -115,6 +137,9 @@
 		ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
 		vendorearn = Math.round(ordertotalprice * 0.7);
 		console.log(vendorearn);
+		console.log(ordertotalprice);
+
+		console.log('Render Test: Completed');
 	});
 
 	/**
@@ -388,7 +413,7 @@
 			</button>
 		</div>
 
-		<div class="textcontainer flex flex-col lg:-ml-20 md:-ml-20">
+		<div class="textcontainer flex flex-col lg:-ml-20 md:-ml-20 text-center">
 			<div
 				class="header font-bold text-3xl text-white w-full h-12 flex items-center justify-center"
 			>

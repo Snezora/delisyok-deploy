@@ -16,14 +16,16 @@
 	 * @type {string | undefined}
 	 */
 	let user_id; //Customer ID
+
 	/**
-	 * @type {never[]}
+	 * @type {any}
 	 */
-	let customerInfo = [];
+	let customerID;
+
 	/**
-	 * @type {never[] | { businessname: any; storephoto: any; businessstarttime: any; businessclosingtime: any; businessopday: any; vendorrkkmlistingno: any; businessdescription: any; vendorhp: any; } | undefined}
+	 * @type {any}
 	 */
-	let vendorInfo = []; //Vendor Info Array
+	let vendorInfo = '';
 
 	/**
 	 * @type {any[] | undefined}
@@ -37,37 +39,52 @@
 	let printDay;
 
 	onMount(async () => {
+		console.log('Start Test: Render Menu Page');
+
 		const userLog = await supabaseClient.auth.getUser();
 		user_id = userLog.data.user?.id;
-		customerInfo = await fetchCustomerData();
+		console.log('Fetch Test: User ID ' + user_id);
+
+		console.log('Fetch Test: Customer ID');
+		customerID = await fetchCustomerID();
+		console.log(customerID);
+
+		console.log('Fetch Test: Vendor Info');
 		vendorInfo = await getVendor();
 		console.log(vendorInfo);
 
+		console.log('Conversion Test: Operating days');
 		if (vendorInfo) {
 			let days = vendorInfo.businessopday;
 			printDay = days.replace(/[\[\]"]/g, ' ');
-			console.log(printDay);
 		}
+		console.log(printDay);
 
-		vendorMenu = await getMenu();
+		console.log('Fetch Test: Vendor Menu Array');
+		vendorMenu = await getMenuItem();
+		console.log(vendorMenu);
+
+		console.log('Fetch Test: Cart');
 		cart = await fetchCart();
+		console.log(cart);
+
+		console.log('Render Test: Completed');
 	});
 
-	//Data Structure: Customer Data Array
-	async function fetchCustomerData() {
+	async function fetchCustomerID() {
 		const { data, error } = await supabaseClient
 			.from('customer')
-			.select('*')
+			.select('customerid')
 			.eq('user_id', user_id);
-
 		if (error) {
-			console.error('Error fetching customer name: ', error);
+			console.error('Error fetching customer ID: ', error);
+			return null;
 		} else if (data && data.length > 0) {
-			return data[0];
+			return data[0].customerid;
 		}
+		return null;
 	}
 
-	//Data Structure: Vendor Info Array
 	async function getVendor() {
 		const { data, error } = await supabaseClient
 			.from('vendor')
@@ -83,8 +100,7 @@
 		}
 	}
 
-	//Data Structure: Menu Item Display Array
-	async function getMenu() {
+	async function getMenuItem() {
 		const { data, error } = await supabaseClient
 			.from('menuitem')
 			.select('itemid, itemname, itemimage, itemprice')
@@ -120,7 +136,7 @@
 		const { data, error } = await supabaseClient
 			.from('cusorder')
 			.select('*')
-			.eq('customerid', customerInfo.customerid)
+			.eq('customerid', customerID)
 			.eq('cartstatus', 'unpaid')
 			.order('ordergenerated', { ascending: false });
 
@@ -130,7 +146,7 @@
 			if (data[0] == null) {
 				//If there's no record of a cart, create a cart
 				const { error } = await supabaseClient.from('cusorder').insert({
-					customerid: customerInfo.customerid,
+					customerid: customerID,
 					ordergenerated: new Date().toLocaleString('en-US', { timeZone: 'Asia/Singapore' }),
 					cartstatus: 'unpaid'
 				});
@@ -141,7 +157,7 @@
 					const { data, error } = await supabaseClient
 						.from('cusorder')
 						.select('*')
-						.eq('customerid', customerInfo.customerid)
+						.eq('customerid', customerID)
 						.eq('cartstatus', 'unpaid')
 						.order('ordergenerated', { ascending: false });
 
@@ -209,7 +225,7 @@
 		<div class="justify-start items-center ml-4 h-[100%] mt-auto mb-auto">
 			<button
 				class="justify-center px-4 py-2 hover:bg-slate-700 bg-slate-800 text-white rounded-lg inline-flex items-center"
-				on:click={() => (window.location.href = '/client/dashboard/customer')}
+				on:click={() => (popupModal = true)}
 			>
 				<ArrowLeftOutline class="h-5 w-5" />
 				<span class="hidden md:flex md:visible ml-2">Vendor List</span>
@@ -242,7 +258,9 @@
 		</div>
 	</div>
 
-	<div class="dark:bg-gray-800 dark:text-white bg-gray-100 p-3 grid grid-cols-[1fr,7fr] gap-3">
+	<div
+		class="dark:bg-gray-800 dark:text-white bg-gray-100 p-3 lg:grid md:grid sm:grid flex flex-col justify-center lg:items-stretch md:items-stretch sm:items-stretch item items-center grid-cols-[1fr,7fr] gap-3"
+	>
 		<div class="h-[200px] w-[220px] relative">
 			<img
 				src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/vendorstore/{vendorInfo.storephoto}"
@@ -279,39 +297,41 @@
 	<div
 		class="menucontainer grid md:grid-cols-2 lg:grid-cols-2 grid-rows-1 place-items-center p-5 gap-5"
 	>
-		{#each vendorMenu as menuItem}
-			<div
-				class="h-[122px] w-[100%] border-black border dark:bg-gray-800 dark:border-gray-900 dark:text-white shadow-md rounded-lg"
-				in:slide
-				out:fade
-			>
-				<div class="flex flex-row h-[120px] w-[100%]">
-					<img
-						src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/menuitemimage/{menuItem.itemimage}"
-						alt=""
-						height="100"
-						width="120"
-						class="align-middle bg-white rounded-l-lg"
-					/>
-					<div class="iteminfo w-[100%] flex flex-col justify-between items-center">
-						<h1 class="text-xl font-bold text-center">{menuItem.itemname}</h1>
+		{#if vendorMenu}
+			{#each vendorMenu as menuItem}
+				<div
+					class="h-[122px] w-[100%] border-black border dark:bg-gray-800 dark:border-gray-900 dark:text-white shadow-md rounded-lg"
+					in:slide
+					out:fade
+				>
+					<div class="flex flex-row h-[120px] w-[100%]">
+						<img
+							src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/menuitemimage/{menuItem.itemimage}"
+							alt=""
+							height="100"
+							width="120"
+							class="align-middle bg-white rounded-l-lg"
+						/>
+						<div class="iteminfo w-[100%] flex flex-col justify-between items-center">
+							<h1 class="text-xl font-bold text-center">{menuItem.itemname}</h1>
 
-						<div class="p-1">
-							<h1 class="text-xl font-semibold text-center">
-								RM {Number(menuItem.itemprice).toFixed(2)}
-							</h1>
-							<Button
-								class="justify-center sm:w-[160px] rounded-full"
-								on:click={() => goToItemPage(menuItem.itemid)}
-								href="#"
-							>
-								Add to cart
-							</Button>
+							<div class="p-1">
+								<h1 class="text-xl font-semibold text-center">
+									RM {Number(menuItem.itemprice).toFixed(2)}
+								</h1>
+								<Button
+									class="justify-center lg:w-[160px] lg:text-[16px] md:w-[160px] md:text-[16px] sm:w-[160px] sm:text-[16px] w-100px text-[12px] rounded-full"
+									on:click={() => goToItemPage(menuItem.itemid)}
+									href="#"
+								>
+									Add to cart
+								</Button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		{/if}
 	</div>
 </div>
 
