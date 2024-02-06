@@ -218,7 +218,7 @@
 
 	//Validation
 	function validateaddress() {
-		const isValid = /^[a-zA-Z0-9-,. ()\\\\]+$/.test(deliveryaddress);
+		const isValid = /^[a-zA-Z0-9-,. ()/]+$/.test(deliveryaddress);
 		if (!deliveryaddress || !isValid) {
 			alert('Please enter an address for delivery purposes.');
 			return false;
