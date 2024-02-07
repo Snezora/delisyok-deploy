@@ -4,7 +4,7 @@
 	import { hidden2 } from "../../../../stores/sidebar.js";
 	import SidebarVendor from "../SidebarVendor.svelte";
 	import { sineIn } from "svelte/easing";
-	import { ArrowRightOutline, CogOutline, ShoppingCartSolid } from "flowbite-svelte-icons";
+	import { ArrowRightOutline, CogOutline, ExclamationCircleOutline, ShoppingCartSolid } from "flowbite-svelte-icons";
 	import { PenToSquareRegular, TrashCanRegular } from "svelte-awesome-icons";
 	import { supabaseClient } from "$lib/supabase";
 	import { onMount } from "svelte";
@@ -185,6 +185,47 @@
         }
     }
 
+    let popupModal = false;
+    /**
+	 * @type {never[] | null}
+	 */
+    let selectedSale = [];
+    /**
+	 * @type {any[]}
+	 */
+    let orderItems = [];
+
+    async function togglePopupModal(saleid) {
+        popupModal = !popupModal;
+
+        let selectedOrderID;
+
+        const {data, error} = await supabaseClient
+        .from('sale')
+        .select('*, cusorder(*, orderitem(*))')
+        .eq('saleid', saleid)
+        .single();
+
+        if (error) {
+            console.error('Error fetching order details: ', error);
+        } else {
+          selectedSale = data;
+          selectedOrderID = data.cusorder.orderid;
+
+          const {data: orderdetails, error: orderdetailserror} = await supabaseClient
+          .from('orderitem')
+          .select('*')
+          .eq('orderid', selectedOrderID);
+
+          if (orderdetailserror) {
+              console.error('Error fetching order details: ', orderdetailserror);
+          } else {
+            orderItems = orderdetails;
+          }
+          console.log(selectedSale);
+        }
+    }
+
 </script>
 
 <SpinnerSet />
@@ -237,7 +278,7 @@
                             <a on:click={() => rejectNewOrder(order.saleid)} class="font-medium text-red-600 hover:underline dark:text-red-600">Reject</a>
                           </TableBodyCell>
                           <TableBodyCell>
-                            <a href="/client/orders/{order.cusorder.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
+                            <a on:click={() => togglePopupModal(order.saleid)} class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
                           </TableBodyCell>
                         </TableBodyRow>
                       {/each}
@@ -279,7 +320,7 @@
                             <a on:click={() => completeNewOrder(order.saleid)} class="font-medium text-green-600 hover:underline dark:text-green-500">Complete</a>
                           </TableBodyCell>
                           <TableBodyCell>
-                            <a href="/client/orders/{order.cusorder.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
+                            <a on:click={() => togglePopupModal(order.saleid)} class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
                           </TableBodyCell>
                         </TableBodyRow>
                       {/each}
@@ -315,7 +356,7 @@
                           <TableBodyCell>{order.cusorder.customer.customername}</TableBodyCell>
                           <TableBodyCell>{order.cusorder.foodtotalprice}</TableBodyCell>
                           <TableBodyCell>
-                            <a href="/client/orders/{order.cusorder.orderid}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
+                            <a on:click={() => togglePopupModal(order.saleid)} class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
                           </TableBodyCell>
                         </TableBodyRow>
                       {/each}
@@ -340,6 +381,28 @@
       </Drawer>
     </div>    
     <SidebarVendor class=" order-1"/>
+
+    <Modal bind:open={popupModal} size="xs" autoclose>
+      {#if selectedSale != null}
+      <div class="text-center">
+        <h3 class="mb-1 text-lg font-normal text-gray-500 dark:text-gray-400">
+          Sale ID: {selectedSale.saleid}
+        </h3>
+        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+          These are the food items:
+        </h3>
+        <hr class="border-black w-[100%] mt-2 mb-2">
+      {#each orderItems as food}
+      <div class="text flex flex-col gap-2">
+        <p>Food ID: {food.itemid}</p>
+        <p>Food Name: {food.itemname}</p>
+        <p>Food Remark: {food.remark}</p>
+      </div>
+      <hr class="border-black w-[100%] mt-2 mb-2">
+      {/each}
+      </div>
+      {/if}
+    </Modal>
 
 </div>
 
