@@ -128,6 +128,7 @@
 		if (error) {
 			console.error('Error creating new cart: ', error);
 		} else {
+			//Not suposed to be triggered but in case customer open old link.
 			if (data[0] == null) {
 				//If there's no record of a cart, create a cart
 				const { error } = await supabaseClient.from('cusorder').insert({

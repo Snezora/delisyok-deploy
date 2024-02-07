@@ -239,7 +239,7 @@
 					/>
 				</svelte:fragment>
 			</SidebarItem>
-			<SidebarItem label="Sign Out" on:click={signOut}>
+			<SidebarItem label="Logout" on:click={signOut}>
 				<svelte:fragment slot="icon">
 					<ArrowRightFromBracketSolid
 						class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white icon-container"
