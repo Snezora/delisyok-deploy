@@ -8,8 +8,8 @@
     <div class="seperate grid sm:grid-row-1 md:grid-cols-2">
         <img src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/publicbucket/foodontable.png?t=2024-02-06T15%3A54%3A54.599Z" alt="food on table." class="max-w-full h-auto justify-self-center">
         <div class="textcontainer justify-self-center grid grid-flow-row p-44 gap-10 mb-5">
-            <Button href="/auth/login" class="w-[100%] self-center max-h-[100px] h-[100px] text-5xl">Register</Button>
-            <Button href="/auth/register" class="w-[100%] self-center max-h-[100px] h-[100px] text-5xl">Login</Button>
+            <Button href="/auth/register" class="w-[100%] self-center max-h-[100px] h-[100px] text-5xl">Register</Button>
+            <Button href="/auth/login" class="w-[100%] self-center max-h-[100px] h-[100px] text-5xl">Login</Button>
         </div>
     </div>
 </div>

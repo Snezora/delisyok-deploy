@@ -1,5 +1,5 @@
 <script>
-	import { Drawer, CloseButton, Accordion, AccordionItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
+	import { Drawer, CloseButton, Accordion, AccordionItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button } from "flowbite-svelte";
 	import { hidden2 } from "../../../../stores/sidebar";
 	import SidebarRider from "../SidebarRider.svelte";
 	import Sidebar from "../../../../Sidebar.svelte";
@@ -66,7 +66,7 @@
     async function fetchCompletedOrders(){
         const { data, error } = await supabaseClient
         .from('sale')
-        .select('*, cusorder(*)')
+        .select('*, cusorder(*, customer(*)), vendor(*)')
         .eq('riderid', riderid)
         .in('deliverystatus', ['completed'])
 
@@ -119,8 +119,8 @@
         <div class="mainmaincontainer w-[100%] flex flex-col p-6">
             <div class="pasttitle text-xl font-bold">Past Orders:</div>
             <div class="subtitle">Click on each order to view details</div>
-            <div class="pastorders sm:w-[100%] lg:w-[70%] lg:self-center my-6  p-0">
-                <Table hoverable={true} color="red">
+            <div class="pastorders w-[100%] my-6 p-0">
+                <!-- <Table hoverable={true} color="red">
                     <TableHead>
                       <TableHeadCell>Order ID</TableHeadCell>
                       <TableHeadCell>Time Created</TableHeadCell>
@@ -133,7 +133,49 @@
                             </TableBodyRow>
                         {/each}
                     </TableBody>
-                  </Table>
+                  </Table> -->
+                  <div class="ordercontainer flex-1 p-6 min-w-[350px]">
+                    {#if completedOrders?.length > 0}
+                    <Accordion flush class="flex flex-col">
+                        {#each completedOrders as order}
+                            <AccordionItem class="mt-6 ">
+                            <span slot="header" class="flex justify-between w-[100%] h-[100%]">
+                                <div class="text flex items-center lg:text-[18px] text-[16px] dark:text-white">{order.cusorder.customer.customername} ㅤㅤ Order ID: {order.orderid}</div>
+                            </span>
+                            <div class="vendoraddress mb-4 flex flex-col w-[100%] justify-between">
+                                <p class="pb-4 text-gray-500 flex align-middle dark:text-gray-200">Receipt Generated: {formatDate(order.receiptgenerated)}</p>
+                                <p class="pb-4 text-gray-500 flex align-middle dark:text-gray-200">Vendor Name: {order.vendor.businessname}</p>
+                            </div>
+                            <hr />
+                            <div class="customeraddress mt-4 flex flex-col w-[100%] justify-between">
+                                <p class="pb-4 text-gray-500 flex align-middle dark:text-gray-200">Vendor Address: 
+                                    {#if order.vendor.vendoraddressl2}
+                                    {order.vendor.vendoraddressl1}, {order.vendor.vendoraddressl2}, 
+                                    {:else}
+                                    {order.vendor.vendoraddressl1},
+                                    {/if}
+                                    {order.vendor.vendoraddresscity}, {order.vendor.vendoraddressposcode} {order.vendor.vendoraddressstate}
+                                </p>
+                                <p class="pb-4 text-gray-500 dark:text-gray-200">Delivery Address: 
+                                    <!-- {#if order.cusorder.customer.customeraddressl2}
+                                    {order.cusorder.customer.customeraddressl1} {order.cusorder.customer.customeraddressl2}, 
+                                    {:else}
+                                    {order.cusorder.customer.customeraddressl1},
+                                    {/if}
+                                    {order.cusorder.customer.customeraddresscity}, {order.cusorder.customer.customeraddressposcode} {order.cusorder.customer.customeraddressstate} -->
+                                    {order.deliveryaddress}
+                                </p>
+                                <!-- <Button color="blue" on:click={() => toMaps(order.cusorder.customer.customeraddressl1, order.cusorder.customer.customeraddressl2, order.cusorder.customer.customeraddresscity, order.cusorder.customer.customeraddressposcode, order.cusorder.customer.customeraddressstate)}>Navigate</Button> -->    
+                            </div>
+                            </AccordionItem>
+                        {/each}
+                      </Accordion>
+                    {:else}
+                      <div class="text-xl font-bold dark:text-white">
+                        No Past Orders at the Moment.
+                      </div>
+                    {/if}
+                </div>
             </div>
         </div>
     </div>
