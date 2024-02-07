@@ -187,7 +187,7 @@
 						<span
 							class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"
 						></span>
-						<span class="relative align-middle">Sign in</span>
+						<span class="relative align-middle">Login</span>
 					</a>
 				{:else if $page.url.pathname == '/auth/login'}
 					<p></p>
@@ -223,7 +223,7 @@
 							>
 						{/if}
 						<DropdownDivider />
-						<DropdownItem on:click={logout}>Sign out</DropdownItem>
+						<DropdownItem on:click={logout}>Log out</DropdownItem>
 					</Dropdown>
 				{/if}
 				<DarkMode
