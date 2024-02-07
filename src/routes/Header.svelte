@@ -207,15 +207,15 @@
 						</DropdownHeader>
 						{#if isVendor}
 							<DropdownItem href="/client/dashboard/vendor" data-sveltekit-reload
-								>Dashboard</DropdownItem
+								>Vendor Dashboard</DropdownItem
 							>
 						{:else if isCustomer}
 							<DropdownItem href="/client/dashboard/customer" data-sveltekit-reload
-								>Dashboard</DropdownItem
+								>Customer Dashboard</DropdownItem
 							>
 						{:else if isRider}
 							<DropdownItem href="/client/dashboard/rider" data-sveltekit-reload
-								>Dashboard</DropdownItem
+								>Delivery Rider Dashboard</DropdownItem
 							>
 						{:else if isSysMan}
 							<DropdownItem href="/client/dashboard/manager" data-sveltekit-reload
