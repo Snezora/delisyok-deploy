@@ -1,19 +1,16 @@
 <script>
 	// @ts-nocheck
 
-	import { Label, Input, Button, Checkbox, Popover, Select } from 'flowbite-svelte';
+	import { Label, Input, Button, Select } from 'flowbite-svelte';
 	import {
 		PhoneSolid,
 		UserSolid,
 		EnvelopeSolid,
 		LockSolid,
 		HomeSolid,
-		CheckOutline,
-		CloseOutline
 	} from 'flowbite-svelte-icons';
 	import { CakeCandlesSolid } from 'svelte-awesome-icons';
 	import { supabaseClient } from '$lib/supabase';
-	import { navigate } from 'svelte-routing';
 
 	let selectedStates;
 	let states = [
