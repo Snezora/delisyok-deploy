@@ -120,8 +120,14 @@
 
 	//Validation
 	function validateaddress() {
-		if (!customeraddressl1 || !customeraddressl1 || !customeraddresscity || !customeraddressstate) {
+		const isValidCity = /^[a-zA-Z ]+$/.test(customeraddresscity);
+		const isValidL1 = /^[a-zA-Z0-9-,. ()/]+$/.test(customeraddressl1);
+		const isValidL2 = /^[a-zA-Z0-9-,. ()/]+$/.test(customeraddressl2);
+		if (!customeraddressl1 || !customeraddresscity || !isValidL1 || !isValidL2) {
 			alert('Please enter an address for delivery purposes.');
+			return false;
+		} else if (!isValidCity) {
+			alert('Please enter a valid city for delivery purposes.');
 			return false;
 		}
 		return true;
