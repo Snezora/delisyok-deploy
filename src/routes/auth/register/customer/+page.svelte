@@ -1,17 +1,19 @@
 <script>
 	// @ts-nocheck
-
 	import { Label, Input, Button, Select } from 'flowbite-svelte';
 	import {
 		PhoneSolid,
 		UserSolid,
 		EnvelopeSolid,
 		LockSolid,
-		HomeSolid,
+		HomeSolid
 	} from 'flowbite-svelte-icons';
 	import { CakeCandlesSolid } from 'svelte-awesome-icons';
 	import { supabaseClient } from '$lib/supabase';
 
+	/**
+	 * @type {any}
+	 */
 	let selectedStates;
 	let states = [
 		{ value: 'Johor', name: 'Johor' },
@@ -43,14 +45,41 @@
 	let password;
 	let showPassword = false;
 	let showcPassword = false;
+	/**
+	 * @type {any}
+	 */
 	let passwordconfirm;
+	/**
+	 * @type {any}
+	 */
 	let customername;
+	/**
+	 * @type {any}
+	 */
 	let customerhp;
+	/**
+	 * @type {any}
+	 */
 	let customerdob;
+	/**
+	 * @type {any}
+	 */
 	let customeraddressl1;
+	/**
+	 * @type {any}
+	 */
 	let customeraddressl2;
+	/**
+	 * @type {any}
+	 */
 	let customeraddresscity;
+	/**
+	 * @type {any}
+	 */
 	let customeraddressposcode;
+	/**
+	 * @type {any}
+	 */
 	let customeraddressstate;
 	let isCustomer = true;
 
@@ -130,7 +159,7 @@
 				loading = false;
 			}
 		} else {
-			if(password != passwordconfirm){
+			if (password != passwordconfirm) {
 				alert('Password does not match');
 			}
 			loading = false;
@@ -165,8 +194,8 @@
 		return isValidHp;
 	}
 
-	function validateState(){
-		if(customeraddressstate === ""){
+	function validateState() {
+		if (customeraddressstate === '') {
 			alert('Please choose a state.');
 			return false;
 		}
@@ -196,7 +225,7 @@
 		if (!customeraddressl1 || !customeraddresscity || !isValidL1 || !isValidL2) {
 			alert('Please enter an address for delivery purposes.');
 			return false;
-		}else if(!isValidCity){
+		} else if (!isValidCity) {
 			alert('Please enter a valid city for delivery purposes.');
 			return false;
 		}
@@ -228,6 +257,7 @@
 								placeholder="name@gmail.com"
 								required
 								bind:value={email}
+								maxlength="255"
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -347,6 +377,7 @@
 								autocomplete="street-address"
 								required
 								bind:value={customeraddressl1}
+								maxlength="100"
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -361,6 +392,7 @@
 								name="customeraddressl2"
 								placeholder="Street"
 								bind:value={customeraddressl2}
+								maxlength="100"
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -377,6 +409,7 @@
 								autocomplete="city"
 								required
 								bind:value={customeraddresscity}
+								maxlength="36"
 								class="w-[325px] text-black email-input dark:bg-[#ECECEC]"
 								color="white"
 							>
