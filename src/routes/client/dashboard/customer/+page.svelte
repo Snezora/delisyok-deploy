@@ -69,7 +69,6 @@
 		return null;
 	}
 
-
 	async function fetchCustomerName() {
 		const { data, error } = await supabaseClient
 			.from('customer')
