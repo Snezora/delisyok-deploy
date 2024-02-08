@@ -220,8 +220,8 @@
 
 	function validateaddress() {
 		const isValidCity = /^[a-zA-Z ]+$/.test(customeraddresscity);
-		const isValidL1 = /^[a-zA-Z0-9-,. ]+$/.test(customeraddressl1);
-		const isValidL2 = /^[a-zA-Z0-9-,. ]+$/.test(customeraddressl2);
+		const isValidL1 = /^[a-zA-Z0-9-,. ()/]+$/.test(customeraddressl1);
+		const isValidL2 = /^[a-zA-Z0-9-,. ()/]+$/.test(customeraddressl2);
 		if (!customeraddressl1 || !customeraddresscity || !isValidL1 || !isValidL2) {
 			alert('Please enter an address for delivery purposes.');
 			return false;
