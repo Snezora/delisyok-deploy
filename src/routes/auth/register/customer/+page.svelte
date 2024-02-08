@@ -1,6 +1,5 @@
 <script>
-	// @ts-nocheck
-
+// @ts-nocheck
 	import { Label, Input, Button, Select } from 'flowbite-svelte';
 	import {
 		PhoneSolid,
@@ -43,14 +42,41 @@
 	let password;
 	let showPassword = false;
 	let showcPassword = false;
+	/**
+	 * @type {any}
+	 */
 	let passwordconfirm;
+	/**
+	 * @type {any}
+	 */
 	let customername;
+	/**
+	 * @type {any}
+	 */
 	let customerhp;
+	/**
+	 * @type {any}
+	 */
 	let customerdob;
+	/**
+	 * @type {any}
+	 */
 	let customeraddressl1;
+	/**
+	 * @type {any}
+	 */
 	let customeraddressl2;
+	/**
+	 * @type {any}
+	 */
 	let customeraddresscity;
+	/**
+	 * @type {any}
+	 */
 	let customeraddressposcode;
+	/**
+	 * @type {any}
+	 */
 	let customeraddressstate;
 	let isCustomer = true;
 
