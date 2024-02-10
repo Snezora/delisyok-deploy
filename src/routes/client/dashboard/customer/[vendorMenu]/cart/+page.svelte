@@ -78,7 +78,7 @@
 
 		console.log('Fetch Test: Cart Data');
 		orderid = await fetchCartID();
-		console.log(cart);
+		//console.log(cart);
 
 		//console.log('Initialisation Test: Populating Variable');
 		//orderid = cart.orderid;
@@ -105,7 +105,7 @@
 
 		console.log('Fetch Test: Cart Data');
 		updatedfoodtotalprice = await fetchCartPrice();
-		console.log(cart);
+		//console.log(cart);
 
 		console.log(updatedfoodtotalprice);
 		console.log('Render Test: Completed');
@@ -197,7 +197,7 @@
 		const { data, error } = await supabaseClient
 			.from('orderitem')
 			.select('*')
-			.eq('orderid', cart.orderid);
+			.eq('orderid', orderid);
 
 		if (error) {
 			console.error('Error creating new cart: ', error);
