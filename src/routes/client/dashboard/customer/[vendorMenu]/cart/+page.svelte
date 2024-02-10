@@ -78,7 +78,7 @@
 
 		console.log('Fetch Test: Cart Data');
 		orderid = await fetchCartID();
-		console.log(orderid);
+		console.log(cart);
 
 		//console.log('Initialisation Test: Populating Variable');
 		//orderid = cart.orderid;
@@ -95,12 +95,12 @@
 			});
 		}
 
-		console.log('pricetotal: ' + pricetotal);
+		console.log(pricetotal);
 		salestax = (pricetotal * 0.08).toFixed(2);
 		console.log(salestax);
 		riderComm = 5;
-		//ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
-		//console.log(ordertotalprice);
+		ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
+		console.log(ordertotalprice);
 		uploadPrice();
 
 		console.log('Fetch Test: Cart Data');
@@ -108,11 +108,6 @@
 		console.log(cart);
 
 		console.log(updatedfoodtotalprice);
-		//salestax = (updatedfoodtotalprice * 0.08).toFixed(2);
-		//console.log('sales tax' + salestax);
-		//riderComm = 5;
-		ordertotalprice = (updatedfoodtotalprice + riderComm + parseFloat(salestax)).toFixed(2);
-		console.log('ordertotalprice: ' + ordertotalprice);
 		console.log('Render Test: Completed');
 	});
 
