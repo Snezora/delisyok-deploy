@@ -40,10 +40,6 @@
 	let pricelist = [];
 	let pricetotal = 0;
 	/**
-	 * @type {any}
-	 */
-	let updatedfoodtotalprice;
-	/**
 	 * @type {number}
 	 */
 	let riderComm;
@@ -77,12 +73,12 @@
 		console.log(vendorData);
 
 		console.log('Fetch Test: Cart Data');
-		orderid = await fetchCartID();
-		//console.log(cart);
+		cart = await fetchCart();
+		console.log(cart);
 
-		//console.log('Initialisation Test: Populating Variable');
-		//orderid = cart.orderid;
-		//console.log(orderid);
+		console.log('Initialisation Test: Populating Variable');
+		orderid = cart.orderid;
+		console.log(orderid);
 
 		console.log('Fetch Test: Order Items Array');
 		orderItems = await fetchItems();
@@ -103,11 +99,7 @@
 		console.log(ordertotalprice);
 		uploadPrice();
 
-		console.log('Fetch Test: Cart Data');
-		updatedfoodtotalprice = await fetchCartPrice();
-		//console.log(cart);
-
-		console.log(updatedfoodtotalprice);
+		console.log(cart.foodtotalprice);
 		console.log('Render Test: Completed');
 	});
 
@@ -163,10 +155,10 @@
 		}
 	}
 
-	async function fetchCartID() {
+	async function fetchCart() {
 		const { data, error } = await supabaseClient
 			.from('cusorder')
-			.select('orderid')
+			.select('*')
 			.eq('customerid', customerData.customerid)
 			.eq('cartstatus', 'unpaid')
 			.order('ordergenerated', { ascending: false });
@@ -178,26 +170,11 @@
 		}
 	}
 
-	async function fetchCartPrice() {
-			const { data, error } = await supabaseClient
-				.from('cusorder')
-				.select('foodtotalprice')
-				.eq('customerid', customerData.customerid)
-				.eq('cartstatus', 'unpaid')
-				.order('ordergenerated', { ascending: false });
-	
-			if (error) {
-				console.error('Error creating new cart: ', error);
-			} else {
-				return data[0];
-			}
-		}
-
 	async function fetchItems() {
 		const { data, error } = await supabaseClient
 			.from('orderitem')
 			.select('*')
-			.eq('orderid', orderid);
+			.eq('orderid', cart.orderid);
 
 		if (error) {
 			console.error('Error creating new cart: ', error);
