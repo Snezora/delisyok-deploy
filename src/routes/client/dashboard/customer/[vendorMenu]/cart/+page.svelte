@@ -99,6 +99,7 @@
 		console.log(ordertotalprice);
 		uploadPrice();
 
+		console.log(cart.foodtotalprice);
 		console.log('Render Test: Completed');
 	});
 
@@ -133,7 +134,7 @@
 	async function uploadPrice() {
 		const { error } = await supabaseClient
 			.from('cusorder')
-			.update({ foodtotalprice: ordertotalprice })
+			.update({ foodtotalprice: pricetotal })
 			.eq('orderid', orderid);
 
 		if (error) {
