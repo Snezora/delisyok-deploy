@@ -108,7 +108,7 @@
 		console.log(cart);
 
 		console.log(updatedfoodtotalprice);
-		salestax = (pricetotal * 0.08).toFixed(2);
+		salestax = (updatedfoodtotalprice * 0.08).toFixed(2);
 		console.log('sales tax' + salestax);
 		riderComm = 5;
 		ordertotalprice = (updatedfoodtotalprice + riderComm + parseFloat(salestax)).toFixed(2);
