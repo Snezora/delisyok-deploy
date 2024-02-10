@@ -92,16 +92,16 @@
 		}
 
 		console.log(pricetotal);
-		//salestax = (pricetotal * 0.08).toFixed(2);
+		salestax = (pricetotal * 0.08).toFixed(2);
 		console.log(salestax);
 		riderComm = 5;
-		//ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
+		ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
 		console.log(ordertotalprice);
 		uploadPrice();
 
-		console.log(cart.foodtotalprice);
-		salestax = (cart.foodtotalprice * 0.08).toFixed(2);
-		ordertotalprice = (cart.foodtotalprice + riderComm + parseFloat(salestax)).toFixed(2);
+		//console.log(cart.foodtotalprice);
+		//salestax = (cart.foodtotalprice * 0.08).toFixed(2);
+		//ordertotalprice = (cart.foodtotalprice + riderComm + parseFloat(salestax)).toFixed(2);
 		console.log('Render Test: Completed');
 	});
 
