@@ -99,10 +99,6 @@
 		console.log(ordertotalprice);
 		uploadPrice();
 
-		console.log('Fetch Test: Cart Data');
-		cart = await fetchCart();
-		console.log(cart);
-
 		console.log(cart.foodtotalprice);
 		salestax = (cart.foodtotalprice * 0.08).toFixed(2);
 		ordertotalprice = (cart.foodtotalprice + riderComm + parseFloat(salestax)).toFixed(2);
