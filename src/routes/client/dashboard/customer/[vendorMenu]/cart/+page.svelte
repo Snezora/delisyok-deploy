@@ -338,7 +338,7 @@
 			</div>
 		</div>
 		<div class="bottom p-[4rem] flex flex-col items-end dark:text-white">
-			<div class="totalprice text-[18px]">Subtotal: RM {Number(cart.foodtotalprice).toFixed(2)}</div>
+			<div class="totalprice text-[18px]">Subtotal: RM {Number(pricetotal).toFixed(2)}</div>
 			<div class="text-[18px]">Delivery fee: RM {Number(riderComm).toFixed(2)}</div>
 			<div class="tax text-[18px]">Sales Tax (8%): RM {Number(salestax).toFixed(2)}</div>
 			<div class="text-xl font-bold mb-3">Total: RM {Number(ordertotalprice).toFixed(2)}</div>
