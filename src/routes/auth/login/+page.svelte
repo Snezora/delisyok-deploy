@@ -146,8 +146,8 @@
 	//   }
 </script>
 
-<div class="flex flex-wrap container-full bg-pdark-100 h-[100%]">
-	<img class="page-image" src="https://via.placeholder.com/846x1024" alt="placeholder" />
+<div class="flex flex-wrap container-full bg-pdark-100 h-[100%] min-h-[100vh]">
+	<img class="page-image" src="https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/publicbucket/floatingtable" alt="placeholder" />
 	<div
 		class=" flex flex-col items-center justify-normal card-holder bg-zinc-100 dark:bg-pdark-100 pt-[50px] pb-[50px] h-auto"
 	>
