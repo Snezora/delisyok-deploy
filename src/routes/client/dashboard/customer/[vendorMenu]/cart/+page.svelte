@@ -78,7 +78,7 @@
 
 		console.log('Fetch Test: Cart Data');
 		orderid = await fetchCartID();
-		console.log(cart);
+		console.log(orderid);
 
 		//console.log('Initialisation Test: Populating Variable');
 		//orderid = cart.orderid;
