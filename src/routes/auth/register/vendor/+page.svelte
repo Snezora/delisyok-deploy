@@ -52,10 +52,10 @@
 	let sundayToggle;
 
 	let loading = false;
-		/**
+	/**
 	 * @type {any}
 	 */
-	 let email;
+	let email;
 	/**
 	 * @type {any}
 	 */
@@ -75,101 +75,198 @@
 
 	function createDaysArray() {
 		if (mondayToggle) {
-			businessopday.push("Monday");
+			businessopday.push('Monday');
 		}
 		if (tuesdayToggle) {
-			businessopday.push("Tuesday");
+			businessopday.push('Tuesday');
 		}
 		if (wednesdayToggle) {
-			businessopday.push("Wednesday");
+			businessopday.push('Wednesday');
 		}
 		if (thursdayToggle) {
-			businessopday.push("Thursday");
+			businessopday.push('Thursday');
 		}
 		if (fridayToggle) {
-			businessopday.push("Friday");
+			businessopday.push('Friday');
 		}
 		if (saturdayToggle) {
-			businessopday.push("Saturday");
+			businessopday.push('Saturday');
 		}
 		if (sundayToggle) {
-			businessopday.push("Sunday");
+			businessopday.push('Sunday');
 		}
 
 		return businessopday;
 	}
 
-	const handleSignup = async() => {
-		try {
-			loading = true;
-			console.log(email);
+	const handleSignup = async () => {
+		if (
+			password == passwordconfirm &&
+			isValidName() &&
+			isValidTime() &&
+			isValidRegNo() &&
+			validatePhoneNumber() &&
+			validateDOB() &&
+			validateaddress() &&
+			validatePoscode() &&
+			validateState()
+		) {
+			try {
+				loading = true;
+				console.log(email);
 
-			const {error} = await supabaseClient.auth.signUp({
-				email,
-				password
-			})
-          
-			if (error) throw error;
+				const { error } = await supabaseClient.auth.signUp({
+					email,
+					password
+				});
 
-			const {error: SigninError} = await supabaseClient.auth.signInWithPassword({
-				email,
-				password
-			})
+				if (error) throw error;
 
-			if (SigninError) throw SigninError;
+				const { error: SigninError } = await supabaseClient.auth.signInWithPassword({
+					email,
+					password
+				});
 
-			const user = await supabaseClient.auth.getUser();
-			const user_id = user.data.user.id;
+				if (SigninError) throw SigninError;
 
-			createDaysArray();
-			const { error: vendorError } = await supabaseClient
-			.from('vendor')
-			.insert([
-				{
-					user_id,
-					vendoremail: email,
-					vendorpicname,
-					vendorhp,
-					vendoraddressl1,
-					vendoraddressl2,
-					vendoraddresscity,
-					vendoraddressposcode,
-					vendoraddressstate,
-					businessname,
-					businessstarttime,
-					vendorkkmlistingno,
-					businessclosingtime,
-					businessopday
-				},
-			])
-			.select();
+				const user = await supabaseClient.auth.getUser();
+				const user_id = user.data.user.id;
 
-			if (vendorError) {
-				console.log(vendorError);
-				throw vendorError;
+				createDaysArray();
+				const { error: vendorError } = await supabaseClient
+					.from('vendor')
+					.insert([
+						{
+							user_id,
+							vendoremail: email,
+							vendorpicname,
+							vendorhp,
+							vendoraddressl1,
+							vendoraddressl2,
+							vendoraddresscity,
+							vendoraddressposcode,
+							vendoraddressstate,
+							businessname,
+							businessstarttime,
+							vendorkkmlistingno,
+							businessclosingtime,
+							businessopday
+						}
+					])
+					.select();
+
+				if (vendorError) {
+					console.log(vendorError);
+					throw vendorError;
+				}
+				alert('Sign up successful!');
+				if (typeof window !== 'undefined') {
+					window.location.href = '/auth/login';
+				}
+			} catch (error) {
+				console.error(error);
+				alert(error);
+			} finally {
+				loading = false;
 			}
-			alert('Sign up successful!');
-			if (typeof window !== 'undefined') {
-                window.location.href = '/auth/login';
-            }
+		}
+	};
 
-		} catch (error) {
-			console.error(error);
-			alert(error);
-		} finally {
-			loading = false;
-
+	function isValidName() {
+		if (!vendorpicname || vendorpicname.length < 3) {
+			alert(
+				'Please enter a valid name which only consist of alphabets and space. The name must be at least 3 letters.'
+			);
+			return false;
 		}
 
+		const isValidName = /^[a-zA-Z ]+$/.test(vendorpicname);
+		if (!isValidName) {
+			alert(
+				'Please enter a valid name which only consist of alphabets and space. The name must be at least 3 letters.'
+			);
+		}
+		return isValidName;
+	}
+
+	function isValidRegNo() {
+		if (!vendorkkmlistingno) {
+			alert('Please enter a valid registration number.');
+			return false;
+		} else {
+			const regNoPattern = /^KKM-[a-zA-Z]{3}-\d{2}-\d{2}-\d{4}$/;
+			if (!regNoPattern.test(vendorkkmlistingno)) {
+				alert('Please enter a valid registration number in the format KKM-XXX-##-##-####.');
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	function isValidTime() {
+		if (!businessstarttime || !businessclosingtime) {
+			alert('Please enter a valid time.');
+			return false;
+		} else if (businessstarttime >= businessclosingtime) {
+			alert('Please enter a valid time.');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function validatePhoneNumber() {
+		const isValidHp = /^\d{9,11}$/.test(vendorhp);
+		if (!isValidHp) {
+			alert('Please enter a valid phone number.');
+		}
+		return isValidHp;
+	}
+
+	function validateState() {
+		if (vendoraddressstate === '') {
+			alert('Please choose a state.');
+			return false;
+		}
+		return true;
+	}
+
+	function validatePoscode() {
+		const isValidPoscode = /^\d{5}$/.test(vendoraddressposcode);
+		if (!isValidPoscode) {
+			alert('Please enter a valid poscode.');
+		}
+		return isValidPoscode;
+	}
+
+	function validateDOB() {
+		if (!vendordob) {
+			alert('Please enter a date of birth.');
+			return false;
+		}
+		return true;
+	}
+
+	function validateaddress() {
+		const isValidCity = /^[a-zA-Z ]+$/.test(vendoraddresscity);
+		const isValidL1 = /^[a-zA-Z0-9-,. ()/]+$/.test(vendoraddressl1);
+		const isValidL2 = /^[a-zA-Z0-9-,. ()/]+$/.test(vendoraddressl2);
+		if (!vendoraddressl1 || !vendoraddresscity || !isValidL1 || !isValidL2) {
+			alert('Please enter an address for delivery purposes.');
+			return false;
+		} else if (!isValidCity) {
+			alert('Please enter a valid city for delivery purposes.');
+			return false;
+		}
+		return true;
 	}
 </script>
 
 <div
 	class="card-container min-h-[100vh] min-w-[100%] flex justify-center w-[100%] bg-white dark:bg-pdark-100 container-fluid"
 >
-	<div
-		class="card flex flex-row rounded-[20px] bg-transparent h-[75%] w-[90%] py-[20px] mb-6"
-	>
+	<div class="card flex flex-row rounded-[20px] bg-transparent h-[75%] w-[90%] py-[20px] mb-6">
 		<div class="flex-1">
 			<form action="" class="flex flex-col mt-5 gap-4 px-0">
 				<div
@@ -268,7 +365,7 @@
 								type="text"
 								name="businessName"
 								placeholder="DeliSyok Sdn. Bhd."
-								autocomplete = "off"
+								autocomplete="off"
 								required
 								bind:value={businessname}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
@@ -334,7 +431,9 @@
 
 						<Label>
 							<span class=" dark:text-white">Business Operation Day(s)</span>
-							<div class="days-container border border-gray-700 rounded-[10px] p-5 space-y-3 dark:bg-[#ECECEC] ">
+							<div
+								class="days-container border border-gray-700 rounded-[10px] p-5 space-y-3 dark:bg-[#ECECEC]"
+							>
 								<Toggle class="dark:text-black" bind:checked={mondayToggle}>Monday</Toggle>
 								<Toggle class="dark:text-black" bind:checked={tuesdayToggle}>Tuesday</Toggle>
 								<Toggle class="dark:text-black" bind:checked={wednesdayToggle}>Wednesday</Toggle>
@@ -424,7 +523,9 @@
 					</div>
 				</div>
 				<div class=" flex flex-col items-center">
-					<Button type="submit" class="btn-primary w-[325px] mt-9" on:click={handleSignup}>Register</Button>
+					<Button type="submit" class="btn-primary w-[325px] mt-9" on:click={handleSignup}
+						>Register</Button
+					>
 					<p class="text-xs font-medium text-gray-500 dark:text-gray-300 mt-2">
 						By registering, you agree to the <a href="../../" class="underline"
 							>Terms & Conditions</a

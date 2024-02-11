@@ -1,7 +1,16 @@
 <script>
 	// @ts-nocheck
 
-	import { Label, Input, Button, Checkbox, Popover, Select, Toggle, Fileupload } from 'flowbite-svelte';
+	import {
+		Label,
+		Input,
+		Button,
+		Checkbox,
+		Popover,
+		Select,
+		Toggle,
+		Fileupload
+	} from 'flowbite-svelte';
 	import {
 		PhoneSolid,
 		UserSolid,
@@ -71,91 +80,159 @@
 	let licensephoto;
 	let photourl;
 
-	const handleSignup = async() => {
-		try {
-			loading = true;
-			console.log(email);
+	const handleSignup = async () => {
+		if (
+			password == passwordconfirm &&
+			isValidName() &&
+			validatePhoneNumber() &&
+			validateDOB() &&
+			validateaddress() &&
+			validatePoscode() &&
+			validateState()
+		) {
+			try {
+				loading = true;
+				console.log(email);
 
-			const {error} = await supabaseClient.auth.signUp({
-				email,
-				password
-			})
-          
-			if (error) throw error;
+				const { error } = await supabaseClient.auth.signUp({
+					email,
+					password
+				});
 
-			const {error: SigninError} = await supabaseClient.auth.signInWithPassword({
-				email,
-				password
-			})
+				if (error) throw error;
 
-			if (SigninError) throw SigninError;
+				const { error: SigninError } = await supabaseClient.auth.signInWithPassword({
+					email,
+					password
+				});
 
-			const file = licensephoto[0];
-			const fileExt = file.name.split('.').pop();
-			const filePath = `riderlicenseimage/${Math.random()}.${fileExt}`;
+				if (SigninError) throw SigninError;
 
-			photourl = filePath;
-			console.log(licensephoto);
-			console.log(photourl);
+				const file = licensephoto[0];
+				const fileExt = file.name.split('.').pop();
+				const filePath = `riderlicenseimage/${Math.random()}.${fileExt}`;
 
-			const { error: imageerror } = await supabaseClient.storage.from('deliveryriderimage').upload(filePath, file);
-			if (imageerror) throw imageerror;
+				photourl = filePath;
+				console.log(licensephoto);
+				console.log(photourl);
 
+				const { error: imageerror } = await supabaseClient.storage
+					.from('deliveryriderimage')
+					.upload(filePath, file);
+				if (imageerror) throw imageerror;
 
-			const user = await supabaseClient.auth.getUser();
-			const user_id = user.data.user.id;
+				const user = await supabaseClient.auth.getUser();
+				const user_id = user.data.user.id;
 
-			const { error: riderError } = await supabaseClient
-			.from('deliveryrider')
-			.insert([
-				{
-					user_id,
-					rideremail: email,
-					ridername,
-					riderhp,
-					riderdob,
-					rideraddressl1,
-					rideraddressl2,
-					rideraddresscity,
-					rideraddressposcode,
-					rideraddressstate,
-					rideric,
-					riderlicense,
-					licenseexpirydate,
-					ridervehicleplate,
-					licensephotourl: photourl
-				},
-			])
-			.select();
+				const { error: riderError } = await supabaseClient
+					.from('deliveryrider')
+					.insert([
+						{
+							user_id,
+							rideremail: email,
+							ridername,
+							riderhp,
+							riderdob,
+							rideraddressl1,
+							rideraddressl2,
+							rideraddresscity,
+							rideraddressposcode,
+							rideraddressstate,
+							rideric,
+							riderlicense,
+							licenseexpirydate,
+							ridervehicleplate,
+							licensephotourl: photourl
+						}
+					])
+					.select();
 
-			if (riderError) {
-				console.log(riderError);
-				throw riderError;
+				if (riderError) {
+					console.log(riderError);
+					throw riderError;
+				}
+
+				alert('Sign up successful!');
+				if (typeof window !== 'undefined') {
+					window.location.href = '/auth/login';
+				}
+			} catch (error) {
+				console.error(error);
+				alert(error);
+			} finally {
+				loading = false;
 			}
-			
-			alert('Sign up successful!')
-			if (typeof window !== 'undefined') {
-                window.location.href = '/auth/login';
-            }
+		}
+	};
 
-
-		} catch (error) {
-			console.error(error);
-			alert(error);
-		} finally {
-			loading = false;
-
+	function isValidName() {
+		if (!ridername || ridername.length < 3) {
+			alert(
+				'Please enter a valid name which only consist of alphabets, and space. The name must be at least 3 letters.'
+			);
+			return false;
 		}
 
+		const isValidName = /^[a-zA-Z ]+$/.test(ridername);
+		if (!isValidName) {
+			alert(
+				'Please enter a valid name which only consist of alphabets, and space. The name must be at least 3 letters.'
+			);
+		}
+		return isValidName;
+	}
+
+	function validatePhoneNumber() {
+		const isValidHp = /^\d{9,11}$/.test(riderhp);
+		if (!isValidHp) {
+			alert('Please enter a valid phone number.');
+		}
+		return isValidHp;
+	}
+
+	function validateState() {
+		if (rideraddressstate === '') {
+			alert('Please choose a state.');
+			return false;
+		}
+		return true;
+	}
+
+	function validatePoscode() {
+		const isValidPoscode = /^\d{5}$/.test(rideraddressposcode);
+		if (!isValidPoscode) {
+			alert('Please enter a valid poscode.');
+		}
+		return isValidPoscode;
+	}
+
+	function validateDOB() {
+		if (!riderdob) {
+			alert('Please enter a date of birth.');
+			return false;
+		}
+		return true;
+	}
+
+	function validateaddress() {
+		const isValidCity = /^[a-zA-Z ]+$/.test(rideraddresscity);
+		const isValidL1 = /^[a-zA-Z0-9-,. ()/]+$/.test(rideraddressl1);
+		const isValidL2 = /^[a-zA-Z0-9-,. ()/]+$/.test(rideraddressl2);
+		if (!rideraddressl1 || !rideraddresscity || !isValidL1 || !isValidL2) {
+			alert('Please enter an address for delivery purposes.');
+			return false;
+		} else if (!isValidCity) {
+			alert('Please enter a valid city for delivery purposes.');
+			return false;
+		}
+		return true;
 	}
 </script>
 
 <div
 	class="card-container min-h-[100vh] min-w-[100%] flex justify-center w-[100%] bg-white dark:bg-pdark-100 container-fluid"
 >
-	<div
-		class="card flex flex-row rounded-[20px] bg-transparent h-[75%] w-[90%] py-[20px] mb-6"
-	>
+	<div class="card flex flex-row rounded-[20px] bg-transparent h-[75%] w-[90%] py-[20px] mb-6">
 		<div class="flex-1">
 			<form action="" class="flex flex-col mt-5 gap-4 px-0">
 				<div
@@ -268,7 +345,7 @@
 								type="text"
 								name="vehicleNo"
 								placeholder="VKL3029"
-								autocomplete = "off"
+								autocomplete="off"
 								required
 								bind:value={ridervehicleplate}
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
@@ -311,7 +388,7 @@
 								class="w-[325px] text-black dark:bg-[#ECECEC]"
 								color="white"
 							>
-								<IdCardSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400"/>
+								<IdCardSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
 							</Input>
 						</Label>
 
@@ -331,7 +408,12 @@
 
 						<Label>
 							<span class=" dark:text-white">Delivery License Image</span>
-							<Fileupload accept=".png, .jpg, .jpeg" color="white" class="border-none m-[1px] dark:text-white" bind:files={licensephoto}></Fileupload>
+							<Fileupload
+								accept=".png, .jpg, .jpeg"
+								color="white"
+								class="border-none m-[1px] dark:text-white"
+								bind:files={licensephoto}
+							></Fileupload>
 							<!-- <Input
 								type="file"
 								name="businessClosingTime"
@@ -342,7 +424,6 @@
 							>
 							</Input> -->
 						</Label>
-
 					</div>
 
 					<!-- Seperator for Address Information -->
@@ -423,7 +504,9 @@
 					</div>
 				</div>
 				<div class=" flex flex-col items-center">
-					<Button type="submit" class="btn-primary w-[325px] mt-9" on:click={handleSignup}>Register</Button>
+					<Button type="submit" class="btn-primary w-[325px] mt-9" on:click={handleSignup}
+						>Register</Button
+					>
 					<p class="text-xs font-medium text-gray-500 dark:text-gray-300 mt-2">
 						By registering, you agree to the <a href="../../" class="underline"
 							>Terms & Conditions</a
