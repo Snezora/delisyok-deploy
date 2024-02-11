@@ -100,6 +100,7 @@
 		}
 	}
 
+	//Vendor Menu Array
 	async function getMenuItem() {
 		const { data, error } = await supabaseClient
 			.from('menuitem')
