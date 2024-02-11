@@ -89,7 +89,7 @@
 		const { data, error } = await supabaseClient
 			.from('vendor')
 			.select(
-				'businessname, storephoto, businessstarttime, businessclosingtime, businessopday, vendorkkmlistingno,businessdescription, vendorhp'
+				'businessname, storephoto, businessstarttime, businessclosingtime, businessopday, vendorkkmlistingno, businessdescription, vendorhp'
 			)
 			.eq('vendorid', vendorid);
 
