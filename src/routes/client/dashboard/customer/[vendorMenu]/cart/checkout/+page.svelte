@@ -139,6 +139,7 @@
 		vendorearn = Math.round(ordertotalprice * 0.7);
 		console.log(vendorearn);
 		console.log(ordertotalprice);
+		console.log(cart.foodtotalprice);
 
 		console.log('Render Test: Completed');
 	});
