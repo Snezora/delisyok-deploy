@@ -128,30 +128,16 @@
 		console.log(orderItems);
 
 		console.log('Calculation Test: Calculate total');
-		orderItems.forEach((element) => {
-			addPrices(element.itemprice);
-		});
-		console.log(pricetotal);
-		salestax = (pricetotal * 0.08).toFixed(2);
-		console.log(salestax);
 		riderComm = 5;
-		ordertotalprice = (pricetotal + riderComm + parseFloat(salestax)).toFixed(2);
+		console.log("Food total price" + cart.foodtotalprice);
+		salestax = (cart.foodtotalprice * 0.08).toFixed(2);
+		console.log(salestax);
+		ordertotalprice = (cart.foodtotalprice + riderComm + parseFloat(salestax)).toFixed(2);
+		console.log(ordertotalprice);
 		vendorearn = Math.round(ordertotalprice * 0.7);
 		console.log(vendorearn);
-		console.log(ordertotalprice);
-
 		console.log('Render Test: Completed');
 	});
-
-	/**
-	 * @param {any} price
-	 */
-	async function addPrices(price) {
-		pricelist.push(price);
-		pricetotal = pricelist.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
-		return pricetotal;
-	}
 
 	async function fetchCustomerData() {
 		const userLog = await supabaseClient.auth.getUser();
@@ -551,7 +537,7 @@
 						</div>
 					</div>
 					<div class="bottom flex flex-col items-start dark:text-white">
-						<div class="totalprice text-[16px]">Subtotal: RM {Number(pricetotal).toFixed(2)}</div>
+						<div class="totalprice text-[16px]">Subtotal: RM {Number(cart.foodtotalprice).toFixed(2)}</div>
 						<div class="text-[16px]">Delivery fee: RM {Number(riderComm).toFixed(2)}</div>
 						<div class="tax text-[16px]">Sales Tax (8%): RM {Number(salestax).toFixed(2)}</div>
 						<div class="text-xl font-bold mt-4">Total: RM {Number(ordertotalprice).toFixed(2)}</div>

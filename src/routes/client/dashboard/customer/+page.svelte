@@ -84,6 +84,7 @@
 		return null;
 	}
 
+	//Data Structure: List Vendor Array
 	async function fetchVendor() {
 		const { data: vendor, error } = await supabaseClient.from('vendor').select('vendorid, businessname, storephoto');
 
