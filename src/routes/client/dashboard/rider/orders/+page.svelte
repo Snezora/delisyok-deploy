@@ -70,14 +70,14 @@
 
     async function fetchNewOrders() {
         const { data, error } = await supabaseClient
-        .from('sale')
-        .select('*, vendor(*), cusorder(*, customer(*), orderitem(*))')
-        .is('riderid', null);
+            .from('sale')
+            .select('*, vendor(*), cusorder(*, customer(*), orderitem(*))')
+            .in('vendororderstatus', ['ongoing', 'completed'])
+            .is('riderid', null);
 
         if (error) {
             console.error('Error fetching new orders', error);
-        }
-        else{
+        } else {
             return data;
         }
     }

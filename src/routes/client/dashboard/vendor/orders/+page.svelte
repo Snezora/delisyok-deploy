@@ -146,7 +146,7 @@
         if (error) {
             console.error('Error updating order status:', error);
         } else {
-          //return bubble here saying success
+          alert("Order has been confirmed!");
           location.reload();
         }
     }
@@ -163,7 +163,7 @@
         if (error) {
             console.error('Error updating order status:', error);
         } else {
-          //return bubble here saying success
+          alert("Order has been rejected!");
           location.reload();
         }
     }
@@ -180,7 +180,7 @@
         if (error) {
             console.error('Error updating order status:', error);
         } else {
-          //return bubble here saying success
+          alert("Order has been completed!");
           location.reload();
         }
     }

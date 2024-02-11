@@ -88,9 +88,7 @@
 	async function getVendor() {
 		const { data, error } = await supabaseClient
 			.from('vendor')
-			.select(
-				'businessname, storephoto, businessstarttime, businessclosingtime, businessopday, vendorkkmlistingno,businessdescription, vendorhp'
-			)
+			.select('*')
 			.eq('vendorid', vendorid);
 
 		if (error) {

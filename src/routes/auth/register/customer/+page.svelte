@@ -84,8 +84,6 @@
 	let isCustomer = true;
 
 	const handleSignup = async () => {
-		console.log(customerdob);
-		console.log(customeraddressstate);
 		if (
 			password == passwordconfirm &&
 			isValidName() &&
@@ -97,7 +95,6 @@
 		) {
 			try {
 				loading = true;
-				console.log(email);
 
 				const { error } = await supabaseClient.auth.signUp({
 					email,
