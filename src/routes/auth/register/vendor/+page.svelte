@@ -261,6 +261,17 @@
 		}
 		return true;
 	}
+
+	async function fetchAndDisplayPDF() {
+    try {
+      const response = await fetch('https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/publicbucket/KKMHomeCookReq.pdf');
+      const pdfBlob = await response.blob();
+      const url = URL.createObjectURL(pdfBlob);
+      window.open(url, '_blank');
+    } catch (error) {
+      console.error('Error fetching and displaying PDF:', error);
+    }
+  }
 </script>
 
 <div
@@ -378,7 +389,7 @@
 						<Label>
 							<span class=" dark:text-white">KKM Registration Number</span>
 							<a
-								href="../../src\lib\assets\files\KKMHomeCookReq.pdf"
+								on:click={fetchAndDisplayPDF}
 								target="_blank"
 								rel="noreferrer"
 								class="dark:text-white text-[10px] underline hover:text-purple-400"

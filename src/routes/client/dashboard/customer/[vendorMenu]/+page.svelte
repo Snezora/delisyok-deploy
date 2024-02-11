@@ -104,6 +104,7 @@
 		const { data, error } = await supabaseClient
 			.from('menuitem')
 			.select('itemid, itemname, itemimage, itemprice')
+			.eq('isActive', true)
 			.eq('vendorid', vendorid);
 
 		if (error) {

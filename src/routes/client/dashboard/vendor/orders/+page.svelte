@@ -41,6 +41,8 @@
 	 */
     let pastOrders;
 
+    let openConfirm = false;
+
 
     onMount(async () => {
         let currentTime = new Date();
@@ -226,6 +228,37 @@
         }
     }
 
+    async function toggleConfirmModal(saleid) {
+        openConfirm = !openConfirm;
+
+        let selectedOrderID;
+
+        const {data, error} = await supabaseClient
+        .from('sale')
+        .select('*, cusorder(*, orderitem(*))')
+        .eq('saleid', saleid)
+        .single();
+
+        if (error) {
+            console.error('Error fetching order details: ', error);
+        } else {
+          selectedSale = data;
+          selectedOrderID = data.cusorder.orderid;
+
+          const {data: orderdetails, error: orderdetailserror} = await supabaseClient
+          .from('orderitem')
+          .select('*')
+          .eq('orderid', selectedOrderID);
+
+          if (orderdetailserror) {
+              console.error('Error fetching order details: ', orderdetailserror);
+          } else {
+            orderItems = orderdetails;
+          }
+          console.log(selectedSale);
+        }
+    }
+
 </script>
 
 <SpinnerSet />
@@ -317,7 +350,7 @@
                           <TableBodyCell>{order.cusorder.customer.customername}</TableBodyCell>
                           <TableBodyCell>{order.cusorder.foodtotalprice}</TableBodyCell>
                           <TableBodyCell>
-                            <a on:click={() => completeNewOrder(order.saleid)} class="font-medium text-green-600 hover:underline dark:text-green-500">Complete</a>
+                            <a on:click={() => (toggleConfirmModal(order.saleid))} class="font-medium text-green-600 hover:underline dark:text-green-500">Complete</a>
                           </TableBodyCell>
                           <TableBodyCell>
                             <a on:click={() => togglePopupModal(order.saleid)} class="font-medium text-primary-600 hover:underline dark:text-primary-500">View Order</a>
@@ -402,6 +435,23 @@
       {/each}
       </div>
       {/if}
+    </Modal>
+
+    <Modal bind:open={openConfirm} size="xs" autoclose>
+      <div class="text-center flex flex-col gap-3">
+        <ExclamationCircleOutline class="mx-auto mb-4 text-red-500 w-12 h-12 dark:text-red-500" />
+        <h3 class="mb-1 text-lg font-normal text-gray-500 dark:text-gray-400">
+          Confirm Order #{selectedSale.orderid}?
+        </h3>
+        <div class="buttons">
+          <Button
+          color="red"
+          class="me-2"
+          on:click={() => (completeNewOrder(selectedSale.saleid))}>Yes, I'm sure</Button
+        >
+        <Button color="alternative" on:click={() => (openConfirm = false)}>No, cancel</Button>
+        </div>
+      </div>
     </Modal>
 
 </div>

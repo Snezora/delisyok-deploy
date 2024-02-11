@@ -20,6 +20,7 @@
 	// @ts-ignore
 	import {
 		ArrowLeftSolid,
+		BowlFoodSolid,
 		DollarSignSolid,
 		EnvelopeSolid,
 		MSolid,
@@ -126,26 +127,30 @@
 	}
 
 	async function changePhoto() {
-		const file = menuItemPhoto[0];
-		const fileExt = file.name.split('.').pop();
-		const filePath = `${Math.random()}.${fileExt}`;
-		const { error: imageerror } = await supabaseClient.storage
-			.from('menuitemimage')
-			.upload(filePath, file);
-		if (imageerror) throw imageerror;
+		if (menuItemPhoto) {
+			const file = menuItemPhoto[0];
+			const fileExt = file.name.split('.').pop();
+			const filePath = `${Math.random()}.${fileExt}`;
+			const { error: imageerror } = await supabaseClient.storage
+				.from('menuitemimage')
+				.upload(filePath, file);
+			if (imageerror) throw imageerror;
 
-		const { data, error } = await supabaseClient
-			.from('menuitem')
-			.update({ itemimage: filePath })
-			.eq('itemid', itemid)
-			.select();
+			const { data, error } = await supabaseClient
+				.from('menuitem')
+				.update({ itemimage: filePath })
+				.eq('itemid', itemid)
+				.select();
 
-		if (error) {
-			console.error('Error updating store photo:', error);
+			if (error) {
+				console.error('Error updating store photo:', error);
+			} else {
+				console.log('Menu Item photo updated successfully:', data);
+				alert('Menu Item photo updated successfully');
+				window.location.href = `/client/dashboard/vendor/menu/${itemid}/edit`;
+			}
 		} else {
-			console.log('Menu Item photo updated successfully:', data);
-			alert('Menu Item photo updated successfully');
-			window.location.href = `/client/dashboard/vendor/menu/${itemid}/edit`;
+			alert('Please upload a photo');
 		}
 	}
 
@@ -234,7 +239,7 @@
 							placeholder="Egg Rolls"
 							bind:value={menuitem.itemname}
 						>
-							<EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+							<BowlFoodSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
 						</Input>
 					</div>
 					<div class="mb-6">
@@ -249,7 +254,13 @@
 							rows="6"
 							placeholder="Describe what your food item is"
 							bind:value={menuitem.itemdescription}
+							maxlength="255"
 						></Textarea>
+						{#if menuitem.itemdescription && menuitem.itemdescription.length}
+							<p class="text-right">{menuitem.itemdescription.length} / 255</p>
+						{:else}
+							<p class="text-right">0 / 255</p>
+						{/if}
 					</div>
 					<div class="mb-10">
 						<Label

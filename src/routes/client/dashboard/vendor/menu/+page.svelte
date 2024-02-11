@@ -1,10 +1,10 @@
 <script>
-	import { Drawer, CloseButton, Button, Card, Toggle, Spinner } from "flowbite-svelte";
+	import { Drawer, CloseButton, Button, Card, Toggle, Spinner, Modal } from "flowbite-svelte";
     import Sidebar from '../../../../Sidebar.svelte';
 	import { hidden2 } from "../../../../stores/sidebar.js";
 	import SidebarVendor from "../SidebarVendor.svelte";
 	import { sineIn } from "svelte/easing";
-	import { ArrowRightOutline } from "flowbite-svelte-icons";
+	import { ArrowRightOutline, ExclamationCircleOutline } from "flowbite-svelte-icons";
 	import { PenToSquareRegular, TrashCanRegular } from "svelte-awesome-icons";
 	import { supabaseClient } from "$lib/supabase";
 	import { onMount } from "svelte";
@@ -91,11 +91,36 @@
 	 */
     let vendorid;
     let isVendor = true;
+    let popupModal = false;
+    let buttonPressed = false;
+    /**
+	 * @type {never[]}
+	 */
+    let selectedItem = [];
 
     vendorStore.subscribe(value => {
         businessname = value.businessname;
         user_id = value.user_id;
     }) //CONTINUE HERE
+
+    /**
+	 * @param {any} itemid
+	 */
+    async function performDeletion(itemid){
+        popupModal = true;
+        const { data, error } = await supabaseClient
+        .from('menuitem')
+        .select('*')
+        .eq('itemid', itemid)
+        .single();
+        
+        if (error) {
+            console.error('Error deleting item:', error);
+            alert('Item deleted unsuccessfully');
+        } else {
+            selectedItem = data;
+        }
+    }
 
 </script>
 
@@ -128,7 +153,7 @@
                     <Button color="blue" class="dark:bg-blue-900" href="/client/dashboard/vendor/menu/{item.itemid}/edit">
                         <PenToSquareRegular class=" w-4.5  text-white" />
                     </Button>
-                    <Button color="red" class="dark:bg-red-900" on:click={() => deleteItem(item.itemid)}>
+                    <Button color="red" class="dark:bg-red-900" on:click={() => performDeletion(item.itemid)}>
                         <TrashCanRegular class=" w-4.5  text-white" />
                     </Button>
                 </div>
@@ -138,3 +163,23 @@
     </div>
     
     </div>
+
+    <Modal bind:open={popupModal} size="xs" autoclose>
+        <div class="text-center">
+            <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
+            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Are you sure you want to delete this item from your menu?
+            </h3>
+            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Item Name: {selectedItem.itemname}
+            </h3>
+            <Button
+                color="red"
+                class="me-2"
+                on:click={() => {
+                    deleteItem(selectedItem.itemid);
+                }}>Yes</Button
+            >
+            <Button color="alternative" on:click={() => (popupModal = false)}>No</Button>
+        </div>
+    </Modal>

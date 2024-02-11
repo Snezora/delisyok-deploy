@@ -26,6 +26,7 @@
 	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/supabase';
 	import { uploadingFile } from '../../../../../stores/businessStore';
+	import { BowlFoodSolid } from 'svelte-awesome-icons';
 
 	const itemid = $page.params.fooditem;
 
@@ -80,30 +81,38 @@
 	});
 
 	async function saveNewItemInfo() {
-		const file = menuItemPhoto[0];
-		const fileExt = file.name.split('.').pop();
-		const filePath = `${Math.random()}.${fileExt}`;
-		const { error: imageerror } = await supabaseClient.storage
-			.from('menuitemimage')
-			.upload(filePath, file);
-		if (imageerror) throw imageerror;
+		if (menuItemPhoto) {
+			if (itemdescription.length > 0) {
+				const file = menuItemPhoto[0];
+				const fileExt = file.name.split('.').pop();
+				const filePath = `${Math.random()}.${fileExt}`;
+				const { error: imageerror } = await supabaseClient.storage
+					.from('menuitemimage')
+					.upload(filePath, file);
+				if (imageerror) throw imageerror;
 
-		const { error: menuItemError } = await supabaseClient.from('menuitem').insert([
-			{
-				itemname,
-				itemdescription,
-				itemprice,
-				isActive,
-				itemimage: filePath,
-				vendorid
+				const { error: menuItemError } = await supabaseClient.from('menuitem').insert([
+					{
+						itemname,
+						itemdescription,
+						itemprice,
+						isActive,
+						itemimage: filePath,
+						vendorid
+					}
+				]);
+
+				if (menuItemError) {
+					alert('Error updating vendor data');
+				} else {
+					showToast = true;
+					window.location.href = `/client/dashboard/vendor/menu/`;
+				}
+			} else {
+				alert('Please enter a description');
 			}
-		]);
-
-		if (menuItemError) {
-			alert('Error updating vendor data');
 		} else {
-			showToast = true;
-			window.location.href = `/client/dashboard/vendor/menu/`;
+			alert('Please upload an image');
 		}
 	}
 </script>
@@ -179,7 +188,7 @@
 							class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item Name</Label
 						>
 						<Input id="itemname" required type="text" placeholder="Egg Rolls" bind:value={itemname}>
-							<EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+							<BowlFoodSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
 						</Input>
 					</div>
 					<div class="mb-6">
@@ -195,6 +204,11 @@
 							placeholder="Describe what your food item is"
 							bind:value={itemdescription}
 						></Textarea>
+						{#if itemdescription && itemdescription.length}
+							<p class="text-right">{itemdescription.length} / 255</p>
+						{:else}
+							<p class="text-right">0 / 255</p>
+						{/if}
 					</div>
 					<div class="mb-10">
 						<Label
