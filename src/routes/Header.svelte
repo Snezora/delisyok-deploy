@@ -206,7 +206,7 @@
 							<span class="block truncate text-sm font-medium">{useremail}</span>
 						</DropdownHeader>
 						{#if isVendor}
-							<DropdownItem href="/client/dashboard/vendor" data-sveltekit-reload
+							<DropdownItem href="/client/dashboard/vendor/orders" data-sveltekit-reload
 								>Vendor Dashboard</DropdownItem
 							>
 						{:else if isCustomer}

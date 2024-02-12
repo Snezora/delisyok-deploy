@@ -127,7 +127,7 @@
 			if (isCustomer) {
 				window.location.href="/client/dashboard/customer";
 			} else if (isVendor) {
-				window.location.href="/client/dashboard/vendor";
+				window.location.href="/client/dashboard/vendor/orders";
 			} else if (isRider) {
 				window.location.href="/client/dashboard/rider";
 			} else if (isSysMan) {

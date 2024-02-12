@@ -54,6 +54,7 @@
 
 				if (error || data?.length == 0) {
 				} else {
+					console.log("is vendor");
 					isVendor = true;
 				}
 
@@ -73,9 +74,9 @@
 					.eq('user_id', user_id);
 
 				if (error || rider?.length == 0) {
-					if (typeof window !== 'undefined') {
-						window.location.href = '/auth/login';
-					}
+				} else {
+					isRider = true;
+				}
 
 				const { data: sysman } = await supabaseClient
 					.from('systemmanager')
@@ -83,17 +84,15 @@
 					.eq('user_id', user_id);
 
 				if (error || sysman?.length == 0) {
-					if (typeof window !== 'undefined') {
-						window.location.href = '/auth/login';
-					}
+					isSysMan = true;
 				}
 			} else {
 				if (typeof window !== 'undefined') {
+					console.log('no user')
 					window.location.href = '/auth/login';
 				}
 			}
-		}
-		});
+		})
 	});
 
 	async function signOut(){
@@ -200,17 +199,6 @@
 	<Sidebar {activeurl}>
 		<SidebarWrapper divClass="overflow-y-auto py-4 px-3 dark:bg-gray-800 h-[100%] ">
 			<SidebarGroup>
-				<SidebarItem
-					label="Dashboard"
-					href="/client/dashboard/vendor"
-					active={activeurl === '/client/dashboard/vendor'}
-				>
-					<svelte:fragment slot="icon">
-						<ChartPieSolid
-							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						/>
-					</svelte:fragment>
-				</SidebarItem>
 				<SidebarDropdownWrapper label="Restaurant Info">
 					<svelte:fragment slot="icon">
 						<MugSaucerSolid
@@ -228,18 +216,11 @@
 						active={activeurl === '/client/dashboard/vendor/menu'}
 					/>
 				</SidebarDropdownWrapper>
-				<SidebarItem label="Orders" href="/client/dashboard/vendor/orders" {spanClass}>
+				<SidebarItem label="Orders" href="/client/dashboard/vendor/orders">
 					<svelte:fragment slot="icon">
 						<ScrollSolid
 							class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
 						/>
-					</svelte:fragment>
-					<svelte:fragment slot="subtext">
-						<span
-							class="inline-flex justify-center items-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300"
-						>
-							Pro
-						</span>
 					</svelte:fragment>
 				</SidebarItem>
 				<!-- <SidebarItem label="Payment">

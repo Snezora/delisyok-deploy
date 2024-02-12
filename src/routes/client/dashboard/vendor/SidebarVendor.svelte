@@ -20,17 +20,14 @@ const logout = () => {
     <Button on:click={() => (hidden2.set(false))} on:mouseenter={() => (placement = 'right')} id="navigation" class=" p-2 m-2 w-10 h-10 ">
         <CompassSolid />
     </Button>
-    <Button href="/client/dashboard/vendor" on:click={() => {uploadingFile.set(false)}} on:mouseenter={() => (placement = 'right')} id="dashboard" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
-        <ChartPieSolid />
+    <Button href="/client/dashboard/vendor/orders" on:click={() => {uploadingFile.set(false)}} on:mouseenter={() => (placement = 'right')} id="orderInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
+        <ScrollSolid />
     </Button>
     <Button href="/client/dashboard/vendor/store" on:click={() => {uploadingFile.set(false)}} on:click={() => {uploadingFile.set(false)}}  on:mouseenter={() => (placement = 'right')} id="storefront" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <StoreSolid />
     </Button>
     <Button href="/client/dashboard/vendor/menu" on:click={() => {uploadingFile.set(false)}} on:mouseenter={() => (placement = 'right')} id="menuInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <BookOpenSolid />
-    </Button>
-    <Button href="/client/dashboard/vendor/orders" on:click={() => {uploadingFile.set(false)}} on:mouseenter={() => (placement = 'right')} id="orderInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
-        <ScrollSolid />
     </Button>
     <!-- <Button href="" on:mouseenter={() => (placement = 'right')} id="paymentInfo" class=" bg-transparent dark:bg-gray-800 p-2 m-2 w-10 h-10">
         <MoneyBillsSolid />
@@ -47,9 +44,6 @@ const logout = () => {
 
 <Popover triggeredBy="#navigation" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
     Navigation
-</Popover>
-<Popover triggeredBy="#dashboard" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
-    Dashboard
 </Popover>
 <Popover triggeredBy="#storefront" placement="right" class="w-28 text-sm font-extrabold rounded text-center bg-gray-800 dark:bg-slate-100 text-white dark:text-black">
     Store Info

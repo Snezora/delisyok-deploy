@@ -1,16 +1,15 @@
 <script>
-	import { Drawer, CloseButton, Button, Card, Toggle, Spinner, Accordion, AccordionItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, ImagePlaceholder, Modal } from "flowbite-svelte";
+	import { Drawer, CloseButton, Button, Accordion, AccordionItem, 
+           Table, TableBody, TableBodyCell, TableBodyRow, TableHead, 
+           TableHeadCell, Modal } from "flowbite-svelte";
     import Sidebar from '../../../../Sidebar.svelte';
 	import { hidden2 } from "../../../../stores/sidebar.js";
 	import SidebarVendor from "../SidebarVendor.svelte";
 	import { sineIn } from "svelte/easing";
-	import { ArrowRightOutline, CogOutline, ExclamationCircleOutline, ShoppingCartSolid } from "flowbite-svelte-icons";
-	import { PenToSquareRegular, TrashCanRegular } from "svelte-awesome-icons";
+	import { CogOutline, ExclamationCircleOutline, ShoppingCartSolid } from "flowbite-svelte-icons";
 	import { supabaseClient } from "$lib/supabase";
 	import { onMount } from "svelte";
-    import { fade, slide } from 'svelte/transition';
 	import SpinnerSet from "../../../SpinnerSet.svelte";
-	import { vendorStore } from "../../../../stores/businessStore";
 
 
     let transitionParams = {
@@ -152,8 +151,7 @@
           location.reload();
         }
     }
-
-    /**
+  /**
 	 * @param {any} saleid
 	 */
     async function rejectNewOrder(saleid) {
@@ -263,7 +261,7 @@
 
 <SpinnerSet />
 
-<div class="pagecontainer w-max-[100%] flex flex-row mobile-content bg-white dark:bg-gray-800">
+<div class="pagecontainer w-max-[100%] min-h-[100vh] flex flex-row mobile-content bg-white dark:bg-gray-800">
 
     <div class="maincontainer flex flex-col w-[100%] order-2">
         <div class="topsection">

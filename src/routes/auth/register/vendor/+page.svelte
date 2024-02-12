@@ -99,6 +99,8 @@
 		return businessopday;
 	}
 
+	let passwordconfirm;
+
 	const handleSignup = async () => {
 		if (
 			password == passwordconfirm &&
@@ -106,7 +108,6 @@
 			isValidTime() &&
 			isValidRegNo() &&
 			validatePhoneNumber() &&
-			validateDOB() &&
 			validateaddress() &&
 			validatePoscode() &&
 			validateState()
@@ -240,13 +241,6 @@
 		return isValidPoscode;
 	}
 
-	function validateDOB() {
-		if (!vendordob) {
-			alert('Please enter a date of birth.');
-			return false;
-		}
-		return true;
-	}
 
 	function validateaddress() {
 		const isValidCity = /^[a-zA-Z ]+$/.test(vendoraddresscity);
@@ -263,15 +257,17 @@
 	}
 
 	async function fetchAndDisplayPDF() {
-    try {
-      const response = await fetch('https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/publicbucket/KKMHomeCookReq.pdf');
-      const pdfBlob = await response.blob();
-      const url = URL.createObjectURL(pdfBlob);
-      window.open(url, '_blank');
-    } catch (error) {
-      console.error('Error fetching and displaying PDF:', error);
-    }
-  }
+		try {
+			const response = await fetch(
+				'https://iwqnmygskbiilbiiardy.supabase.co/storage/v1/object/public/publicbucket/KKMHomeCookReq.pdf'
+			);
+			const pdfBlob = await response.blob();
+			const url = URL.createObjectURL(pdfBlob);
+			window.open(url, '_blank');
+		} catch (error) {
+			console.error('Error fetching and displaying PDF:', error);
+		}
+	}
 </script>
 
 <div
@@ -324,6 +320,7 @@
 								name="passwordconfirmation"
 								placeholder="••••••••••"
 								required
+								bind:value={passwordconfirm}
 								class="w-[325px] text-black password-input dark:bg-[#ECECEC]"
 								color="white"
 							>
@@ -386,8 +383,11 @@
 							</Input>
 						</Label>
 
+						<!-- svelte-ignore a11y-missing-attribute -->
 						<Label>
 							<span class=" dark:text-white">KKM Registration Number</span>
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
 							<a
 								on:click={fetchAndDisplayPDF}
 								target="_blank"
@@ -547,27 +547,3 @@
 		</div>
 	</div>
 </div>
-
-<!-- <Popover class="text-sm" triggeredBy=".password-input" placement="bottom">
-    <h3 class="font-semibold text-gray-900 dark:text-white">Must have at least 6 characters</h3>
-    <div class="grid grid-cols-4 gap-2">
-      <div class="h-1 bg-orange-300 dark:bg-orange-400" />
-      <div class="h-1 bg-orange-300 dark:bg-orange-400" />
-      <div class="h-1 bg-gray-200 dark:bg-gray-600" />
-      <div class="h-1 bg-gray-200 dark:bg-gray-600" />
-    </div>
-    <p class="py-2">It’s better to have:</p>
-    <ul>
-      <li class="flex items-center mb-1">
-        <CheckOutline class="me-2 w-4 h-4 text-green-400 dark:text-green-500" />
-        Upper &amp; lower case letters
-      </li>
-      <li class="flex items-center mb-1">
-        <CheckOutline class="me-2 w-4 h-4 text-green-400 dark:text-green-500" />
-        A symbol (#$&amp;)
-      </li>
-      <li class="flex items-center">
-        <CloseOutline class="me-2 w-4 h-4 text-gray-300 dark:text-gray-400" />A longer password (min. 12 chars.)
-      </li>
-    </ul>
-  </Popover> -->

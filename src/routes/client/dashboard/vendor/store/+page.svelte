@@ -299,7 +299,7 @@
 		} else {
 			console.log('Store photo updated successfully:', data);
 			alert('Store photo updated successfully');
-			window.location.href = '/client/dashboard/vendor/';
+			window.location.href = '/client/dashboard/vendor/orders';
 		}
 	}
 
