@@ -201,7 +201,9 @@
 			Edit Item
 			<p />
 		</div>
-		<div class="maincontainer w-[100%] grid grid-flow-row md:grid-flow-col bg-gray-100 dark:bg-gray-700 h-[100%]">
+		<div
+			class="maincontainer w-[100%] grid grid-flow-row md:grid-flow-col bg-gray-100 dark:bg-gray-700 h-[100%]"
+		>
 			<div class="firsthalf justify-start py-10 flex flex-col px-20 pb-0">
 				<!-- Put Photo here -->
 				<img src={menuitemphotourl} alt="" class="w-[300px] self-center" />
@@ -238,9 +240,15 @@
 							type="text"
 							placeholder="Egg Rolls"
 							bind:value={menuitem.itemname}
+							maxlength="20"
 						>
 							<BowlFoodSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
 						</Input>
+						{#if menuitem.itemname && menuitem.itemname.length}
+							<p class="text-right">{menuitem.itemname.length} / 20</p>
+						{:else}
+							<p class="text-right">0 / 20</p>
+						{/if}
 					</div>
 					<div class="mb-6">
 						<Label

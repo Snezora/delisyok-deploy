@@ -187,9 +187,14 @@
 							for="itemname"
 							class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item Name</Label
 						>
-						<Input id="itemname" required type="text" placeholder="Egg Rolls" bind:value={itemname}>
+						<Input id="itemname" required type="text" placeholder="Egg Rolls" bind:value={itemname} maxlength="20">
 							<BowlFoodSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
 						</Input>
+						{#if itemname && itemname.length}
+						<p class="text-right">{itemname.length} / 20</p>
+					{:else}
+						<p class="text-right">0 / 20</p>
+					{/if}
 					</div>
 					<div class="mb-6">
 						<Label
