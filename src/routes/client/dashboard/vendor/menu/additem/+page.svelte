@@ -203,6 +203,7 @@
 							rows="6"
 							placeholder="Describe what your food item is"
 							bind:value={itemdescription}
+							maxlength="255"
 						></Textarea>
 						{#if itemdescription && itemdescription.length}
 							<p class="text-right">{itemdescription.length} / 255</p>
