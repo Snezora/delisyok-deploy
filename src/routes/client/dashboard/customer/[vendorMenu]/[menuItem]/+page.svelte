@@ -286,7 +286,7 @@
 				<div class="text">
 					<Label for="textarea-id" class="mb-2">Write your remark for the food here!</Label>
 					<Textarea
-						class="dark:bg-gray-100"
+						class="dark:bg-gray-100 dark:text-black"
 						id="textarea-id"
 						placeholder="Remark"
 						rows="8"
