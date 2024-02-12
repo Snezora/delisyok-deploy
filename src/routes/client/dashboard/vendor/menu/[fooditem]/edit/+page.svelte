@@ -174,7 +174,7 @@
 {/if}
 
 <div
-	class="pagecontainer h-[100%] min-h-[100dvh] w-[100%] flex flex-row mobile-content bg-gray-500 dark:bg-gray-500"
+	class="pagecontainer h-[100%] min-h-[100dvh] w-[100%] flex flex-row mobile-content bg-gray-500 dark:bg-gray-800"
 >
 	<SidebarVendor />
 	<div class="sidebarcontainer max-w-[] bg-white dark:bg-[#1F2937]">
@@ -201,7 +201,7 @@
 			Edit Item
 			<p />
 		</div>
-		<div class="maincontainer w-[100%] grid grid-flow-row md:grid-flow-col bg-gray-100 h-[100%]">
+		<div class="maincontainer w-[100%] grid grid-flow-row md:grid-flow-col bg-gray-100 dark:bg-gray-700 h-[100%]">
 			<div class="firsthalf justify-start py-10 flex flex-col px-20 pb-0">
 				<!-- Put Photo here -->
 				<img src={menuitemphotourl} alt="" class="w-[300px] self-center" />
